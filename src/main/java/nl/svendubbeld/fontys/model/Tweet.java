@@ -2,6 +2,8 @@ package nl.svendubbeld.fontys.model;
 
 import org.jetbrains.annotations.Nullable;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -10,17 +12,19 @@ import java.util.Set;
 /**
  * A tweet.
  */
+@Entity
 public class Tweet {
 
     /**
      * The unique id identifying this tweet.
      */
+    @Id
     private long id;
 
     /**
      * The user who placed the tweet.
      */
-    private Profile owner;
+    private User owner;
 
     /**
      * The content of the tweet.
@@ -30,7 +34,7 @@ public class Tweet {
     /**
      * The users who liked the tweet.
      */
-    private Set<Profile> likedBy;
+    private Set<User> likedBy;
 
     /**
      * The date and time the tweet was placed.
@@ -58,7 +62,7 @@ public class Tweet {
     /**
      * @return The user who placed the tweet.
      */
-    public Profile getOwner() {
+    public User getOwner() {
         return owner;
     }
 
@@ -72,7 +76,7 @@ public class Tweet {
     /**
      * @return The users who liked the tweet.
      */
-    public Set<Profile> getLikedBy() {
+    public Set<User> getLikedBy() {
         return likedBy;
     }
 
