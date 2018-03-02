@@ -2,21 +2,26 @@ package nl.svendubbeld.fontys.model;
 
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
 
+import javax.persistence.*;
 import java.util.Set;
 
 /**
  * A user.
  */
+@Entity
 public class User {
 
     /**
-     * A unique id identifying this profile.
+     * A unique id identifying this user.
      */
+    @Id
+    @GeneratedValue
     private long id;
 
     /**
      * The email address of the user.
      */
+    @Column(unique = true)
     private String email;
 
     /**
@@ -27,15 +32,17 @@ public class User {
     /**
      * The security groups the user is a member of.
      */
+    @ManyToMany
     private Set<SecurityGroup> securityGroups;
 
     /**
      * The users this user follows.
      */
+    @OneToMany
     private Set<Profile> following;
 
     /**
-     * @return A unique id facing.
+     * @return A unique id identifying this user.
      */
     public long getId() {
         return id;

@@ -1,15 +1,19 @@
 package nl.svendubbeld.fontys.model.security;
 
+import javax.persistence.*;
 import java.util.Set;
 
 /**
  * A group with {@link Permission permissions}.
  */
+@Entity
 public class SecurityGroup {
 
     /**
      * A unique id identifying the group.
      */
+    @Id
+    @GeneratedValue
     private long id;
 
     /**
@@ -20,6 +24,7 @@ public class SecurityGroup {
     /**
      * The permissions of the group.
      */
+    @ManyToMany
     private Set<Permission> permissions;
 
     /**

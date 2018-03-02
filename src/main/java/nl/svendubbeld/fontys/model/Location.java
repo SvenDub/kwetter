@@ -2,11 +2,14 @@ package nl.svendubbeld.fontys.model;
 
 import org.jetbrains.annotations.Nullable;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import java.util.Optional;
 
 /**
  * A geographical location with a label.
  */
+@Embeddable
 public class Location {
 
     /**
@@ -25,6 +28,9 @@ public class Location {
      */
     @Nullable
     private Float longitude;
+
+    protected Location() {
+    }
 
     /**
      * Create a new location with a label but without coordinates.

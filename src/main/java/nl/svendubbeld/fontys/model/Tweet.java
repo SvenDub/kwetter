@@ -2,8 +2,7 @@ package nl.svendubbeld.fontys.model;
 
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -13,17 +12,22 @@ import java.util.Set;
  * A tweet.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner")
+})
 public class Tweet {
 
     /**
      * The unique id identifying this tweet.
      */
     @Id
+    @GeneratedValue
     private long id;
 
     /**
      * The user who placed the tweet.
      */
+    @ManyToOne
     private User owner;
 
     /**
@@ -34,6 +38,7 @@ public class Tweet {
     /**
      * The users who liked the tweet.
      */
+    @OneToMany
     private Set<User> likedBy;
 
     /**
@@ -50,6 +55,7 @@ public class Tweet {
     /**
      * Maps the used usernames to unique ids so they still point to the same user after they change their username.
      */
+    @ManyToMany
     private Map<String, User> mentions;
 
     /**

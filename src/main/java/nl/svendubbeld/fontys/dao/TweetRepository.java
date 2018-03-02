@@ -3,15 +3,17 @@ package nl.svendubbeld.fontys.dao;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface TweetRepository extends CrudRepository<Tweet, Long> {
 
-    Tweet save(Tweet tweet);
+    void create(Tweet tweet);
 
-    boolean remove(Tweet tweet);
+    Tweet edit(Tweet tweet);
+
+    void remove(Tweet tweet);
 
     Tweet findById(Long id);
 
-    List<Tweet> findByOwner(User user);
+    Stream<Tweet> findByOwner(User user);
 }
