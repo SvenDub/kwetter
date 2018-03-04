@@ -1,6 +1,7 @@
 package nl.svendubbeld.fontys.model.security;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 /**
@@ -19,6 +20,7 @@ public class SecurityGroup {
     /**
      * The name of the group.
      */
+    @NotBlank
     private String name;
 
     /**

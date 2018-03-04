@@ -3,6 +3,9 @@ package nl.svendubbeld.fontys.model;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -28,22 +31,27 @@ public class Tweet {
      * The user who placed the tweet.
      */
     @ManyToOne
+    @NotNull
     private User owner;
 
     /**
      * The content of the tweet.
      */
+    @NotBlank
     private String content;
 
     /**
      * The users who liked the tweet.
      */
     @OneToMany
+    @NotNull
     private Set<User> likedBy;
 
     /**
      * The date and time the tweet was placed.
      */
+    @PastOrPresent
+    @NotNull
     private OffsetDateTime date;
 
     /**

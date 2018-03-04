@@ -1,8 +1,15 @@
 package nl.svendubbeld.fontys.model;
 
+import org.hibernate.validator.constraints.URL;
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -24,11 +31,13 @@ public class Profile {
      * The unique handle of the user.
      */
     @Column(unique = true)
+    @NotBlank
     private String username;
 
     /**
      * The display name of the user.
      */
+    @NotBlank
     private String name;
 
     /**
@@ -45,11 +54,14 @@ public class Profile {
     /**
      * The website of the user.
      */
+    @URL
     private String website;
 
     /**
      * The date and time this profile was created.
      */
+    @PastOrPresent
+    @NotNull
     private OffsetDateTime createdAt;
 
     /**

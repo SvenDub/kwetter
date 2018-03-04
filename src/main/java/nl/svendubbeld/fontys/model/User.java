@@ -3,6 +3,9 @@ package nl.svendubbeld.fontys.model;
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -22,6 +25,8 @@ public class User {
      * The email address of the user.
      */
     @Column(unique = true)
+    @Email
+    @NotBlank
     private String email;
 
     /**
@@ -33,12 +38,14 @@ public class User {
      * The security groups the user is a member of.
      */
     @ManyToMany
+    @NotNull
     private Set<SecurityGroup> securityGroups;
 
     /**
      * The users this user follows.
      */
     @OneToMany
+    @NotNull
     private Set<Profile> following;
 
     /**
