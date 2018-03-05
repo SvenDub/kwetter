@@ -126,4 +126,8 @@
         </repository>
     </repositories>
 
+    <properties>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
+
 </project>
