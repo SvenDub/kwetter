@@ -3,9 +3,9 @@ package nl.svendubbeld.fontys.model.security;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 /**
  * A permission for a {@link SecurityGroup}. Used to control access to certain functions.
@@ -14,15 +14,24 @@ import javax.persistence.Id;
 public class Permission {
 
     /**
-     * The key of the permission.
+     * The unique id of the permission.
      */
     @Id
+    @GeneratedValue
+    private long id;
+
+    /**
+     * The key of the permission.
+     */
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z]+(_[a-zA-Z]+)*$")
+    @Column(unique = true, name = "permission_key")
     private String key;
 
     /**
      * A description of the permission.
      */
-    @Column
+    @NotBlank
     private String description;
 
     protected Permission() {
@@ -37,6 +46,13 @@ public class Permission {
     public Permission(String key, String description) {
         this.key = key;
         this.description = description;
+    }
+
+    /**
+     * @return The unique id of the permission.
+     */
+    public long getId() {
+        return id;
     }
 
     /**
