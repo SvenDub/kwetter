@@ -9,31 +9,15 @@ import java.util.stream.Stream;
 /**
  * A JPA repository for tweets.
  */
-public class TweetRepositoryJPA extends JPARepository implements TweetRepository {
+public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements TweetRepository {
 
-    @Override
-    public void create(Tweet tweet) {
-        getEntityManager().persist(tweet);
-    }
-
-    @Override
-    public Tweet edit(Tweet tweet) {
-        return getEntityManager().merge(tweet);
-    }
-
-    @Override
-    public void remove(Tweet tweet) {
-        getEntityManager().remove(tweet);
-    }
-
-    @Override
-    public Tweet findById(Long id) {
-        return getEntityManager().find(Tweet.class, id);
+    protected TweetRepositoryJPA() {
+        super(Tweet.class);
     }
 
     @Override
     public Stream<Tweet> findByOwner(User user) {
-        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.findByOwner", Tweet.class);
+        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.findByOwner", getEntityClass());
         query.setParameter("owner", user);
 
         return query.getResultStream();
