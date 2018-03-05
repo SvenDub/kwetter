@@ -1,7 +1,11 @@
 package nl.svendubbeld.fontys.model.security;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -29,6 +33,14 @@ public class SecurityGroup {
     @ManyToMany
     private Set<Permission> permissions;
 
+    protected SecurityGroup() {
+    }
+
+    public SecurityGroup(String name, Set<Permission> permissions) {
+        this.name = name;
+        this.permissions = permissions;
+    }
+
     /**
      * @return A unique id identifying the group.
      */
@@ -47,7 +59,7 @@ public class SecurityGroup {
      * @return The permissions of the group.
      */
     public Set<Permission> getPermissions() {
-        return permissions;
+        return Collections.unmodifiableSet(permissions);
     }
 
     /**

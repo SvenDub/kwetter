@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -60,6 +61,17 @@ public class User {
     @NotNull
     private Set<Profile> profiles;
 
+    protected User() {
+    }
+
+    public User(String email, String password, Set<SecurityGroup> securityGroups, Set<Profile> following) {
+        this.email = email;
+        this.password = password;
+        this.securityGroups = securityGroups;
+        this.following = following;
+        this.profiles = new HashSet<>();
+    }
+
     /**
      * @return A unique id identifying this user.
      */
@@ -109,5 +121,13 @@ public class User {
      */
     public Optional<Profile> getCurrentProfile() {
         return profiles.stream().max(Comparator.comparing(Profile::getCreatedAt));
+    }
+
+    public Profile createProfile(String username, String name, String bio, Location location, String website) {
+        Profile profile = new Profile(this, username, name, bio, location, website);
+
+        profiles.add(profile);
+
+        return profile;
     }
 }

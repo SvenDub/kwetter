@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.URL;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
@@ -56,6 +57,7 @@ public class Profile {
      * The location of the user. Can be null.
      */
     @Nullable
+    @Valid
     private Location location;
 
     /**
@@ -70,6 +72,29 @@ public class Profile {
     @PastOrPresent
     @NotNull
     private OffsetDateTime createdAt;
+
+    protected Profile() {
+    }
+
+    public Profile(User user, String username, String name, String bio, @Nullable Location location, String website) {
+        this.user = user;
+        this.username = username;
+        this.name = name;
+        this.bio = bio;
+        this.location = location;
+        this.website = website;
+        this.createdAt = OffsetDateTime.now();
+    }
+
+    public Profile(User user, String username, String name, String bio, @Nullable Location location, String website, OffsetDateTime createdAt) {
+        this.user = user;
+        this.username = username;
+        this.name = name;
+        this.bio = bio;
+        this.location = location;
+        this.website = website;
+        this.createdAt = createdAt;
+    }
 
     /**
      * @return A unique id identifying this profile.

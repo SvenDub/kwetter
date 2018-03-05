@@ -3,13 +3,12 @@ package nl.svendubbeld.fontys.model;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.OffsetDateTime;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A tweet.
@@ -58,6 +57,7 @@ public class Tweet {
      * The location from which the tweet was placed. Can be null.
      */
     @Nullable
+    @Valid
     private Location location;
 
     /**
@@ -65,6 +65,18 @@ public class Tweet {
      */
     @ManyToMany
     private Map<String, User> mentions;
+
+    protected Tweet() {
+    }
+
+    public Tweet(User owner, String content, @Nullable Location location) {
+        this.owner = owner;
+        this.content = content;
+        this.likedBy = new HashSet<>();
+        this.location = location;
+        this.date = OffsetDateTime.now();
+        this.mentions = new HashMap<>();
+    }
 
     /**
      * @return The unique id identifying this tweet.
@@ -91,7 +103,7 @@ public class Tweet {
      * @return The users who liked the tweet.
      */
     public Set<User> getLikedBy() {
-        return likedBy;
+        return Collections.unmodifiableSet(likedBy);
     }
 
     /**
@@ -114,6 +126,6 @@ public class Tweet {
      * @return Map of the used usernames to unique ids.
      */
     public Map<String, User> getMentions() {
-        return mentions;
+        return Collections.unmodifiableMap(mentions);
     }
 }
