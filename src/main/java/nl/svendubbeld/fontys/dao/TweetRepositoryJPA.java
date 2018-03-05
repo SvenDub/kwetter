@@ -3,11 +3,12 @@ package nl.svendubbeld.fontys.dao;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 
-import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 import java.util.stream.Stream;
 
-@Stateless
+/**
+ * A JPA repository for tweets.
+ */
 public class TweetRepositoryJPA extends JPARepository implements TweetRepository {
 
     @Override
