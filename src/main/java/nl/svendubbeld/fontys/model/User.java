@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -52,6 +54,13 @@ public class User {
     private Set<Profile> following;
 
     /**
+     * The profiles used by this user.
+     */
+    @OneToMany(mappedBy = "user")
+    @NotNull
+    private Set<Profile> profiles;
+
+    /**
      * @return A unique id identifying this user.
      */
     public long getId() {
@@ -84,5 +93,21 @@ public class User {
      */
     public Set<Profile> getFollowing() {
         return following;
+    }
+
+    /**
+     * @return The profiles used by this user.
+     */
+    public Set<Profile> getProfiles() {
+        return profiles;
+    }
+
+    /**
+     * Gets the current profile of the user. This is the most recently created profile.
+     *
+     * @return The current profile.
+     */
+    public Optional<Profile> getCurrentProfile() {
+        return profiles.stream().max(Comparator.comparing(Profile::getCreatedAt));
     }
 }

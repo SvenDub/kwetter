@@ -3,10 +3,7 @@ package nl.svendubbeld.fontys.model;
 import org.hibernate.validator.constraints.URL;
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
@@ -18,6 +15,9 @@ import java.util.Optional;
  * for authentication and authorization.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "profile.findByUsername", query = "select p from Profile p where p.username = :username")
+})
 public class Profile {
 
     /**
@@ -26,6 +26,13 @@ public class Profile {
     @Id
     @GeneratedValue
     private long id;
+
+    /**
+     * The owner of this profile.
+     */
+    @NotNull
+    @ManyToOne(optional = false)
+    private User user;
 
     /**
      * The unique handle of the user.
@@ -69,6 +76,13 @@ public class Profile {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * @return The owner of this profile.
+     */
+    public User getUser() {
+        return user;
     }
 
     /**
