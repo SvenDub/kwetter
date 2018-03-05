@@ -11,6 +11,9 @@ import javax.validation.constraints.Pattern;
  * A permission for a {@link SecurityGroup}. Used to control access to certain functions.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "permission.findByKey", query = "select p from Permission p where p.key = :key")
+})
 public class Permission {
 
     /**
