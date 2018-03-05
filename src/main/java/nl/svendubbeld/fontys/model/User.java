@@ -12,6 +12,9 @@ import java.util.Set;
  * A user.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "user.findByEmail", query = "select u from User u where u.email = :email")
+})
 public class User {
 
     /**
