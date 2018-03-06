@@ -1,22 +1,25 @@
 pipeline {
     agent {
-            docker { image 'openjdk:8-jdk' }
+            docker { image 'maven:3.5.2-jdk-8' }
         }
 
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                sh 'mvn clean compile'
+                archiveArtifacts artifacts: 'target/', fingerprint: true
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh 'mvn test'
+                archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                sh 'mvn package'
+                archiveArtifacts artifacts: 'target/kwetter.war', fingerprint: true
             }
         }
     }
