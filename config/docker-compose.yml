@@ -1,0 +1,21 @@
+version: "3"
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: "kwetter"
+      MYSQL_USER: "fontys"
+      MYSQL_PASSWORD: "fontys"
+    volumes:
+      - kwetter-mysql:/var/lib/mysql
+  kwetter:
+    image: kwetter
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+      - "8181:8181"
+      - "4848:4848"
+volumes:
+  kwetter-mysql:

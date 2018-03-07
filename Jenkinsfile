@@ -17,6 +17,9 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                branch 'master || develop'
+            }
             steps {
                 sh 'mvn package'
                 archiveArtifacts artifacts: 'target/kwetter.war', fingerprint: true
