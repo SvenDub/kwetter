@@ -14,13 +14,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - target: 8080
-        published: 8080
-        protocol: tcp
-        mode: host
-      - target: 4848
-        published: 4848
-        protocol: tcp
-        mode: host
+      - "8080:8080"
+      - "4848:4848"
 volumes:
   kwetter-mysql:
