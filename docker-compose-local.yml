@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 services:
   mysql:
     image: mysql
@@ -10,6 +10,9 @@ services:
     volumes:
       - kwetter-mysql:/var/lib/mysql
     ports:
-      - 3306:3306
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
 volumes:
   kwetter-mysql:

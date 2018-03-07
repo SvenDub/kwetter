@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 services:
   mysql:
     image: mysql
@@ -14,8 +14,13 @@ services:
     depends_on:
       - mysql
     ports:
-      - "8080:8080"
-      - "8181:8181"
-      - "4848:4848"
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
+      - target: 4848
+        published: 4848
+        protocol: tcp
+        mode: host
 volumes:
   kwetter-mysql:
