@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn test -P arquillian-glassfish-embedded'
                 archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
             }
         }

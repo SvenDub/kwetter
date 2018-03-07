@@ -1,5 +1,6 @@
-package nl.svendubbeld.fontys.dao;
+package nl.svendubbeld.fontys.dao.jpa;
 
+import nl.svendubbeld.fontys.dao.PermissionRepository;
 import nl.svendubbeld.fontys.model.security.Permission;
 
 import javax.persistence.TypedQuery;

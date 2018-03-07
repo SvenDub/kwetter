@@ -1,4 +1,6 @@
-package nl.svendubbeld.fontys.dao;
+package nl.svendubbeld.fontys.dao.jpa;
+
+import nl.svendubbeld.fontys.dao.CrudRepository;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

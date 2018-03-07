@@ -1,0 +1,3 @@
+<glassfish-web-app>
+    <class-loader delegate="false" />
+</glassfish-web-app>
