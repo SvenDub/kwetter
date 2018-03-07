@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                branch 'master' || branch 'develop'
+                branch 'master || develop'
             }
             steps {
                 sh 'mvn package'
