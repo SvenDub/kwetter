@@ -13,4 +13,9 @@
         </configuration>
     </container>
 
+    <extension qualifier="cucumber">
+        <property name="report">true</property>
+        <property name="reportDirectory">target/cucumber-report</property>
+    </extension>
+
 </arquillian>

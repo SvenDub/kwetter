@@ -21,6 +21,11 @@ pipeline {
                 sh 'mvn clean test -P arquillian-glassfish-embedded -B'
                 archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
             }
+            post {
+                always {
+                    cucumber target/cucumber-report/*.json'
+                }
+            }
         }
         stage('Deploy') {
             when {
