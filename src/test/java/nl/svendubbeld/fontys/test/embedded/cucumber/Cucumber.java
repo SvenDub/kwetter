@@ -1,6 +1,5 @@
 package nl.svendubbeld.fontys.test.embedded.cucumber;
 
-import cucumber.api.java.en.Given;
 import cucumber.runtime.arquillian.ArquillianCucumber;
 import cucumber.runtime.arquillian.api.Features;
 import cucumber.runtime.arquillian.api.Glues;
@@ -14,7 +13,6 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.runner.RunWith;
 
-import javax.inject.Inject;
 import java.io.File;
 
 @Features({
@@ -24,8 +22,8 @@ import java.io.File;
         "nl/svendubbeld/fontys/test/embedded/cucumber/Profile Page.feature"*/
 })
 @Glues({
-        HomePageStepdefs.class,
-        Cucumber.class
+        CommonStepdefs.class,
+        HomePageStepdefs.class
 })
 @RunWith(ArquillianCucumber.class)
 public class Cucumber {
@@ -43,13 +41,5 @@ public class Cucumber {
                 .addAsResource("persistence.xml", "META-INF/persistence.xml")
                 .addPackages(true, Filters.exclude(Initialize.class), "nl.svendubbeld.fontys")
                 .addAsLibraries(files);
-    }
-
-    @Inject
-    private DataSetLoader loader;
-
-    @Given("^The test data set \"([^\"]*)\" is loaded$")
-    public void loadTestData(String dataSet) {
-        loader.loadTestData(dataSet);
     }
 }
