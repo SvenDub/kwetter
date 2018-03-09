@@ -1,5 +1,8 @@
 package nl.svendubbeld.fontys.model;
 
+import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.ToDTOConvertible;
+import nl.svendubbeld.fontys.dto.UserDTO;
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
 
 import javax.persistence.*;
@@ -16,9 +19,13 @@ import java.util.Set;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "user.findByEmail", query = "select u from User u where u.email = :email")
+        @NamedQuery(name = "user.findByEmail", query = "select u from User u where u.email = :email"),
+        @NamedQuery(name = "user.findByUsername", query = "select p.user from Profile p where p.username = :username and p.createdAt = (select max(subp.createdAt) from Profile subp where subp.username = :username)"),
+        @NamedQuery(name = "user.tweetsCount", query = "select count(t) from Tweet t where t.owner = :user"),
+        @NamedQuery(name = "user.followersCount", query = "select count(u) from User u where :user member of u.following"),
+        @NamedQuery(name = "user.followingCount", query = "select size(u.following) from User u where u = :user")
 })
-public class User {
+public class User implements ToDTOConvertible<UserDTO> {
 
     /**
      * A unique id identifying this user.
@@ -43,7 +50,7 @@ public class User {
     /**
      * The security groups the user is a member of.
      */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @NotNull
     private Set<SecurityGroup> securityGroups;
 
@@ -52,19 +59,19 @@ public class User {
      */
     @OneToMany
     @NotNull
-    private Set<Profile> following;
+    private Set<User> following;
 
     /**
      * The profiles used by this user.
      */
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotNull
     private Set<Profile> profiles;
 
     protected User() {
     }
 
-    public User(String email, String password, Set<SecurityGroup> securityGroups, Set<Profile> following) {
+    public User(String email, String password, Set<SecurityGroup> securityGroups, Set<User> following) {
         this.email = email;
         this.password = password;
         this.securityGroups = securityGroups;
@@ -103,7 +110,7 @@ public class User {
     /**
      * @return The users this user follows.
      */
-    public Set<Profile> getFollowing() {
+    public Set<User> getFollowing() {
         return following;
     }
 
@@ -129,5 +136,18 @@ public class User {
         profiles.add(profile);
 
         return profile;
+    }
+
+    @Override
+    public UserDTO convert(DTOHelper dtoHelper) {
+        UserDTO dto = new UserDTO();
+
+        dto.setId(getId());
+        getCurrentProfile().map(profile -> profile.convert(dtoHelper)).ifPresent(dto::setProfile);
+        dto.setTweetsCount(dtoHelper.getUserRepository().getTweetsCount(this));
+        dto.setFollowersCount(dtoHelper.getUserRepository().getFollowersCount(this));
+        dto.setFollowingCount(dtoHelper.getUserRepository().getFollowingCount(this));
+
+        return dto;
     }
 }

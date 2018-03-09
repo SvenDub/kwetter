@@ -41,15 +41,22 @@ public class DataSetLoader {
         SecurityGroup defaultSecurityGroup = new SecurityGroup("Default", Collections.singleton(loginPermission));
         securityGroupRepository.create(defaultSecurityGroup);
 
-        User user = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
-        Profile profile = user.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
+        User user1 = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
+        Profile profile1 = user1.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
-        userRepository.create(user);
-        profileRepository.create(profile);
+        userRepository.create(user1);
+        profileRepository.create(profile1);
 
+        tweetRepository.create(new Tweet(user1, "Hello World!", null));
+        tweetRepository.create(new Tweet(user1, "Hi there!", null));
 
-        Tweet tweet = new Tweet(user, "Hello World!", null);
-        tweetRepository.create(tweet);
+        User user2 = new User("sven@svendubbeld.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
+        Profile profile2 = user2.createProfile("DeEnigeEchteSven", "Sven #2", "", null, "https://example.org");
+
+        userRepository.create(user2);
+        profileRepository.create(profile2);
+
+        tweetRepository.create(new Tweet(user2, "Hello everyone", null));
     }
 
     private void clear() {

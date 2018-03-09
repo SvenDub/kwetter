@@ -1,5 +1,8 @@
 package nl.svendubbeld.fontys.model;
 
+import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.ToDTOConvertible;
+import nl.svendubbeld.fontys.dto.TweetDTO;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A tweet.
@@ -16,10 +20,9 @@ import java.util.*;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner"),
-        @NamedQuery(name = "tweet.findByOwnerString", query = "select t from Tweet t where (select p from Profile p where p.username = :owner) member of t.owner.profiles"),
-        @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where t.content like concat('%', :content, '%')")
+        @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')")
 })
-public class Tweet {
+public class Tweet implements ToDTOConvertible<TweetDTO> {
 
     /**
      * The unique id identifying this tweet.
@@ -129,5 +132,20 @@ public class Tweet {
      */
     public Map<String, User> getMentions() {
         return Collections.unmodifiableMap(mentions);
+    }
+
+    @Override
+    public TweetDTO convert(DTOHelper dtoHelper) {
+        TweetDTO dto = new TweetDTO();
+
+        dto.setId(getId());
+        dto.setOwner(getOwner().convert(dtoHelper));
+        dto.setContent(getContent());
+        dto.setLikedBy(getLikedBy().stream().map(user -> user.convert(dtoHelper)).collect(Collectors.toSet()));
+        dto.setDate(getDate());
+        getLocation().map(l -> l.convert(dtoHelper)).ifPresent(dto::setLocation);
+        dto.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> user.getValue().convert(dtoHelper))));
+
+        return dto;
     }
 }

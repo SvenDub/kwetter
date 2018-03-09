@@ -5,15 +5,14 @@ import cucumber.api.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import okhttp3.HttpUrl;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
-import org.hamcrest.core.StringContains;
 import org.jboss.arquillian.test.api.ArquillianResource;
 
 import java.net.URL;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 public class HomePageStepdefs {
 
@@ -28,7 +27,7 @@ public class HomePageStepdefs {
                 .scheme(url.getProtocol())
                 .host(url.getHost())
                 .port(url.getPort())
-                .addPathSegments(url.getPath())
+                .addPathSegments(StringUtils.strip(url.getPath(), "/"))
                 .addPathSegment("api")
                 .build().toString();
 
@@ -42,17 +41,17 @@ public class HomePageStepdefs {
     public void contains(int count, String query) {
         response.then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("results", hasSize(count))
+                .body("", hasSize(count))
                 .and()
-                .body("results.content", hasItems(StringContains.containsString(query)));
+                .body("content", everyItem(containsString(query)));
     }
 
     @Then("^I get (\\d+) tweets from \"([^\"]*)\"$")
-    public void fromOwner(int count, String query) throws Throwable {
+    public void fromOwner(int count, String query) {
         response.then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("results", hasSize(count))
+                .body("", hasSize(count))
                 .and()
-                .body("results.owner", hasItems(query));
+                .body("owner.profile.username", everyItem(is(query)));
     }
 }

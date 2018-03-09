@@ -1,9 +1,11 @@
 package nl.svendubbeld.fontys.dao.jpa;
 
 import nl.svendubbeld.fontys.dao.TweetRepository;
+import nl.svendubbeld.fontys.dao.UserRepository;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 
+import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import java.util.stream.Stream;
 
@@ -11,6 +13,9 @@ import java.util.stream.Stream;
  * A JPA repository for tweets.
  */
 public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements TweetRepository {
+
+    @Inject
+    private UserRepository userRepository;
 
     protected TweetRepositoryJPA() {
         super(Tweet.class);
@@ -26,10 +31,7 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
 
     @Override
     public Stream<Tweet> findByOwner(String owner) {
-        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.findByOwnerString", getEntityClass());
-        query.setParameter("owner", owner);
-
-        return query.getResultStream();
+        return findByOwner(userRepository.findByUsername(owner));
     }
 
     @Override

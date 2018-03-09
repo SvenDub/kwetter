@@ -18,7 +18,18 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
      */
     Stream<Tweet> findByOwner(User user);
 
+    /**
+     * Find tweets posted by a certain user.
+     *
+     * @param owner The username of the user who placed the tweets.
+     * @return A stream of tweets posted by the user.
+     */
     Stream<Tweet> findByOwner(String owner);
 
+    /**
+     * Find tweets that contain a certain string.
+     * @param content The string to search for (case-insensitive).
+     * @return A stream of tweets containing the string.
+     */
     Stream<Tweet> findByContent(String content);
 }
