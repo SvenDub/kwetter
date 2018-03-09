@@ -1,4 +1,4 @@
-package nl.svendubbeld.fontys.validation.validator;
+package nl.svendubbeld.fontys.test.unit.validation.validator;
 
 import nl.svendubbeld.fontys.model.Location;
 import org.junit.Test;

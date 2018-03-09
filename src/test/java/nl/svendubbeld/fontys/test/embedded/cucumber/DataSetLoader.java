@@ -1,4 +1,4 @@
-package nl.svendubbeld.fontys.cucumber;
+package nl.svendubbeld.fontys.test.embedded.cucumber;
 
 import nl.svendubbeld.fontys.dao.*;
 import nl.svendubbeld.fontys.model.Location;

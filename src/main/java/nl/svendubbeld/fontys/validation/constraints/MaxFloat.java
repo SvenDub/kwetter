@@ -1,7 +1,7 @@
 package nl.svendubbeld.fontys.validation.constraints;
 
-import nl.svendubbeld.fontys.validation.validator.MaxDoubleValidator;
-import nl.svendubbeld.fontys.validation.validator.MaxFloatValidator;
+import nl.svendubbeld.fontys.test.unit.validation.validator.MaxDoubleValidator;
+import nl.svendubbeld.fontys.test.unit.validation.validator.MaxFloatValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

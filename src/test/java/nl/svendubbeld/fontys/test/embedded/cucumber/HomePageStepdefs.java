@@ -1,4 +1,4 @@
-package nl.svendubbeld.fontys.cucumber;
+package nl.svendubbeld.fontys.test.embedded.cucumber;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

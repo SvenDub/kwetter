@@ -12,7 +12,13 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'mvn test -P arquillian-glassfish-embedded -B'
+                sh 'mvn clean test  -B'
+                archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
+            }
+        }
+        stage('Embedded Test') {
+            steps {
+                sh 'mvn clean test -P arquillian-glassfish-embedded -B'
                 archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
             }
         }
@@ -21,7 +27,7 @@ pipeline {
                 branch 'master || develop'
             }
             steps {
-                sh 'mvn package -B'
+                sh 'mvn clean package -B'
                 archiveArtifacts artifacts: 'target/kwetter.war', fingerprint: true
             }
         }

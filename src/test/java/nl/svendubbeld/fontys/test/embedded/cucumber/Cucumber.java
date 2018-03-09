@@ -1,4 +1,4 @@
-package nl.svendubbeld.fontys.cucumber;
+package nl.svendubbeld.fontys.test.embedded.cucumber;
 
 import cucumber.api.java.en.Given;
 import cucumber.runtime.arquillian.ArquillianCucumber;
@@ -18,17 +18,17 @@ import javax.inject.Inject;
 import java.io.File;
 
 @Features({
-        //"nl/svendubbeld/fontys/cucumber/Administration.feature",
-        "nl/svendubbeld/fontys/cucumber/Home Page.feature"/*,
-        "nl/svendubbeld/fontys/cucumber/Login.feature",
-        "nl/svendubbeld/fontys/cucumber/Profile Page.feature"*/
+        //"nl/svendubbeld/fontys/test/embedded/cucumber/Administration.feature",
+        "nl/svendubbeld/fontys/test/embedded/cucumber/Home Page.feature"/*,
+        "nl/svendubbeld/fontys/test/embedded/cucumber/Login.feature",
+        "nl/svendubbeld/fontys/test/embedded/cucumber/Profile Page.feature"*/
 })
 @Glues({
         HomePageStepdefs.class,
-        CucumberTest.class
+        Cucumber.class
 })
 @RunWith(ArquillianCucumber.class)
-public class CucumberTest {
+public class Cucumber {
 
     @Deployment
     public static Archive<?> createDeployment() {

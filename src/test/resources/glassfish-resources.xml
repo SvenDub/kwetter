@@ -1,15 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE resources PUBLIC
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE resources PUBLIC
     "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
     "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
-    <jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" name="kwetter"
-        res-type="javax.sql.DataSource">
-        <property name="password" value="fontys"></property>
-        <property name="databaseName" value="kwetter"></property>
-        <property name="serverName" value="localhost"></property>
-        <property name="user" value="fontys"></property>
-        <property name="portNumber" value="3306"></property>
+    <jdbc-resource pool-name="ArquillianEmbeddedH2Pool" jndi-name="jdbc/kwetter" />
+    <jdbc-connection-pool name="ArquillianEmbeddedH2Pool" res-type="javax.sql.DataSource"
+        datasource-classname="org.h2.jdbcx.JdbcDataSource">
+        <property name="user" value="sa" />
+        <property name="password" value="" />
+        <property name="url" value="jdbc:h2:mem:test" />
     </jdbc-connection-pool>
-    <jdbc-resource pool-name="kwetter" jndi-name="jdbc/kwetter"></jdbc-resource>
 </resources>

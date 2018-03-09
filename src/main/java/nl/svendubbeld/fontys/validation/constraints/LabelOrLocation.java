@@ -1,6 +1,6 @@
 package nl.svendubbeld.fontys.validation.constraints;
 
-import nl.svendubbeld.fontys.validation.validator.LabelOrLocationValidator;
+import nl.svendubbeld.fontys.test.unit.validation.validator.LabelOrLocationValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
