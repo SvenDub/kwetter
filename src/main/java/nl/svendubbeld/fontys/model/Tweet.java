@@ -15,7 +15,9 @@ import java.util.*;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner")
+        @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner"),
+        @NamedQuery(name = "tweet.findByOwnerString", query = "select t from Tweet t where (select p from Profile p where p.username = :owner) member of t.owner.profiles"),
+        @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where t.content like concat('%', :content, '%')")
 })
 public class Tweet {
 

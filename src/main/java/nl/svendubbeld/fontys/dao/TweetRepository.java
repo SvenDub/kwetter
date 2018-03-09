@@ -17,4 +17,8 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
      * @return A stream of tweets posted by the user.
      */
     Stream<Tweet> findByOwner(User user);
+
+    Stream<Tweet> findByOwner(String owner);
+
+    Stream<Tweet> findByContent(String content);
 }

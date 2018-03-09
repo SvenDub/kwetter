@@ -23,4 +23,20 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
 
         return query.getResultStream();
     }
+
+    @Override
+    public Stream<Tweet> findByOwner(String owner) {
+        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.findByOwnerString", getEntityClass());
+        query.setParameter("owner", owner);
+
+        return query.getResultStream();
+    }
+
+    @Override
+    public Stream<Tweet> findByContent(String content) {
+        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.findByContent", getEntityClass());
+        query.setParameter("content", content);
+
+        return query.getResultStream();
+    }
 }

@@ -8,6 +8,8 @@ Feature: Home Page
     Then I get 2 tweets containing "Hello"
 
   Scenario: Search tweets by user
+    When I search for "@SvenDub"
+    Then I get 2 tweets from "SvenDub"
 
   Scenario: Place tweet
 

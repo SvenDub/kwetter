@@ -38,4 +38,9 @@ public interface CrudRepository<T, ID> {
      */
     T findById(ID id);
 
+    /**
+     * Clear all entities.
+     */
+    void clear();
+
 }
