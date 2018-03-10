@@ -7,7 +7,8 @@ public class World {
 
     private String username;
     private String token;
-private String path;
+    private String path;
+    private String baseUri;
 
     public String getUsername() {
         return username;
@@ -31,5 +32,13 @@ private String path;
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getBaseUri() {
+        return baseUri;
+    }
+
+    public void setBaseUri(String baseUri) {
+        this.baseUri = baseUri;
     }
 }

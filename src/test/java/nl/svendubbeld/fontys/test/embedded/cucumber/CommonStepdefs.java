@@ -43,5 +43,6 @@ public class CommonStepdefs {
         RestAssured.baseURI = httpUrl.toString();
 
         world.setPath(httpUrl.encodedPath());
+        world.setBaseUri(httpUrl.toString());
     }
 }

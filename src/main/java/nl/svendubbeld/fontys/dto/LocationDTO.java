@@ -1,6 +1,8 @@
 package nl.svendubbeld.fontys.dto;
 
-public class LocationDTO {
+import nl.svendubbeld.fontys.model.Location;
+
+public class LocationDTO implements ToEntityConvertible<Location> {
 
     private String label;
 
@@ -39,5 +41,10 @@ public class LocationDTO {
 
     public void setLongitude(Float longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public Location convert(DTOHelper dtoHelper) {
+        return new Location(getLabel(), getLatitude(), getLongitude());
     }
 }

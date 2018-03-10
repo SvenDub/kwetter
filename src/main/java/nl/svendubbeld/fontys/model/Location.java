@@ -44,7 +44,7 @@ public class Location implements ToDTOConvertible<LocationDTO> {
     @Column
     private Float longitude;
 
-    protected Location() {
+    public Location() {
     }
 
     /**

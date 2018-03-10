@@ -3,19 +3,15 @@ package nl.svendubbeld.fontys.test.embedded.cucumber;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
-import nl.svendubbeld.fontys.dao.TweetRepository;
-import nl.svendubbeld.fontys.model.Tweet;
+import nl.svendubbeld.fontys.dto.TweetDTO;
 import org.apache.http.HttpStatus;
 
 import javax.inject.Inject;
-import java.util.List;
+import javax.ws.rs.core.MediaType;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
-import static nl.svendubbeld.fontys.test.matcher.PredicateMatcher.matches;
 import static nl.svendubbeld.fontys.test.matcher.RegexMatcher.matchesPattern;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class HomePageStepdefs {
@@ -26,7 +22,7 @@ public class HomePageStepdefs {
     private World world;
 
     @Inject
-    private TweetRepository tweetRepository;
+    private TransactionalTests transactionalTests;
 
     @When("^I search for \"([^\"]*)\"$")
     public void search(String query) {
@@ -56,9 +52,14 @@ public class HomePageStepdefs {
 
     @When("^I place a tweet containing \"([^\"]*)\"$")
     public void placeTweet(String content) {
+        TweetDTO tweet = new TweetDTO();
+
+        tweet.setContent(content);
+
         response = given()
-                .header("X-API_KEY", world.getToken())
-                .body("")
+                .header("X-API-KEY", world.getToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(tweet)
                 .when()
                 .post("/tweets");
     }
@@ -67,13 +68,11 @@ public class HomePageStepdefs {
     public void serverRedirect(int code, String path) {
         response.then()
                 .statusCode(code)
-                .header("Location", matchesPattern(Pattern.compile("^" + world.getPath() + "/" + path + "$")));
+                .header("Location", matchesPattern(Pattern.compile("^" + world.getBaseUri() + path + "$")));
     }
 
     @Then("^A tweet containing \"([^\"]*)\" from \"([^\"]*)\" should exist$")
     public void tweetContains(String content, String username) {
-        List<? super Tweet> byContent = tweetRepository.findByContent(content).collect(Collectors.toList());
-
-        assertThat(byContent, hasItem(matches((Tweet tweet) -> tweet.getOwner().getCurrentProfile().get().getUsername().equals(username))));
+        transactionalTests.tweetContains(content, username);
     }
 }

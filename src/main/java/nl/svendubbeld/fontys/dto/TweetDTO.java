@@ -1,10 +1,13 @@
 package nl.svendubbeld.fontys.dto;
 
+import nl.svendubbeld.fontys.model.Tweet;
+
 import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class TweetDTO {
+public class TweetDTO implements ToEntityConvertible<Tweet> {
 
     private long id;
 
@@ -87,5 +90,32 @@ public class TweetDTO {
 
     public void setMentions(Map<String, UserDTO> mentions) {
         this.mentions = mentions;
+    }
+
+    @Override
+    public Tweet convert(DTOHelper dtoHelper) {
+        Tweet tweet = new Tweet();
+
+        tweet.setId(getId());
+        tweet.setContent(getContent());
+        tweet.setDate(getDate());
+
+        if (getOwner() != null) {
+            tweet.setOwner(dtoHelper.getUserRepository().findById(getOwner().getId()));
+        }
+
+        if (getLikedBy() != null) {
+            tweet.setLikedBy(getLikedBy().stream().map(user -> dtoHelper.getUserRepository().findById(user.getId())).collect(Collectors.toSet()));
+        }
+
+        if (getLocation() != null) {
+            tweet.setLocation(getLocation().convert(dtoHelper));
+        }
+
+        if (getMentions() != null) {
+            tweet.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> dtoHelper.getUserRepository().findById(user.getValue().getId()))));
+        }
+
+        return tweet;
     }
 }

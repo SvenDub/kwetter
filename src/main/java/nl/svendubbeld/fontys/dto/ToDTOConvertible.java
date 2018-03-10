@@ -10,6 +10,7 @@ public interface ToDTOConvertible<DTO> {
     /**
      * Obtain a DTO representation of this object. An open Hibernate session might be required.
      *
+     * @param dtoHelper Helper for use in DTO conversion.
      * @return The DTO representation of this object.
      */
     DTO convert(DTOHelper dtoHelper);

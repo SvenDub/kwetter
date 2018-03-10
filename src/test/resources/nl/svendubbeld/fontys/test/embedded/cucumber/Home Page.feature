@@ -15,7 +15,7 @@ Feature: Home Page
   Scenario Outline: Place tweet
     Given I am logged in as "<user>"
     When I place a tweet containing "<content>"
-    Then The server responds with 201 and redirects me to "/tweets/(\\d+)"
+    Then The server responds with 201 and redirects me to "/tweets/(\d+)"
     And A tweet containing "<content>" from "<user>" should exist
     Examples:
       | user             | content                   |

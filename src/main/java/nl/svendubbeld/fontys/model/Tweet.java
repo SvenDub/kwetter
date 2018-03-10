@@ -71,7 +71,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
     @ManyToMany
     private Map<String, User> mentions;
 
-    protected Tweet() {
+    public Tweet() {
     }
 
     public Tweet(User owner, String content, @Nullable Location location) {
@@ -90,11 +90,19 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     /**
      * @return The user who placed the tweet.
      */
     public User getOwner() {
         return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     /**
@@ -104,11 +112,19 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         return content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     /**
      * @return The users who liked the tweet.
      */
     public Set<User> getLikedBy() {
         return Collections.unmodifiableSet(likedBy);
+    }
+
+    public void setLikedBy(Set<User> likedBy) {
+        this.likedBy = new HashSet<>(likedBy);
     }
 
     /**
@@ -118,11 +134,19 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         return date;
     }
 
+    public void setDate(OffsetDateTime date) {
+        this.date = date;
+    }
+
     /**
      * @return The location from which the tweet was placed.
      */
     public Optional<Location> getLocation() {
         return Optional.ofNullable(location);
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     /**
@@ -132,6 +156,10 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
      */
     public Map<String, User> getMentions() {
         return Collections.unmodifiableMap(mentions);
+    }
+
+    public void setMentions(Map<String, User> mentions) {
+        this.mentions = new HashMap<>(mentions);
     }
 
     @Override
