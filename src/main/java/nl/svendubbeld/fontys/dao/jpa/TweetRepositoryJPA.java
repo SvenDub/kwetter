@@ -41,4 +41,13 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
 
         return query.getResultStream();
     }
+
+    @Override
+    public Stream<Tweet> getTimeline(User user) {
+        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.getTimeline", getEntityClass());
+        query.setParameter("user", user);
+        query.setParameter("following", user.getFollowing());
+
+        return query.getResultStream();
+    }
 }

@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import nl.svendubbeld.fontys.dto.TweetDTO;
+import nl.svendubbeld.fontys.rest.Headers;
 import org.apache.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -50,6 +51,13 @@ public class HomePageStepdefs {
                 .body("owner.profile.username", everyItem(is(query)));
     }
 
+    @Then("^I get (\\d+) tweets$")
+    public void totalTweets(int count) {
+        response.then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("", hasSize(count));
+    }
+
     @When("^I place a tweet containing \"([^\"]*)\"$")
     public void placeTweet(String content) {
         TweetDTO tweet = new TweetDTO();
@@ -57,7 +65,7 @@ public class HomePageStepdefs {
         tweet.setContent(content);
 
         response = given()
-                .header("X-API-KEY", world.getToken())
+                .header(Headers.API_KEY, world.getToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(tweet)
                 .when()
@@ -74,5 +82,13 @@ public class HomePageStepdefs {
     @Then("^A tweet containing \"([^\"]*)\" from \"([^\"]*)\" should exist$")
     public void tweetContains(String content, String username) {
         transactionalTests.tweetContains(content, username);
+    }
+
+    @When("^I load my timeline$")
+    public void loadTimeline() {
+        response = given()
+                .header(Headers.API_KEY, world.getToken())
+                .when()
+                .get("/me/timeline");
     }
 }

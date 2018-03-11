@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner"),
-        @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')")
+        @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')"),
+        @NamedQuery(name = "tweet.getTimeline", query = "select t from Tweet t where t.owner in :following or t.owner = :user")
 })
 public class Tweet implements ToDTOConvertible<TweetDTO> {
 

@@ -74,7 +74,7 @@ public class TweetController {
     @POST
     @Consumes
     @Transactional
-    public Response addTweet(TweetDTO dto, @HeaderParam("X-API-KEY") String apiKey) {
+    public Response addTweet(TweetDTO dto, @HeaderParam(Headers.API_KEY) String apiKey) {
         Tweet tweet = dto.convert(dtoHelper);
 
         User user;

@@ -41,22 +41,22 @@ public class DataSetLoader {
         SecurityGroup defaultSecurityGroup = new SecurityGroup("Default", Collections.singleton(loginPermission));
         securityGroupRepository.create(defaultSecurityGroup);
 
-        User user1 = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
-        Profile profile1 = user1.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
+        User userSvenDub = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
+        Profile profileSvenDub = userSvenDub.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
-        userRepository.create(user1);
-        profileRepository.create(profile1);
+        userRepository.create(userSvenDub);
+        profileRepository.create(profileSvenDub);
 
-        tweetRepository.create(new Tweet(user1, "Hello World!", null));
-        tweetRepository.create(new Tweet(user1, "Hi there!", null));
+        tweetRepository.create(new Tweet(userSvenDub, "Hello World!", null));
+        tweetRepository.create(new Tweet(userSvenDub, "Hi there!", null));
 
-        User user2 = new User("sven@svendubbeld.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
-        Profile profile2 = user2.createProfile("DeEnigeEchteSven", "Sven #2", "", null, "https://example.org");
+        User userDeEnigeEchteSven = new User("sven@svendubbeld.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.singleton(userSvenDub));
+        Profile profileDeEnigeEchteSven = userDeEnigeEchteSven.createProfile("DeEnigeEchteSven", "Sven #2", "", null, "https://example.org");
 
-        userRepository.create(user2);
-        profileRepository.create(profile2);
+        userRepository.create(userDeEnigeEchteSven);
+        profileRepository.create(profileDeEnigeEchteSven);
 
-        tweetRepository.create(new Tweet(user2, "Hello everyone", null));
+        tweetRepository.create(new Tweet(userDeEnigeEchteSven, "Hello everyone", null));
     }
 
     private void clear() {

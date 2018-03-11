@@ -28,8 +28,17 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
 
     /**
      * Find tweets that contain a certain string.
+     *
      * @param content The string to search for (case-insensitive).
      * @return A stream of tweets containing the string.
      */
     Stream<Tweet> findByContent(String content);
+
+    /**
+     * Get the timeline for a user. This includes tweets from the users they follow and their own tweets.
+     *
+     * @param user The user whose timeline to get.
+     * @return A stream of tweets representing the timeline.
+     */
+    Stream<Tweet> getTimeline(User user);
 }

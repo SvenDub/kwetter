@@ -23,6 +23,14 @@ Feature: Home Page
       | DeEnigeEchteSven | How is it going @SvenDub? |
 
   Scenario: Show timeline
+    Given I am logged in as "DeEnigeEchteSven"
+    When I load my timeline
+    Then I get 3 tweets
+
+  Scenario: Show timeline
+    Given I am logged in as "SvenDub"
+    When I load my timeline
+    Then I get 2 tweets
 
   Scenario: Mention user in tweet
 
