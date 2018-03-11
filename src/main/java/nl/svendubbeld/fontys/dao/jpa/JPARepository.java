@@ -6,7 +6,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.stream.Stream;
 
 /**
  * A repository for JPA.
@@ -63,8 +64,16 @@ public abstract class JPARepository<T, ID> implements CrudRepository<T, ID> {
     @Override
     public void clear() {
         CriteriaDelete<T> criteriaDelete = getEntityManager().getCriteriaBuilder().createCriteriaDelete(entityClass);
-        Root<T> root = criteriaDelete.from(entityClass);
+        criteriaDelete.from(entityClass);
 
         getEntityManager().createQuery(criteriaDelete).executeUpdate();
+    }
+
+    @Override
+    public Stream<T> findAll() {
+        CriteriaQuery<T> query = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
+        query.from(entityClass);
+
+        return getEntityManager().createQuery(query).getResultStream();
     }
 }

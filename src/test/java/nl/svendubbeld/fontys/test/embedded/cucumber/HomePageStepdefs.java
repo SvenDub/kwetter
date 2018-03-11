@@ -1,5 +1,6 @@
 package nl.svendubbeld.fontys.test.embedded.cucumber;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
@@ -90,5 +91,10 @@ public class HomePageStepdefs {
                 .header(Headers.API_KEY, world.getToken())
                 .when()
                 .get("/me/timeline");
+    }
+
+    @And("^A tweet mentioning \"([^\"]*)\" should exist$")
+    public void tweetMentions(String username) {
+        transactionalTests.tweetMentions(username);
     }
 }

@@ -6,6 +6,7 @@ import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.TweetDTO;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
+import nl.svendubbeld.fontys.parser.TweetParser;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -27,6 +28,8 @@ import java.util.stream.Stream;
 @Path("/tweets")
 public class TweetController {
 
+    private final Logger logger = Logger.getLogger(TweetController.class.getName());
+
     @Inject
     private TweetRepository tweetRepository;
 
@@ -36,7 +39,8 @@ public class TweetController {
     @Inject
     private DTOHelper dtoHelper;
 
-    private final Logger logger = Logger.getLogger(TweetController.class.getName());
+    @Inject
+    private TweetParser tweetParser;
 
     @Context
     private ServletContext context;
@@ -90,7 +94,7 @@ public class TweetController {
         }
 
         tweet.setOwner(user);
-        tweet.setMentions(Collections.emptyMap());
+        tweet.setMentions(tweetParser.getMentions(tweet.getContent()));
         tweet.setLikedBy(Collections.emptySet());
         tweet.setDate(OffsetDateTime.now());
 

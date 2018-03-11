@@ -1,7 +1,7 @@
 package nl.svendubbeld.fontys.validation.constraints;
 
-import nl.svendubbeld.fontys.test.unit.validation.validator.MinDoubleValidator;
-import nl.svendubbeld.fontys.test.unit.validation.validator.MinFloatValidator;
+import nl.svendubbeld.fontys.validation.validator.MinDoubleValidator;
+import nl.svendubbeld.fontys.validation.validator.MinFloatValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

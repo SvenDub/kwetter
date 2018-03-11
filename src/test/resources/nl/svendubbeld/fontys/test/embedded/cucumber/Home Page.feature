@@ -33,6 +33,11 @@ Feature: Home Page
     Then I get 2 tweets
 
   Scenario: Mention user in tweet
+    Given I am logged in as "SvenDub"
+    When I place a tweet containing "How is it going @DeEnigeEchteSven @SvenDub?"
+    Then A tweet containing "How is it going @DeEnigeEchteSven @SvenDub?" from "SvenDub" should exist
+    And A tweet mentioning "DeEnigeEchteSven" should exist
+    And A tweet mentioning "SvenDub" should exist
 
   Scenario: Show tweets mentioning me
 

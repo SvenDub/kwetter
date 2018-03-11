@@ -1,5 +1,7 @@
 package nl.svendubbeld.fontys.dao;
 
+import java.util.stream.Stream;
+
 /**
  * A repository that exposes CRUD operations.
  *
@@ -43,4 +45,10 @@ public interface CrudRepository<T, ID> {
      */
     void clear();
 
+    /**
+     * Find all entities.
+     *
+     * @return All entities.
+     */
+    Stream<T> findAll();
 }

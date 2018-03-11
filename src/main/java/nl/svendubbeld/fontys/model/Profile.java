@@ -8,9 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -42,6 +40,8 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
      * The unique handle of the user.
      */
     @Column(unique = true)
+    @Size(min = 1, max = 30)
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$")
     @NotBlank
     private String username;
 

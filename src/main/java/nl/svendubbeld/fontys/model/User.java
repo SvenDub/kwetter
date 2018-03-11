@@ -58,6 +58,7 @@ public class User implements ToDTOConvertible<UserDTO> {
      * The users this user follows.
      */
     @OneToMany
+    @JoinTable(name = "User_Following")
     @NotNull
     private Set<User> following;
 
