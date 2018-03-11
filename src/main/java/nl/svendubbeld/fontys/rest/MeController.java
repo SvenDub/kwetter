@@ -53,4 +53,28 @@ public class MeController {
                 )
                 .build();
     }
+
+    @GET
+    @Path("/mentions")
+    @Transactional
+    public Response getMentions(@HeaderParam(Headers.API_KEY) String apiKey) {
+        User user;
+
+        try {
+            user = userRepository.findByUsername(apiKey);
+        } catch (NoResultException e) {
+            logger.log(Level.WARNING, e, () -> "User does not exist.");
+
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        return Response
+                .ok(tweetRepository.getMentions(user)
+                        .map(tweet -> tweet.convert(dtoHelper))
+                        .collect(Collectors.toList())
+                )
+                .build();
+    }
 }

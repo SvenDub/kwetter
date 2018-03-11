@@ -41,4 +41,12 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
      * @return A stream of tweets representing the timeline.
      */
     Stream<Tweet> getTimeline(User user);
+
+    /**
+     * Get all tweets a user is mentioned in.
+     *
+     * @param user The user.
+     * @return A stream of tweets mentioning the user.
+     */
+    Stream<Tweet> getMentions(User user);
 }

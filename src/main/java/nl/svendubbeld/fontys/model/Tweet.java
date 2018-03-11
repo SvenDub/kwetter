@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 @NamedQueries({
         @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner"),
         @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')"),
-        @NamedQuery(name = "tweet.getTimeline", query = "select t from Tweet t where t.owner in :following or t.owner = :user")
+        @NamedQuery(name = "tweet.getTimeline", query = "select t from Tweet t where t.owner in :following or t.owner = :user"),
+        @NamedQuery(name = "tweet.getMentions", query = "select t from Tweet t where :user = value(t.mentions)")
 })
 public class Tweet implements ToDTOConvertible<TweetDTO> {
 
@@ -49,6 +50,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
      * The users who liked the tweet.
      */
     @OneToMany
+    @JoinTable(name = "Tweet_LikedBy")
     @NotNull
     private Set<User> likedBy;
 
@@ -70,6 +72,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
      * Maps the used usernames to unique ids so they still point to the same user after they change their username.
      */
     @ManyToMany
+    @JoinTable(name = "Tweet_Mentions")
     private Map<String, User> mentions;
 
     public Tweet() {

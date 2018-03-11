@@ -40,6 +40,11 @@ Feature: Home Page
     And A tweet mentioning "SvenDub" should exist
 
   Scenario: Show tweets mentioning me
+    Given I am logged in as "SvenDub"
+    And I place a tweet containing "How is it going @DeEnigeEchteSven?"
+    And I place a tweet containing "It's a me, @SvenDub!"
+    When I load my mentions
+    Then I get 1 tweets
 
   Scenario: Show popular trends
 

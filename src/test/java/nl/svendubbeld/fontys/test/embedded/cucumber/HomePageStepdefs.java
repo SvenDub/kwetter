@@ -97,4 +97,12 @@ public class HomePageStepdefs {
     public void tweetMentions(String username) {
         transactionalTests.tweetMentions(username);
     }
+
+    @When("^I load my mentions$")
+    public void loadMentions() {
+        response = given()
+                .header(Headers.API_KEY, world.getToken())
+                .when()
+                .get("/me/mentions");
+    }
 }

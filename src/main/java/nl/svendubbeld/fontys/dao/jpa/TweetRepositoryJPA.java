@@ -50,4 +50,12 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
 
         return query.getResultStream();
     }
+
+    @Override
+    public Stream<Tweet> getMentions(User user) {
+        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.getMentions", getEntityClass());
+        query.setParameter("user", user);
+
+        return query.getResultStream();
+    }
 }
