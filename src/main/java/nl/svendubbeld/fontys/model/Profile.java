@@ -1,13 +1,14 @@
 package nl.svendubbeld.fontys.model;
 
+import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.ProfileDTO;
+import nl.svendubbeld.fontys.dto.ToDTOConvertible;
 import org.hibernate.validator.constraints.URL;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 @NamedQueries({
         @NamedQuery(name = "profile.findByUsername", query = "select p from Profile p where p.username = :username")
 })
-public class Profile {
+public class Profile implements ToDTOConvertible<ProfileDTO> {
 
     /**
      * A unique id identifying this profile.
@@ -39,6 +40,8 @@ public class Profile {
      * The unique handle of the user.
      */
     @Column(unique = true)
+    @Size(min = 1, max = 30)
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$")
     @NotBlank
     private String username;
 
@@ -150,5 +153,20 @@ public class Profile {
      */
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public ProfileDTO convert(DTOHelper dtoHelper) {
+        ProfileDTO dto = new ProfileDTO();
+
+        dto.setId(getId());
+        dto.setUsername(getUsername());
+        dto.setName(getName());
+        dto.setBio(getBio());
+        getLocation().map(l -> l.convert(dtoHelper)).ifPresent(dto::setLocation);
+        dto.setWebsite(getWebsite());
+        dto.setCreatedAt(getCreatedAt());
+
+        return dto;
     }
 }

@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 services:
   mysql:
     image: mysql
@@ -15,7 +15,6 @@ services:
       - mysql
     ports:
       - "8080:8080"
-      - "8181:8181"
       - "4848:4848"
 volumes:
   kwetter-mysql:

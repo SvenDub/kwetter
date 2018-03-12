@@ -1,8 +1,13 @@
-package nl.svendubbeld.fontys.dao;
+package nl.svendubbeld.fontys.dao.jpa;
+
+import nl.svendubbeld.fontys.dao.CrudRepository;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.stream.Stream;
 
 /**
  * A repository for JPA.
@@ -54,5 +59,21 @@ public abstract class JPARepository<T, ID> implements CrudRepository<T, ID> {
     @Override
     public T findById(ID id) {
         return getEntityManager().find(entityClass, id);
+    }
+
+    @Override
+    public void clear() {
+        CriteriaDelete<T> criteriaDelete = getEntityManager().getCriteriaBuilder().createCriteriaDelete(entityClass);
+        criteriaDelete.from(entityClass);
+
+        getEntityManager().createQuery(criteriaDelete).executeUpdate();
+    }
+
+    @Override
+    public Stream<T> findAll() {
+        CriteriaQuery<T> query = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
+        query.from(entityClass);
+
+        return getEntityManager().createQuery(query).getResultStream();
     }
 }

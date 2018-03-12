@@ -1,4 +1,4 @@
-package nl.svendubbeld.fontys.validation.validator;
+package nl.svendubbeld.fontys.test.unit.validation.validator;
 
 import nl.svendubbeld.fontys.validation.constraints.MinFloat;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class MinDoubleValidatorTest extends ValidatorTest{
+public class MinFloatValidatorTest extends ValidatorTest{
 
     @Test
     public void testNull() {
@@ -22,7 +22,7 @@ public class MinDoubleValidatorTest extends ValidatorTest{
 
     @Test
     public void testGreater() {
-        Container container = new Container(50.51);
+        Container container = new Container(50.51f);
 
         Set<ConstraintViolation<Container>> violations = getValidator().validate(container);
 
@@ -31,7 +31,7 @@ public class MinDoubleValidatorTest extends ValidatorTest{
 
     @Test
     public void testEqual() {
-        Container container = new Container(50.5);
+        Container container = new Container(50.5f);
 
         Set<ConstraintViolation<Container>> violations = getValidator().validate(container);
 
@@ -40,7 +40,7 @@ public class MinDoubleValidatorTest extends ValidatorTest{
 
     @Test
     public void testLower() {
-        Container container = new Container(50.49);
+        Container container = new Container(50.49f);
 
         Set<ConstraintViolation<Container>> violations = getValidator().validate(container);
 
@@ -50,9 +50,9 @@ public class MinDoubleValidatorTest extends ValidatorTest{
     private class Container {
 
         @MinFloat(50.5)
-        private Double value;
+        private Float value;
 
-        public Container(Double value) {
+        public Container(Float value) {
             this.value = value;
         }
     }

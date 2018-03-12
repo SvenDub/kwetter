@@ -1,17 +1,15 @@
-package nl.svendubbeld.fontys.validation.validator;
+package nl.svendubbeld.fontys.test.unit.validation.validator;
 
-import nl.svendubbeld.fontys.validation.constraints.MaxFloat;
+import nl.svendubbeld.fontys.validation.constraints.MinFloat;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
-public class MaxDoubleValidatorTest extends ValidatorTest{
+public class MinDoubleValidatorTest extends ValidatorTest{
 
     @Test
     public void testNull() {
@@ -28,7 +26,7 @@ public class MaxDoubleValidatorTest extends ValidatorTest{
 
         Set<ConstraintViolation<Container>> violations = getValidator().validate(container);
 
-        assertThat(violations, is(not(empty())));
+        assertThat(violations, is(empty()));
     }
 
     @Test
@@ -46,12 +44,12 @@ public class MaxDoubleValidatorTest extends ValidatorTest{
 
         Set<ConstraintViolation<Container>> violations = getValidator().validate(container);
 
-        assertThat(violations, is(empty()));
+        assertThat(violations, is(not(empty())));
     }
 
     private class Container {
 
-        @MaxFloat(50.5)
+        @MinFloat(50.5)
         private Double value;
 
         public Container(Double value) {

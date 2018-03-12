@@ -1,5 +1,8 @@
 package nl.svendubbeld.fontys.model;
 
+import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.LocationDTO;
+import nl.svendubbeld.fontys.dto.ToDTOConvertible;
 import nl.svendubbeld.fontys.validation.constraints.LabelOrLocation;
 import nl.svendubbeld.fontys.validation.constraints.MaxFloat;
 import nl.svendubbeld.fontys.validation.constraints.MinFloat;
@@ -14,7 +17,7 @@ import java.util.Optional;
  */
 @Embeddable
 @LabelOrLocation
-public class Location {
+public class Location implements ToDTOConvertible<LocationDTO> {
 
     /**
      * The label associated with the location.
@@ -41,7 +44,7 @@ public class Location {
     @Column
     private Float longitude;
 
-    protected Location() {
+    public Location() {
     }
 
     /**
@@ -49,7 +52,7 @@ public class Location {
      *
      * @param label The label describing the location.
      */
-    public Location(String label) {
+    public Location(@Nullable String label) {
         this.label = label;
     }
 
@@ -96,5 +99,10 @@ public class Location {
      */
     public Optional<Float> getLongitude() {
         return Optional.ofNullable(longitude);
+    }
+
+    @Override
+    public LocationDTO convert(DTOHelper dtoHelper) {
+        return new LocationDTO(label, latitude, longitude);
     }
 }

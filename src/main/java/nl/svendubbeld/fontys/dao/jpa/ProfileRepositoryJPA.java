@@ -1,5 +1,6 @@
-package nl.svendubbeld.fontys.dao;
+package nl.svendubbeld.fontys.dao.jpa;
 
+import nl.svendubbeld.fontys.dao.ProfileRepository;
 import nl.svendubbeld.fontys.model.Profile;
 
 import javax.persistence.TypedQuery;
