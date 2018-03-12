@@ -41,4 +41,10 @@ public class TransactionalTests {
             return currentProfile.get().getUsername().equals(username);
         })));
     }
+
+    public void tweetWithHashtag(String hashtag) {
+        List<? super Tweet> tweets = tweetRepository.findAll().collect(Collectors.toList());
+
+        assertThat(tweets, hasItem(matches((Tweet tweet) -> tweet.getHashtags().contains(hashtag))));
+    }
 }

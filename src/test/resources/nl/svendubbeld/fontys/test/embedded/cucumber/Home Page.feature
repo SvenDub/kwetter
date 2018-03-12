@@ -47,8 +47,26 @@ Feature: Home Page
     Then I get 1 tweets
 
   Scenario: Show popular trends
+    Given I am logged in as "SvenDub"
+    And I place a tweet containing "Coding and coding #javaee #fontys"
+    And I place a tweet containing "Building kwetter in #javaee"
+    When I load popular trends
+    Then I get 2 times hashtag "#javaee"
+    And I get 1 times hashtag "#fontys"
+
 
   Scenario: Mention trend in tweet
+    Given I am logged in as "SvenDub"
+    When I place a tweet containing "Coding and coding #javaee #fontys"
+    Then A tweet containing "Coding and coding #javaee #fontys" from "SvenDub" should exist
+    And A tweet with hashtag "#javaee" should exist
+    And A tweet with hashtag "#fontys" should exist
+
 
   Scenario: Show tweets by trend
+    Given I am logged in as "SvenDub"
+    And I place a tweet containing "Coding and coding #javaee #fontys"
+    And I place a tweet containing "Building kwetter in #javaee"
+    When I search for "#javaee"
+    Then I get 2 tweets containing "#javaee"
 

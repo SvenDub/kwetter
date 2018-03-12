@@ -3,6 +3,7 @@ package nl.svendubbeld.fontys.dto;
 import nl.svendubbeld.fontys.model.Tweet;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,10 +24,12 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
 
     private Map<String, UserDTO> mentions;
 
+    private Set<String> hashtags;
+
     public TweetDTO() {
     }
 
-    public TweetDTO(long id, UserDTO owner, String content, Set<UserDTO> likedBy, OffsetDateTime date, LocationDTO location, Map<String, UserDTO> mentions) {
+    public TweetDTO(long id, UserDTO owner, String content, Set<UserDTO> likedBy, OffsetDateTime date, LocationDTO location, Map<String, UserDTO> mentions, Set<String> hashtags) {
         this.id = id;
         this.owner = owner;
         this.content = content;
@@ -34,6 +37,7 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
         this.date = date;
         this.location = location;
         this.mentions = mentions;
+        this.hashtags = hashtags;
     }
 
     public long getId() {
@@ -92,6 +96,14 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
         this.mentions = mentions;
     }
 
+    public Set<String> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(Set<String> hashtags) {
+        this.hashtags = hashtags;
+    }
+
     @Override
     public Tweet convert(DTOHelper dtoHelper) {
         Tweet tweet = new Tweet();
@@ -114,6 +126,10 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
 
         if (getMentions() != null) {
             tweet.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> dtoHelper.getUserRepository().findById(user.getValue().getId()))));
+        }
+
+        if (getHashtags() != null) {
+            tweet.setHashtags(new HashSet<>(getHashtags()));
         }
 
         return tweet;

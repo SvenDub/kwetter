@@ -7,6 +7,10 @@ import nl.svendubbeld.fontys.model.User;
 
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -44,9 +48,30 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
 
     @Override
     public Stream<Tweet> getTimeline(User user) {
-        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.getTimeline", getEntityClass());
-        query.setParameter("user", user);
-        query.setParameter("following", user.getFollowing());
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Tweet> criteriaQuery = cb.createQuery(getEntityClass());
+        Root<Tweet> root = criteriaQuery.from(getEntityClass());
+
+        ParameterExpression<User> parameterOwner = cb.parameter(User.class, "user");
+        ParameterExpression<Set> parameterFollowing = cb.parameter(Set.class, "following");
+
+        Predicate criteriaOwner = cb.equal(root.get("owner"), parameterOwner);
+        Predicate criteriaFollowing = root.get("owner").in(parameterFollowing);
+
+        TypedQuery<Tweet> query;
+
+        if (user.getFollowing().size() > 0) {
+            criteriaQuery = criteriaQuery.select(root).where(cb.or(criteriaOwner, criteriaFollowing));
+
+            query = getEntityManager().createQuery(criteriaQuery);
+            query.setParameter("user", user);
+            query.setParameter("following", user.getFollowing());
+        } else {
+            criteriaQuery = criteriaQuery.select(root).where(criteriaOwner);
+
+            query = getEntityManager().createQuery(criteriaQuery);
+            query.setParameter("user", user);
+        }
 
         return query.getResultStream();
     }
@@ -57,5 +82,13 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
         query.setParameter("user", user);
 
         return query.getResultStream();
+    }
+
+    @Override
+    public Map<String, Long> getTrends() {
+        TypedQuery<Object[]> query = getEntityManager().createNamedQuery("tweet.getTrends", Object[].class);
+
+        return query.getResultStream()
+                .collect(Collectors.toMap(o -> ((String) o[0]), o -> ((Long) o[1])));
     }
 }

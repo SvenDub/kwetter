@@ -46,7 +46,7 @@ public class TweetController {
     private ServletContext context;
 
     @GET
-    @Path("{id}")
+    @Path("/{id}")
     @Transactional
     public Response getTweet(@PathParam("id") long id) {
         Tweet tweet = tweetRepository.findById(id);
@@ -59,7 +59,7 @@ public class TweetController {
     }
 
     @GET
-    @Path("search")
+    @Path("/search")
     @Transactional
     public List<TweetDTO> searchTweets(@QueryParam("query") String query) {
         Stream<Tweet> tweets;
@@ -95,6 +95,7 @@ public class TweetController {
 
         tweet.setOwner(user);
         tweet.setMentions(tweetParser.getMentions(tweet.getContent()));
+        tweet.setHashtags(tweetParser.getHashtags(tweet.getContent()));
         tweet.setLikedBy(Collections.emptySet());
         tweet.setDate(OffsetDateTime.now());
 

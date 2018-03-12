@@ -3,6 +3,7 @@ package nl.svendubbeld.fontys.dao;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -49,4 +50,11 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
      * @return A stream of tweets mentioning the user.
      */
     Stream<Tweet> getMentions(User user);
+
+    /**
+     * Get all current trends.
+     *
+     * @return A stream of strings with the trends.
+     */
+    Map<String, Long> getTrends();
 }

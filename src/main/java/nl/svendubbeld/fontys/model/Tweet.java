@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
         @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner"),
         @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')"),
         @NamedQuery(name = "tweet.getTimeline", query = "select t from Tweet t where t.owner in :following or t.owner = :user"),
-        @NamedQuery(name = "tweet.getMentions", query = "select t from Tweet t where :user = value(t.mentions)")
+        @NamedQuery(name = "tweet.getMentions", query = "select t from Tweet t where :user = value(t.mentions)"),
+        @NamedQuery(name = "tweet.getTrends", query = "select h, count(h) from Tweet t join t.hashtags h group by h")
 })
 public class Tweet implements ToDTOConvertible<TweetDTO> {
 
@@ -75,6 +76,13 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
     @JoinTable(name = "Tweet_Mentions")
     private Map<String, User> mentions;
 
+    /**
+     * The hashtags used in the tweet.
+     */
+    @ElementCollection
+    @CollectionTable(name = "Tweet_Hashtags")
+    private Set<String> hashtags;
+
     public Tweet() {
     }
 
@@ -85,6 +93,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         this.location = location;
         this.date = OffsetDateTime.now();
         this.mentions = new HashMap<>();
+        this.hashtags = new HashSet<>();
     }
 
     /**
@@ -166,6 +175,17 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         this.mentions = new HashMap<>(mentions);
     }
 
+    /**
+     * @return The hashtags used in the tweet.
+     */
+    public Set<String> getHashtags() {
+        return Collections.unmodifiableSet(hashtags);
+    }
+
+    public void setHashtags(Set<String> hashtags) {
+        this.hashtags = hashtags;
+    }
+
     @Override
     public TweetDTO convert(DTOHelper dtoHelper) {
         TweetDTO dto = new TweetDTO();
@@ -177,6 +197,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         dto.setDate(getDate());
         getLocation().map(l -> l.convert(dtoHelper)).ifPresent(dto::setLocation);
         dto.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> user.getValue().convert(dtoHelper))));
+        dto.setHashtags(new HashSet<>(getHashtags()));
 
         return dto;
     }

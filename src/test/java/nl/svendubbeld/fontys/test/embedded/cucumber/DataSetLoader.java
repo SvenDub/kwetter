@@ -10,6 +10,8 @@ import nl.svendubbeld.fontys.model.security.SecurityGroup;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Collections;
 
 @Stateless
@@ -29,6 +31,9 @@ public class DataSetLoader {
 
     @Inject
     private UserRepository userRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void loadTestData(String dataSet) {
         // TODO: Load specific data set
@@ -60,7 +65,8 @@ public class DataSetLoader {
     }
 
     private void clear() {
-        tweetRepository.clear();
+        tweetRepository.findAll().forEach(tweetRepository::remove);
+        entityManager.flush();
         profileRepository.clear();
         userRepository.clear();
         securityGroupRepository.clear();

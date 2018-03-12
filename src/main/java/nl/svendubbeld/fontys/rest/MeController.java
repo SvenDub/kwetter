@@ -77,4 +77,23 @@ public class MeController {
                 )
                 .build();
     }
+
+    @GET
+    @Path("/trends")
+    @Transactional
+    public Response getTrends(@HeaderParam(Headers.API_KEY) String apiKey) {
+        try {
+            userRepository.findByUsername(apiKey);
+        } catch (NoResultException e) {
+            logger.log(Level.WARNING, e, () -> "User does not exist.");
+
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        return Response
+                .ok(tweetRepository.getTrends())
+                .build();
+    }
 }

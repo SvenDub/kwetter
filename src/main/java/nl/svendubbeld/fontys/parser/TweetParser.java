@@ -6,10 +6,7 @@ import nl.svendubbeld.fontys.model.User;
 
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +19,7 @@ public class TweetParser {
     private UserRepository userRepository;
 
     private Pattern mentionPattern = Pattern.compile("@[a-zA-Z0-9_]+");
+    private Pattern hashtagPattern = Pattern.compile("#[a-zA-Z0-9_]+");
 
     /**
      * Parse all mentions.
@@ -46,7 +44,15 @@ public class TweetParser {
         return mentions;
     }
 
-    public List<String> getHashtags() {
-        return Collections.emptyList(); // TODO
+    public Set<String> getHashtags(String content) {
+        Set<String> hashtags = new HashSet<>();
+
+        Matcher matcher = hashtagPattern.matcher(content);
+
+        while (matcher.find()) {
+            hashtags.add(matcher.group(0));
+        }
+
+        return hashtags;
     }
 }

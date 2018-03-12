@@ -1,5 +1,7 @@
 package nl.svendubbeld.fontys.test.embedded.cucumber;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,6 +16,7 @@ import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
 import static nl.svendubbeld.fontys.test.matcher.RegexMatcher.matchesPattern;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class HomePageStepdefs {
@@ -104,5 +107,34 @@ public class HomePageStepdefs {
                 .header(Headers.API_KEY, world.getToken())
                 .when()
                 .get("/me/mentions");
+    }
+
+    @And("^A tweet with hashtag \"([^\"]*)\" should exist$")
+    public void tweetWithHashtag(String hashtag) {
+        transactionalTests.tweetWithHashtag(hashtag);
+    }
+
+    @When("^I load popular trends$")
+    public void loadTrends() {
+        response = given()
+                .header(Headers.API_KEY, world.getToken())
+                .when()
+                .get("/me/trends");
+    }
+
+    @Then("^I get (\\d+) times hashtag \"([^\"]*)\"$")
+    public void timesHashtag(int expected, String hashtag) {
+        // Use Gson parser because JsonPath shits itself when it encounters an '#' symbol
+        JsonObject jsonObject = new JsonParser().parse(response.then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .asString())
+                .getAsJsonObject();
+
+        int amount = jsonObject
+                .get(hashtag)
+                .getAsInt();
+
+        assertThat(amount, is(expected));
     }
 }
