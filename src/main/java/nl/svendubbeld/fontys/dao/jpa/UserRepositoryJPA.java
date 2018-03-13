@@ -53,4 +53,12 @@ public class UserRepositoryJPA extends JPARepository<User, Long> implements User
 
         return query.getSingleResult();
     }
+
+    @Override
+    public boolean exists(String username) {
+        TypedQuery<Boolean> query = getEntityManager().createNamedQuery("user.exists", Boolean.class);
+        query.setParameter("username", username);
+
+        return query.getSingleResult();
+    }
 }

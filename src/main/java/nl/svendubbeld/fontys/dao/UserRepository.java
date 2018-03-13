@@ -46,4 +46,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return The amount of users followed by the user.
      */
     long getFollowingCount(User user);
+
+    /**
+     * Checks if a user with a given username exists.
+     *
+     * @param username The username.
+     * @return Whether the user exists.
+     */
+    boolean exists(String username);
 }
