@@ -23,7 +23,8 @@ import java.util.Set;
         @NamedQuery(name = "user.findByUsername", query = "select p.user from Profile p where p.username = :username and p.createdAt = (select max(subp.createdAt) from Profile subp where subp.username = :username)"),
         @NamedQuery(name = "user.tweetsCount", query = "select count(t) from Tweet t where t.owner = :user"),
         @NamedQuery(name = "user.followersCount", query = "select count(u) from User u where :user member of u.following"),
-        @NamedQuery(name = "user.followingCount", query = "select size(u.following) from User u where u = :user")
+        @NamedQuery(name = "user.followingCount", query = "select size(u.following) from User u where u = :user"),
+        @NamedQuery(name = "user.exists", query = "select case when (count(p.user) > 0) then true else false end from Profile p where p.username = :username and p.createdAt = (select max(subp.createdAt) from Profile subp where subp.username = :username)")
 })
 public class User implements ToDTOConvertible<UserDTO> {
 
@@ -145,9 +146,9 @@ public class User implements ToDTOConvertible<UserDTO> {
 
         dto.setId(getId());
         getCurrentProfile().map(profile -> profile.convert(dtoHelper)).ifPresent(dto::setProfile);
-        dto.setTweetsCount(dtoHelper.getUserRepository().getTweetsCount(this));
-        dto.setFollowersCount(dtoHelper.getUserRepository().getFollowersCount(this));
-        dto.setFollowingCount(dtoHelper.getUserRepository().getFollowingCount(this));
+        dto.setTweetsCount(dtoHelper.getUserService().getTweetsCount(this));
+        dto.setFollowersCount(dtoHelper.getUserService().getFollowersCount(this));
+        dto.setFollowingCount(dtoHelper.getUserService().getFollowingCount(this));
 
         return dto;
     }

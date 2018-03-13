@@ -1,39 +1,34 @@
 package nl.svendubbeld.fontys.test.embedded.cucumber;
 
-import nl.svendubbeld.fontys.dao.*;
 import nl.svendubbeld.fontys.model.Location;
 import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.model.security.Permission;
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
+import nl.svendubbeld.fontys.service.ProfileService;
+import nl.svendubbeld.fontys.service.SecurityService;
+import nl.svendubbeld.fontys.service.TweetService;
+import nl.svendubbeld.fontys.service.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Collections;
 
 @Stateless
 public class DataSetLoader {
 
     @Inject
-    private PermissionRepository permissionRepository;
+    private SecurityService securityService;
 
     @Inject
-    private ProfileRepository profileRepository;
+    private ProfileService profileService;
 
     @Inject
-    private SecurityGroupRepository securityGroupRepository;
+    private TweetService tweetService;
 
     @Inject
-    private TweetRepository tweetRepository;
-
-    @Inject
-    private UserRepository userRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private UserService userService;
 
     public void loadTestData(String dataSet) {
         // TODO: Load specific data set
@@ -41,35 +36,33 @@ public class DataSetLoader {
         clear();
 
         Permission loginPermission = new Permission(Permission.Keys.LOG_IN, "Allow login");
-        permissionRepository.create(loginPermission);
+        securityService.addPermission(loginPermission);
 
         SecurityGroup defaultSecurityGroup = new SecurityGroup("Default", Collections.singleton(loginPermission));
-        securityGroupRepository.create(defaultSecurityGroup);
+        securityService.addGroup(defaultSecurityGroup);
 
         User userSvenDub = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
         Profile profileSvenDub = userSvenDub.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
-        userRepository.create(userSvenDub);
-        profileRepository.create(profileSvenDub);
+        userService.addUser(userSvenDub);
+        profileService.addProfile(profileSvenDub);
 
-        tweetRepository.create(new Tweet(userSvenDub, "Hello World!", null));
-        tweetRepository.create(new Tweet(userSvenDub, "Hi there!", null));
+        tweetService.addTweet(new Tweet(userSvenDub, "Hello World!", null), "SvenDub");
+        tweetService.addTweet(new Tweet(userSvenDub, "Hi there!", null), "SvenDub");
 
         User userDeEnigeEchteSven = new User("sven@svendubbeld.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.singleton(userSvenDub));
         Profile profileDeEnigeEchteSven = userDeEnigeEchteSven.createProfile("DeEnigeEchteSven", "Sven #2", "", null, "https://example.org");
 
-        userRepository.create(userDeEnigeEchteSven);
-        profileRepository.create(profileDeEnigeEchteSven);
+        userService.addUser(userDeEnigeEchteSven);
+        profileService.addProfile(profileDeEnigeEchteSven);
 
-        tweetRepository.create(new Tweet(userDeEnigeEchteSven, "Hello everyone", null));
+        tweetService.addTweet(new Tweet(userDeEnigeEchteSven, "Hello everyone", null), "DeEnigeEchteSven");
     }
 
     private void clear() {
-        tweetRepository.findAll().forEach(tweetRepository::remove);
-        entityManager.flush();
-        profileRepository.clear();
-        userRepository.clear();
-        securityGroupRepository.clear();
-        permissionRepository.clear();
+        tweetService.clear();
+        profileService.clear();
+        userService.clear();
+        securityService.clear();
     }
 }

@@ -113,11 +113,11 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
         tweet.setDate(getDate());
 
         if (getOwner() != null) {
-            tweet.setOwner(dtoHelper.getUserRepository().findById(getOwner().getId()));
+            tweet.setOwner(dtoHelper.getUserService().findById(getOwner().getId()));
         }
 
         if (getLikedBy() != null) {
-            tweet.setLikedBy(getLikedBy().stream().map(user -> dtoHelper.getUserRepository().findById(user.getId())).collect(Collectors.toSet()));
+            tweet.setLikedBy(getLikedBy().stream().map(user -> dtoHelper.getUserService().findById(user.getId())).collect(Collectors.toSet()));
         }
 
         if (getLocation() != null) {
@@ -125,7 +125,7 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
         }
 
         if (getMentions() != null) {
-            tweet.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> dtoHelper.getUserRepository().findById(user.getValue().getId()))));
+            tweet.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> dtoHelper.getUserService().findById(user.getValue().getId()))));
         }
 
         if (getHashtags() != null) {

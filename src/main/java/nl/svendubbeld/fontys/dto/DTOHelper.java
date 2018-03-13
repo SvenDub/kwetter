@@ -1,6 +1,9 @@
 package nl.svendubbeld.fontys.dto;
 
-import nl.svendubbeld.fontys.dao.*;
+import nl.svendubbeld.fontys.service.ProfileService;
+import nl.svendubbeld.fontys.service.SecurityService;
+import nl.svendubbeld.fontys.service.TweetService;
+import nl.svendubbeld.fontys.service.UserService;
 
 import javax.inject.Inject;
 
@@ -10,37 +13,30 @@ import javax.inject.Inject;
 public class DTOHelper {
 
     @Inject
-    private PermissionRepository permissionRepository;
+    private SecurityService securityService;
 
     @Inject
-    private ProfileRepository profileRepository;
+    private ProfileService profileService;
 
     @Inject
-    private SecurityGroupRepository securityGroupRepository;
+    private TweetService tweetService;
 
     @Inject
-    private TweetRepository tweetRepository;
+    private UserService userService;
 
-    @Inject
-    private UserRepository userRepository;
-
-    public PermissionRepository getPermissionRepository() {
-        return permissionRepository;
+    public SecurityService getSecurityService() {
+        return securityService;
     }
 
-    public ProfileRepository getProfileRepository() {
-        return profileRepository;
+    public ProfileService getProfileService() {
+        return profileService;
     }
 
-    public SecurityGroupRepository getSecurityGroupRepository() {
-        return securityGroupRepository;
+    public TweetService getTweetService() {
+        return tweetService;
     }
 
-    public TweetRepository getTweetRepository() {
-        return tweetRepository;
-    }
-
-    public UserRepository getUserRepository() {
-        return userRepository;
+    public UserService getUserService() {
+        return userService;
     }
 }
