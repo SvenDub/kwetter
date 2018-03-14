@@ -38,7 +38,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn clean package deploy -DskipTests -B'
+                configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
+                    sh 'mvn -s $SETTINGS clean package deploy -DskipTests -B'
+                }
                 archiveArtifacts artifacts: 'target/kwetter.war', fingerprint: true
             }
         }
