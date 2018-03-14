@@ -2,7 +2,6 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5.2-jdk-8'
-            args '-v /home/dockeruser/settings.xml:/root/.m2/settings.xml'
         }
     }
 
@@ -32,7 +31,11 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                branch 'master || develop || feature/jenkins'
+                anyOf {
+                    branch 'master'
+                    branch 'develop'
+                    branch 'feature/jenkins'
+                }
             }
             steps {
                 sh 'mvn clean package deploy -DskipTests -B'
