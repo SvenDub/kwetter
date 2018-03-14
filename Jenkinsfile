@@ -1,7 +1,10 @@
 pipeline {
     agent {
-            docker { image 'maven:3.5.2-jdk-8' }
+        docker {
+            image 'maven:3.5.2-jdk-8'
+            args '-v /home/dockeruser/settings.xml:/root/.m2/settings.xml'
         }
+    }
 
     stages {
         stage('Build') {
@@ -29,10 +32,10 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                branch 'master || develop'
+                branch 'master || develop || feature/jenkins'
             }
             steps {
-                sh 'mvn clean package -B'
+                sh 'mvn clean package deploy -DskipTests -B'
                 archiveArtifacts artifacts: 'target/kwetter.war', fingerprint: true
             }
         }
