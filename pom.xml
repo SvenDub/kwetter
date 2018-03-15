@@ -200,7 +200,6 @@
                             <id>default</id>
                             <goals>
                                 <goal>build</goal>
-                                <goal>push</goal>
                             </goals>
                         </execution>
                     </executions>
@@ -298,10 +297,10 @@
 
     <repositories>
         <repository>
-            <id>central</id>
-            <name>Maven Central</name>
+            <id>artifactory</id>
+            <name>Artifactory</name>
             <layout>default</layout>
-            <url>http://repo2.maven.org/maven2</url>
+            <url>http://192.168.25.98:8081/artifactory/maven-central-remote</url>
         </repository>
     </repositories>
 
@@ -309,5 +308,19 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.arquillian_universe>1.2.0.1</version.arquillian_universe>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>artifactory</id>
+            <name>c53325995254-releases</name>
+            <url>http://192.168.25.98:8081/artifactory/release-local</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>artifactory</id>
+            <name>c53325995254-snapshots</name>
+            <url>http://192.168.25.98:8081/artifactory/dev-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
