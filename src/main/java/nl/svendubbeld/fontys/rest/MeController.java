@@ -1,6 +1,7 @@
 package nl.svendubbeld.fontys.rest;
 
 import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.service.TweetService;
 import nl.svendubbeld.fontys.service.UserService;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Path("/me")
+@SentryLogged
 public class MeController {
 
     @Inject
