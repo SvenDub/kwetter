@@ -3,9 +3,9 @@ package nl.svendubbeld.fontys.dto;
 /**
  * Marks an entity as being convertible to a Data Transfer Object.
  *
- * @param <Entity> The type of entity to convert to.
+ * @param <T> The type of entity to convert to.
  */
-public interface ToEntityConvertible<Entity> {
+public interface ToEntityConvertible<T> {
 
     /**
      * Obtain an entity from the DTO representation. An open Hibernate session might be required.
@@ -13,5 +13,5 @@ public interface ToEntityConvertible<Entity> {
      * @param dtoHelper Helper for use in DTO conversion.
      * @return The entity this DTO represents.
      */
-    Entity convert(DTOHelper dtoHelper);
+    T convert(DTOHelper dtoHelper);
 }

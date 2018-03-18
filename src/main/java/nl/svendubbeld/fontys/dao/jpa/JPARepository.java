@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * A repository for JPA.
  */
 @Stateless
-public abstract class JPARepository<T, ID> implements CrudRepository<T, ID> {
+public abstract class JPARepository<T, I> implements CrudRepository<T, I> {
 
     @PersistenceContext
     private EntityManager em;
@@ -57,7 +57,7 @@ public abstract class JPARepository<T, ID> implements CrudRepository<T, ID> {
     }
 
     @Override
-    public T findById(ID id) {
+    public T findById(I id) {
         return getEntityManager().find(entityClass, id);
     }
 

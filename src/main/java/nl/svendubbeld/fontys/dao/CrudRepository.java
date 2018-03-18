@@ -5,10 +5,10 @@ import java.util.stream.Stream;
 /**
  * A repository that exposes CRUD operations.
  *
- * @param <T>  The entity to expose.
- * @param <ID> The type of the field annotated with {@link javax.persistence.Id}.
+ * @param <T> The entity to expose.
+ * @param <I> The type of the field annotated with {@link javax.persistence.Id}.
  */
-public interface CrudRepository<T, ID> {
+public interface CrudRepository<T, I> {
 
     /**
      * Persist a new entity.
@@ -38,7 +38,7 @@ public interface CrudRepository<T, ID> {
      * @param id The Id of the entity.
      * @return The entity.
      */
-    T findById(ID id);
+    T findById(I id);
 
     /**
      * Clear all entities.

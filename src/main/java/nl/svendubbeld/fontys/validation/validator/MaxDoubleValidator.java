@@ -19,10 +19,7 @@ public class MaxDoubleValidator implements ConstraintValidator<MaxFloat, Double>
 
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
+        return value == null || value - max <= 0.00001;
 
-        return !(value - max > 0.00001);
     }
 }

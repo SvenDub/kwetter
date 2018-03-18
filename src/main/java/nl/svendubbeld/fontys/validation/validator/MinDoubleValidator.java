@@ -19,10 +19,7 @@ public class MinDoubleValidator implements ConstraintValidator<MinFloat, Double>
 
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
+        return value == null || min - value <= 0.00001;
 
-        return !(min - value > 0.00001);
     }
 }

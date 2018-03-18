@@ -17,6 +17,7 @@ import java.util.Optional;
  * for authentication and authorization.
  */
 @Entity
+@SuppressWarnings("squid:S1710")
 @NamedQueries({
         @NamedQuery(name = "profile.findByUsername", query = "select p from Profile p where p.username = :username")
 })
