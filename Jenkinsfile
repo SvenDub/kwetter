@@ -14,11 +14,13 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn clean test  -B'
+                stash name: 'test-reports', includes: 'target/surefire-reports/**'
             }
         }
         stage('Embedded Test') {
             steps {
                 sh 'mvn clean test -P arquillian-glassfish-embedded -B'
+                stash name: 'embedded-test-reports', includes: 'target/surefire-reports/**'
             }
             post {
                 always {
@@ -29,7 +31,10 @@ pipeline {
         stage('SonarQube') {
             steps {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
-                    sh 'mvn -s $SETTINGS clean compile sonar:sonar -B'
+                    sh 'mvn -s $SETTINGS clean compile -B'
+                    unstash 'test-reports'
+                    unstash 'embedded-test-reports'
+                    sh 'mvn -s $SETTINGS sonar:sonar -B'
                 }
             }
         }
