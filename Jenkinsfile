@@ -29,7 +29,7 @@ pipeline {
         stage('SonarQube') {
             steps {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
-                    sh 'mvn -s $SETTINGS clean sonar:sonar -B'
+                    sh 'mvn -s $SETTINGS clean compile sonar:sonar -B'
                 }
             }
         }
