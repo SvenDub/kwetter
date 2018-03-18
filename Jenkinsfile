@@ -14,7 +14,13 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn clean test  -B'
-                stash name: 'test-reports', includes: 'target/surefire-reports/**'
+                stash name: 'test-reports', includes: 'target/surefire-reports/**,target/jacoco.exec'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    jacoco(execPattern: 'target/jacoco.exec')
+                }
             }
         }
         stage('Embedded Test') {
@@ -25,6 +31,7 @@ pipeline {
             post {
                 always {
                     cucumber 'target/cucumber-report/*.json'
+                    junit 'target/surefire-reports/*.xml'
                 }
             }
         }
