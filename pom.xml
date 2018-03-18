@@ -143,6 +143,10 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -204,8 +208,28 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <repository>kwetter</repository>
+                        <repository>svendub/kwetter</repository>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.0</version>
+                    <executions>
+                        <execution>
+                            <id>pre-unit-test</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>post-unit-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -244,13 +268,6 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <dependencies>
-                <!--<dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.45</version>
-                    <scope>test</scope>
-                </dependency>-->
-
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>

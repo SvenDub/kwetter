@@ -60,7 +60,7 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
 
         TypedQuery<Tweet> query;
 
-        if (user.getFollowing().size() > 0) {
+        if (!user.getFollowing().isEmpty()) {
             criteriaQuery = criteriaQuery.select(root).where(cb.or(criteriaOwner, criteriaFollowing));
 
             query = getEntityManager().createQuery(criteriaQuery);

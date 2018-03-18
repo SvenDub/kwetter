@@ -19,10 +19,7 @@ public class MaxFloatValidator implements ConstraintValidator<MaxFloat, Float> {
 
     @Override
     public boolean isValid(Float value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
+        return value == null || value - max <= 0.00001;
 
-        return !(value - max > 0.00001);
     }
 }

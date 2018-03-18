@@ -9,23 +9,39 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean compile -B'
-                archiveArtifacts artifacts: 'target/', fingerprint: true
             }
         }
         stage('Test') {
             steps {
                 sh 'mvn clean test  -B'
-                archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
+                stash name: 'test-reports', includes: 'target/surefire-reports/**,target/jacoco.exec'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    jacoco(execPattern: 'target/jacoco.exec')
+                }
             }
         }
         stage('Embedded Test') {
             steps {
                 sh 'mvn clean test -P arquillian-glassfish-embedded -B'
-                archiveArtifacts artifacts: 'target/surefire-reports/', fingerprint: true
+                stash name: 'embedded-test-reports', includes: 'target/surefire-reports/**'
             }
             post {
                 always {
                     cucumber 'target/cucumber-report/*.json'
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
+                    sh 'mvn -s $SETTINGS clean compile -B'
+                    unstash 'test-reports'
+                    unstash 'embedded-test-reports'
+                    sh 'mvn -s $SETTINGS sonar:sonar -B'
                 }
             }
         }
@@ -41,7 +57,6 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean package deploy -DskipTests -B'
                 }
-                archiveArtifacts artifacts: 'target/kwetter.war', fingerprint: true
             }
         }
     }

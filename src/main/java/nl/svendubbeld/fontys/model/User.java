@@ -18,6 +18,7 @@ import java.util.Set;
  * A user.
  */
 @Entity
+@SuppressWarnings("squid:S1710")
 @NamedQueries({
         @NamedQuery(name = "user.findByEmail", query = "select u from User u where u.email = :email"),
         @NamedQuery(name = "user.findByUsername", query = "select p.user from Profile p where p.username = :username and p.createdAt = (select max(subp.createdAt) from Profile subp where subp.username = :username)"),

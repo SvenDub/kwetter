@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * A tweet.
  */
 @Entity
+@SuppressWarnings("squid:S1710")
 @NamedQueries({
         @NamedQuery(name = "tweet.findByOwner", query = "select t from Tweet t where t.owner = :owner"),
         @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')"),

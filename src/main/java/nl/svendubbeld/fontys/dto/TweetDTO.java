@@ -26,20 +26,6 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
 
     private Set<String> hashtags;
 
-    public TweetDTO() {
-    }
-
-    public TweetDTO(long id, UserDTO owner, String content, Set<UserDTO> likedBy, OffsetDateTime date, LocationDTO location, Map<String, UserDTO> mentions, Set<String> hashtags) {
-        this.id = id;
-        this.owner = owner;
-        this.content = content;
-        this.likedBy = likedBy;
-        this.date = date;
-        this.location = location;
-        this.mentions = mentions;
-        this.hashtags = hashtags;
-    }
-
     public long getId() {
         return id;
     }

@@ -5,8 +5,6 @@ import nl.svendubbeld.fontys.dao.UserRepository;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.parser.TweetParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,8 +17,6 @@ import java.util.stream.Stream;
 
 @Stateless
 public class TweetService {
-
-    private static final Logger logger = LoggerFactory.getLogger(TweetService.class);
 
     @Inject
     private TweetRepository tweetRepository;

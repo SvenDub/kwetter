@@ -19,10 +19,7 @@ public class MinFloatValidator implements ConstraintValidator<MinFloat, Float> {
 
     @Override
     public boolean isValid(Float value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
+        return value == null || min - value <= 0.00001;
 
-        return !(min - value > 0.00001);
     }
 }

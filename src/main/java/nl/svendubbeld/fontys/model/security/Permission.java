@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
  * A permission for a {@link SecurityGroup}. Used to control access to certain functions.
  */
 @Entity
+@SuppressWarnings("squid:S1710")
 @NamedQueries({
         @NamedQuery(name = "permission.findByKey", query = "select p from Permission p where p.key = :key")
 })
@@ -95,5 +96,8 @@ public class Permission {
     public static final class Keys {
 
         public static final String LOG_IN = "log_in";
+
+        private Keys() {
+        }
     }
 }
