@@ -21,4 +21,8 @@ public class ProfileService {
     public void clear() {
         profileRepository.clear();
     }
+
+    public Profile findById(long id) {
+        return profileRepository.findById(id);
+    }
 }

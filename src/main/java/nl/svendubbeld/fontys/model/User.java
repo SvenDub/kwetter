@@ -1,8 +1,6 @@
 package nl.svendubbeld.fontys.model;
 
-import nl.svendubbeld.fontys.dto.DTOHelper;
-import nl.svendubbeld.fontys.dto.ToDTOConvertible;
-import nl.svendubbeld.fontys.dto.UserDTO;
+import nl.svendubbeld.fontys.dto.*;
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
 
 import javax.persistence.*;
@@ -13,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A user.
@@ -27,7 +26,7 @@ import java.util.Set;
         @NamedQuery(name = "user.followingCount", query = "select size(u.following) from User u where u = :user"),
         @NamedQuery(name = "user.exists", query = "select case when (count(p.user) > 0) then true else false end from Profile p where p.username = :username and p.createdAt = (select max(subp.createdAt) from Profile subp where subp.username = :username)")
 })
-public class User implements ToDTOConvertible<UserDTO> {
+public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<UserDTOSecure> {
 
     /**
      * A unique id identifying this user.
@@ -71,7 +70,7 @@ public class User implements ToDTOConvertible<UserDTO> {
     @NotNull
     private Set<Profile> profiles;
 
-    protected User() {
+    public User() {
     }
 
     public User(String email, String password, Set<SecurityGroup> securityGroups, Set<User> following) {
@@ -89,11 +88,19 @@ public class User implements ToDTOConvertible<UserDTO> {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     /**
      * @return The email address of the user.
      */
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
@@ -103,11 +110,19 @@ public class User implements ToDTOConvertible<UserDTO> {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     /**
      * @return The security groups the user is a member of.
      */
     public Set<SecurityGroup> getSecurityGroups() {
         return securityGroups;
+    }
+
+    public void setSecurityGroups(Set<SecurityGroup> securityGroups) {
+        this.securityGroups = securityGroups;
     }
 
     /**
@@ -117,11 +132,19 @@ public class User implements ToDTOConvertible<UserDTO> {
         return following;
     }
 
+    public void setFollowing(Set<User> following) {
+        this.following = following;
+    }
+
     /**
      * @return The profiles used by this user.
      */
     public Set<Profile> getProfiles() {
         return profiles;
+    }
+
+    public void setProfiles(Set<Profile> profiles) {
+        this.profiles = profiles;
     }
 
     /**
@@ -150,6 +173,27 @@ public class User implements ToDTOConvertible<UserDTO> {
         dto.setTweetsCount(dtoHelper.getUserService().getTweetsCount(this));
         dto.setFollowersCount(dtoHelper.getUserService().getFollowersCount(this));
         dto.setFollowingCount(dtoHelper.getUserService().getFollowingCount(this));
+
+        return dto;
+    }
+
+    @Override
+    public UserDTOSecure convertSecure(DTOHelper dtoHelper) {
+        UserDTOSecure dto = new UserDTOSecure();
+
+        dto.setId(getId());
+        getCurrentProfile().map(profile -> profile.convert(dtoHelper)).ifPresent(dto::setProfile);
+        dto.setTweetsCount(dtoHelper.getUserService().getTweetsCount(this));
+        dto.setFollowersCount(dtoHelper.getUserService().getFollowersCount(this));
+        dto.setFollowingCount(dtoHelper.getUserService().getFollowingCount(this));
+        dto.setEmail(getEmail());
+        dto.setSecurityGroups(getSecurityGroups().stream().map(securityGroup -> securityGroup.convert(dtoHelper)).collect(Collectors.toSet()));
+        dto.setFollowing(getFollowing().stream()
+                .map(User::getCurrentProfile)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(profile -> profile.convert(dtoHelper)).collect(Collectors.toSet()));
+        dto.setProfiles(getProfiles().stream().map(profile -> profile.convert(dtoHelper)).collect(Collectors.toSet()));
 
         return dto;
     }

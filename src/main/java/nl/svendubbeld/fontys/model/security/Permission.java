@@ -1,5 +1,8 @@
 package nl.svendubbeld.fontys.model.security;
 
+import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.PermissionDTO;
+import nl.svendubbeld.fontys.dto.ToDTOConvertible;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -15,7 +18,7 @@ import javax.validation.constraints.Pattern;
 @NamedQueries({
         @NamedQuery(name = "permission.findByKey", query = "select p from Permission p where p.key = :key")
 })
-public class Permission {
+public class Permission implements ToDTOConvertible<PermissionDTO> {
 
     /**
      * The unique id of the permission.
@@ -38,7 +41,7 @@ public class Permission {
     @NotBlank
     private String description;
 
-    protected Permission() {
+    public Permission() {
     }
 
     /**
@@ -59,6 +62,10 @@ public class Permission {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     /**
      * @return The key of the permission.
      */
@@ -66,11 +73,19 @@ public class Permission {
         return key;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     /**
      * @return A description of the permission.
      */
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -93,9 +108,21 @@ public class Permission {
                 .toHashCode();
     }
 
+    @Override
+    public PermissionDTO convert(DTOHelper dtoHelper) {
+        PermissionDTO dto = new PermissionDTO();
+
+        dto.setId(getId());
+        dto.setKey(getKey());
+        dto.setDescription(getDescription());
+
+        return dto;
+    }
+
     public static final class Keys {
 
         public static final String LOG_IN = "log_in";
+        public static final String ADMIN = "admin";
 
         private Keys() {
         }

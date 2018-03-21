@@ -106,6 +106,24 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ocpsoft.rewrite</groupId>
+            <artifactId>rewrite-servlet</artifactId>
+            <version>3.4.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ocpsoft.rewrite</groupId>
+            <artifactId>rewrite-config-prettyfaces</artifactId>
+            <version>3.4.1.Final</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -322,7 +340,6 @@
     </repositories>
 
     <properties>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.arquillian_universe>1.2.0.1</version.arquillian_universe>
     </properties>
 

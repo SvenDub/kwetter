@@ -5,11 +5,13 @@ import nl.svendubbeld.fontys.service.SecurityService;
 import nl.svendubbeld.fontys.service.TweetService;
 import nl.svendubbeld.fontys.service.UserService;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  * Helper for use in DTO conversion.
  */
+@Stateless
 public class DTOHelper {
 
     @Inject

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>#{pageTitle} - Kwetter</title>
+    <h:outputStylesheet name="styles.css" library="css"/>
+</h:head>
+<h:body>
+    <div style="display: flex; flex-direction: column;">
+        <div id="header">
+            <p:outputPanel><h1>#{pageTitle}</h1></p:outputPanel>
+        </div>
+        <div style="display: flex;">
+            <div id="left">
+                <ui:insert name="left">
+                    <p:menu>
+                        <p:submenu label="Admin">
+                            <p:menuitem value="Tweets" outcome="/admin/tweets" icon="fa fa-twitter"/>
+                            <p:menuitem value="Users" outcome="/admin/users" icon="fa fa-user"/>
+                        </p:submenu>
+                    </p:menu>
+                </ui:insert>
+            </div>
+
+            <div id="content">
+                <ui:insert name="content"/>
+            </div>
+        </div>
+        <div id="footer">
+            <ui:insert name="footer">
+                <p:outputPanel>© 2018 Kwetter</p:outputPanel>
+            </ui:insert>
+        </div>
+    </div>
+</h:body>
+</html>

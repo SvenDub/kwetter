@@ -55,6 +55,7 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
     /**
      * A short description of the user.
      */
+    @Size(max = 160)
     private String bio;
 
     /**
@@ -77,7 +78,7 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
     @NotNull
     private OffsetDateTime createdAt;
 
-    protected Profile() {
+    public Profile() {
     }
 
     public Profile(User user, String username, String name, String bio, @Nullable Location location, String website) {
@@ -107,11 +108,19 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     /**
      * @return The owner of this profile.
      */
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -121,11 +130,19 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     /**
      * @return The display name of the user.
      */
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -135,11 +152,19 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
         return bio;
     }
 
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     /**
      * @return The location of the user.
      */
     public Optional<Location> getLocation() {
         return Optional.ofNullable(location);
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     /**
@@ -149,11 +174,19 @@ public class Profile implements ToDTOConvertible<ProfileDTO> {
         return website;
     }
 
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     /**
      * @return The date and time this profile was created.
      */
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

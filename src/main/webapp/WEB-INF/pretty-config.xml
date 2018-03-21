@@ -1,0 +1,6 @@
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.4.0
+                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.4.0.xsd">
+
+    <rewrite match="^/admin/(\w+)(\/)?$" substitute="/admin/$1.xhtml" redirect="chain" trailingSlash="remove" />
+
+</pretty-config>

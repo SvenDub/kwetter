@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,6 +47,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
      * The content of the tweet.
      */
     @NotBlank
+    @Size(max = 140)
     private String content;
 
     /**
@@ -83,6 +85,10 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
     @ElementCollection
     @CollectionTable(name = "Tweet_Hashtags")
     private Set<String> hashtags;
+
+    @ManyToMany
+    @JoinTable(name = "Tweet_Flags")
+    private Set<User> flags;
 
     public Tweet() {
     }
@@ -187,6 +193,14 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         this.hashtags = hashtags;
     }
 
+    public Set<User> getFlags() {
+        return flags;
+    }
+
+    public void setFlags(Set<User> flags) {
+        this.flags = flags;
+    }
+
     @Override
     public TweetDTO convert(DTOHelper dtoHelper) {
         TweetDTO dto = new TweetDTO();
@@ -199,6 +213,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         getLocation().map(l -> l.convert(dtoHelper)).ifPresent(dto::setLocation);
         dto.setMentions(getMentions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, user -> user.getValue().convert(dtoHelper))));
         dto.setHashtags(new HashSet<>(getHashtags()));
+        dto.setFlagCount(getFlags().size());
 
         return dto;
     }

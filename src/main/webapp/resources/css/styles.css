@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+}
+
+#left {
+    margin: 0 4px 0 8px;
+}
+
+#content {
+    margin: 0 8px 0 4px;
+}
+
+#header {
+    margin: 8px;
+}
+
+#footer {
+    margin: 8px;
+}
