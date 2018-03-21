@@ -55,7 +55,7 @@ pipeline {
             }
             steps {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
-                    sh 'mvn -s $SETTINGS clean package deploy -DskipTests -B'
+                    sh 'mvn -s $SETTINGS clean package -DskipTests -B'
                 }
             }
         }

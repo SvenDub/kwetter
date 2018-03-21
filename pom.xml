@@ -206,6 +206,24 @@
                                 <goal>build</goal>
                             </goals>
                         </execution>
+                        <execution>
+                            <id>tag-version</id>
+                            <goals>
+                                <goal>tag</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${project.version}</tag>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>tag-branch</id>
+                            <goals>
+                                <goal>tag</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${git.branch}</tag>
+                            </configuration>
+                        </execution>
                     </executions>
                     <configuration>
                         <repository>svendub/kwetter</repository>
@@ -324,6 +342,7 @@
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.arquillian_universe>1.2.0.1</version.arquillian_universe>
+        <git.branch>${env.GIT_LOCAL_BRANCH}</git.branch>
     </properties>
 
     <distributionManagement>
