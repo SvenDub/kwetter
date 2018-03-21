@@ -147,6 +147,10 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -249,6 +253,26 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.12</version>
+                    <executions>
+                        <execution>
+                            <id>regex-property</id>
+                            <goals>
+                                <goal>regex-property</goal>
+                            </goals>
+                            <configuration>
+                                <name>git.branch</name>
+                                <value>${env.GIT_LOCAL_BRANCH}</value>
+                                <regex>\/</regex>
+                                <replacement>_</replacement>
+                                <failIfNoMatch>false</failIfNoMatch>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -342,7 +366,6 @@
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.arquillian_universe>1.2.0.1</version.arquillian_universe>
-        <git.branch>${env.GIT_LOCAL_BRANCH}</git.branch>
     </properties>
 
     <distributionManagement>
