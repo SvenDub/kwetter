@@ -36,6 +36,9 @@ pipeline {
             }
         }
         stage('SonarQube') {
+            when {
+                branch 'develop'
+            }
             steps {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean compile -B'
