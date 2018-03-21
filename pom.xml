@@ -165,6 +165,10 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -224,6 +228,24 @@
                                 <goal>build</goal>
                             </goals>
                         </execution>
+                        <execution>
+                            <id>tag-version</id>
+                            <goals>
+                                <goal>tag</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${project.version}</tag>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>tag-branch</id>
+                            <goals>
+                                <goal>tag</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${git.branch}</tag>
+                            </configuration>
+                        </execution>
                     </executions>
                     <configuration>
                         <repository>svendub/kwetter</repository>
@@ -246,6 +268,26 @@
                             <goals>
                                 <goal>report</goal>
                             </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.12</version>
+                    <executions>
+                        <execution>
+                            <id>regex-property</id>
+                            <goals>
+                                <goal>regex-property</goal>
+                            </goals>
+                            <configuration>
+                                <name>git.branch</name>
+                                <value>${env.GIT_LOCAL_BRANCH}</value>
+                                <regex>\/</regex>
+                                <replacement>_</replacement>
+                                <failIfNoMatch>false</failIfNoMatch>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
