@@ -1,4 +1,4 @@
-FROM oracle/glassfish
+FROM oracle/glassfish:5.0
 
 RUN curl https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.45/mysql-connector-java-5.1.45.jar -o $GLASSFISH_HOME/glassfish/lib/mysql-connector-java-5.1.45.jar
 
