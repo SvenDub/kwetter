@@ -14,7 +14,7 @@ services:
     volumes:
       - kwetter-mysql:/var/lib/mysql
   kwetter:
-    image: kwetter
+    image: svendub/kwetter
     depends_on:
       - mysql
     ports:

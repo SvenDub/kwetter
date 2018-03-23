@@ -66,5 +66,7 @@ public class Initialize {
 
         Tweet tweet = new Tweet(user, "Hello World!", null);
         tweetService.addTweet(tweet, "SvenDub");
+
+        securityService.createUserGroupsView();
     }
 }

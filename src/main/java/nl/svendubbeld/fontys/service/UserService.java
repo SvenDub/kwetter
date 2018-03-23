@@ -3,16 +3,25 @@ package nl.svendubbeld.fontys.service;
 import nl.svendubbeld.fontys.dao.UserRepository;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.UserDTOSecure;
+import nl.svendubbeld.fontys.exception.EncryptionException;
 import nl.svendubbeld.fontys.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Stateless
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Inject
     private UserRepository userRepository;
@@ -21,6 +30,12 @@ public class UserService {
     private DTOHelper dtoHelper;
 
     public User addUser(User user) {
+        try {
+            user.setPassword(encodeSHA256(user.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            throw new EncryptionException("Can't encrypt password", e);
+        }
+
         userRepository.create(user);
 
         return user;
@@ -70,5 +85,11 @@ public class UserService {
 
 
         return edit(user).convertSecure(dtoHelper);
+    }
+
+    private static String encodeSHA256(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash);
     }
 }

@@ -16,12 +16,17 @@
         <div style="display: flex;">
             <div id="left">
                 <ui:insert name="left">
-                    <p:menu>
-                        <p:submenu label="Admin">
-                            <p:menuitem value="Tweets" outcome="/admin/tweets" icon="fa fa-twitter"/>
-                            <p:menuitem value="Users" outcome="/admin/users" icon="fa fa-user"/>
-                        </p:submenu>
-                    </p:menu>
+                    <h:form>
+                        <p:menu>
+                            <p:submenu label="Admin">
+                                <p:menuitem value="Tweets" outcome="/admin/tweets.xhtml" icon="fa fa-twitter"/>
+                                <p:menuitem value="Users" outcome="/admin/users" icon="fa fa-user"/>
+                            </p:submenu>
+                            <p:submenu label="Session">
+                                <p:menuitem value="Logout" actionListener="#{adminController.logout}" icon="fa fa-sign-out"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
                 </ui:insert>
             </div>
 

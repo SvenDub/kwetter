@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Embedded Test') {
             steps {
-                sh 'mvn clean test -P arquillian-glassfish-embedded -B'
+                sh 'mvn clean test -P arquillian-glassfish-embedded,!default -B'
                 stash name: 'embedded-test-reports', includes: 'target/surefire-reports/**'
             }
             post {

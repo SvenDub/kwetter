@@ -17,3 +17,7 @@ body {
 #footer {
     margin: 8px;
 }
+
+.ui-no-border {
+    border: 0 none transparent;
+}

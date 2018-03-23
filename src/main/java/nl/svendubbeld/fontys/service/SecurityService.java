@@ -9,6 +9,8 @@ import nl.svendubbeld.fontys.model.security.SecurityGroup;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +26,9 @@ public class SecurityService {
 
     @Inject
     private DTOHelper dtoHelper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public Permission addPermission(Permission permission) {
         permissionRepository.create(permission);
@@ -49,5 +54,15 @@ public class SecurityService {
     public void clear() {
         securityGroupRepository.clear();
         permissionRepository.clear();
+    }
+
+    public void createUserGroupsView() {
+        entityManager.createNativeQuery("DROP VIEW IF EXISTS `v_User_SecurityGroup`").executeUpdate();
+        entityManager.createNativeQuery("CREATE VIEW v_User_SecurityGroup AS\n" +
+                "  SELECT User_SecurityGroup.User_id AS User_id, User_SecurityGroup.securityGroups_id AS securityGroup_id, `U`.email AS email, `S`.name AS securityGroup_name\n" +
+                "  FROM User_SecurityGroup\n" +
+                "  INNER JOIN `User` `U` ON `User_SecurityGroup`.`User_id` = `U`.`id`\n" +
+                "  INNER JOIN `SecurityGroup` `S` ON `User_SecurityGroup`.`securityGroups_id` = `S`.`id`")
+                .executeUpdate();
     }
 }

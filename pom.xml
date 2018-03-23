@@ -283,7 +283,7 @@
                             </goals>
                             <configuration>
                                 <name>git.branch</name>
-                                <value>${env.GIT_LOCAL_BRANCH}</value>
+                                <value>${branch}</value>
                                 <regex>\/</regex>
                                 <replacement>_</replacement>
                                 <failIfNoMatch>false</failIfNoMatch>
@@ -369,6 +369,30 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>branch-defined</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.GIT_LOCAL_BRANCH</name>
+                </property>
+            </activation>
+            <properties>
+                <branch>${env.GIT_LOCAL_BRANCH}</branch>
+            </properties>
+        </profile>
+        <profile>
+            <id>branch-undefined</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!env.GIT_LOCAL_BRANCH</name>
+                </property>
+            </activation>
+            <properties>
+                <branch>latest</branch>
+            </properties>
         </profile>
     </profiles>
 
