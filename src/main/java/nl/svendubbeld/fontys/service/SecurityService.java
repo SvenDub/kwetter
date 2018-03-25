@@ -59,10 +59,12 @@ public class SecurityService {
     public void createUserGroupsView() {
         entityManager.createNativeQuery("DROP VIEW IF EXISTS `v_User_SecurityGroup`").executeUpdate();
         entityManager.createNativeQuery("CREATE VIEW v_User_SecurityGroup AS\n" +
-                "  SELECT User_SecurityGroup.User_id AS User_id, User_SecurityGroup.securityGroups_id AS securityGroup_id, `U`.email AS email, `S`.name AS securityGroup_name\n" +
-                "  FROM User_SecurityGroup\n" +
-                "  INNER JOIN `User` `U` ON `User_SecurityGroup`.`User_id` = `U`.`id`\n" +
-                "  INNER JOIN `SecurityGroup` `S` ON `User_SecurityGroup`.`securityGroups_id` = `S`.`id`")
+                "SELECT User_SecurityGroup.User_id AS User_id, User_SecurityGroup.securityGroups_id AS securityGroup_id, `U`.email AS email, `S`.name AS securityGroup_name, `P`.`permission_key` AS permission_key\n" +
+                "FROM User_SecurityGroup\n" +
+                "INNER JOIN `User` `U` ON `User_SecurityGroup`.`User_id` = `U`.`id`\n" +
+                "INNER JOIN `SecurityGroup` `S` ON `User_SecurityGroup`.`securityGroups_id` = `S`.`id`\n" +
+                "INNER JOIN `SecurityGroup_Permission` `S2` ON `S`.`id` = `S2`.`SecurityGroup_id`\n" +
+                "INNER JOIN `Permission` `P` ON `S2`.`permissions_id` = `P`.`id`")
                 .executeUpdate();
     }
 }
