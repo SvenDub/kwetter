@@ -4,7 +4,8 @@ import nl.svendubbeld.fontys.dao.TweetRepository;
 import nl.svendubbeld.fontys.dao.UserRepository;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
-import nl.svendubbeld.fontys.parser.TweetParser;
+import nl.svendubbeld.fontys.parser.HashtagParser;
+import nl.svendubbeld.fontys.parser.MentionsParser;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,7 +26,10 @@ public class TweetService {
     private UserRepository userRepository;
 
     @Inject
-    private TweetParser tweetParser;
+    private MentionsParser mentionsParser;
+
+    @Inject
+    private HashtagParser hashtagParser;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -46,8 +50,8 @@ public class TweetService {
         User user = userRepository.findByUsername(username);
 
         tweet.setOwner(user);
-        tweet.setMentions(tweetParser.getMentions(tweet.getContent()));
-        tweet.setHashtags(tweetParser.getHashtags(tweet.getContent()));
+        tweet.setMentions(mentionsParser.parse(tweet.getContent()));
+        tweet.setHashtags(hashtagParser.parse(tweet.getContent()));
         tweet.setLikedBy(Collections.emptySet());
         tweet.setDate(OffsetDateTime.now());
 

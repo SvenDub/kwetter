@@ -47,7 +47,7 @@ public class Initialize {
         userService.addUser(user);
         profileService.addProfile(profile);
 
-        Tweet tweet = new Tweet(user, "Hello World!", null);
+        Tweet tweet = new Tweet(user, "Hello World, @SvenDub! #fontys #kwetter", null);
         tweetService.addTweet(tweet, "SvenDub");
     }
 }
