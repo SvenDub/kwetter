@@ -60,6 +60,7 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean package -DskipTests -B'
                 }
+                sshPublisher(publishers: [sshPublisherDesc(configName: '192.168.25.98', transfers: [sshTransfer(excludes: '**', execCommand: 'docker stack deploy kwetter_sven -c stack.yml')])])
             }
         }
     }
