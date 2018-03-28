@@ -1,8 +1,10 @@
 package nl.svendubbeld.fontys.dto;
 
+import nl.svendubbeld.fontys.model.Profile;
+
 import java.time.OffsetDateTime;
 
-public class ProfileDTO {
+public class ProfileDTO implements ToEntityConvertible<Profile> {
 
     private long id;
 
@@ -85,5 +87,20 @@ public class ProfileDTO {
 
     public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public Profile convert(DTOHelper dtoHelper) {
+        Profile profile = new Profile();
+
+        profile.setId(getId());
+        profile.setUsername(getUsername());
+        profile.setName(getName());
+        profile.setBio(getBio());
+        profile.setLocation(getLocation() != null ? getLocation().convert(dtoHelper) : null);
+        profile.setWebsite(getWebsite());
+        profile.setCreatedAt(getCreatedAt());
+
+        return profile;
     }
 }

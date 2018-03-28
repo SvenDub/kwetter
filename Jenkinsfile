@@ -8,12 +8,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean compile -B'
+                configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
+                    sh 'mvn -s $SETTINGS clean compile -B'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn clean test  -B'
+                configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
+                    sh 'mvn -s $SETTINGS clean test  -B'
+                }
                 stash name: 'test-reports', includes: 'target/surefire-reports/**,target/jacoco.exec'
             }
             post {
@@ -25,7 +29,9 @@ pipeline {
         }
         stage('Embedded Test') {
             steps {
-                sh 'mvn clean test -P arquillian-glassfish-embedded -B'
+                configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
+                    sh 'mvn -s $SETTINGS clean test -P arquillian-glassfish-embedded,!default -B'
+                }
                 stash name: 'embedded-test-reports', includes: 'target/surefire-reports/**'
             }
             post {

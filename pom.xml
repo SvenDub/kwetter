@@ -106,6 +106,24 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ocpsoft.rewrite</groupId>
+            <artifactId>rewrite-servlet</artifactId>
+            <version>3.4.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ocpsoft.rewrite</groupId>
+            <artifactId>rewrite-config-prettyfaces</artifactId>
+            <version>3.4.1.Final</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -265,7 +283,7 @@
                             </goals>
                             <configuration>
                                 <name>git.branch</name>
-                                <value>${env.GIT_LOCAL_BRANCH}</value>
+                                <value>${branch}</value>
                                 <regex>\/</regex>
                                 <replacement>_</replacement>
                                 <failIfNoMatch>false</failIfNoMatch>
@@ -352,6 +370,30 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>branch-defined</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.GIT_LOCAL_BRANCH</name>
+                </property>
+            </activation>
+            <properties>
+                <branch>${env.GIT_LOCAL_BRANCH}</branch>
+            </properties>
+        </profile>
+        <profile>
+            <id>branch-undefined</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!env.GIT_LOCAL_BRANCH</name>
+                </property>
+            </activation>
+            <properties>
+                <branch>latest</branch>
+            </properties>
+        </profile>
     </profiles>
 
     <repositories>
@@ -364,7 +406,6 @@
     </repositories>
 
     <properties>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.arquillian_universe>1.2.0.1</version.arquillian_universe>
     </properties>
 

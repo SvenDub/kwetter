@@ -26,6 +26,8 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
 
     private Set<String> hashtags;
 
+    private long flagCount;
+
     public long getId() {
         return id;
     }
@@ -88,6 +90,14 @@ public class TweetDTO implements ToEntityConvertible<Tweet> {
 
     public void setHashtags(Set<String> hashtags) {
         this.hashtags = hashtags;
+    }
+
+    public long getFlagCount() {
+        return flagCount;
+    }
+
+    public void setFlagCount(long flagCount) {
+        this.flagCount = flagCount;
     }
 
     @Override

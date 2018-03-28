@@ -1,6 +1,8 @@
 package nl.svendubbeld.fontys.dto;
 
-public class UserDTO {
+import nl.svendubbeld.fontys.model.User;
+
+public class UserDTO implements ToEntityConvertible<User> {
 
     private long id;
 
@@ -61,5 +63,14 @@ public class UserDTO {
 
     public void setFollowingCount(long followingCount) {
         this.followingCount = followingCount;
+    }
+
+    @Override
+    public User convert(DTOHelper dtoHelper) {
+        User user = new User();
+
+        user.setId(getId());
+
+        return user;
     }
 }

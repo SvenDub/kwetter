@@ -2,6 +2,8 @@ package nl.svendubbeld.fontys.service;
 
 import nl.svendubbeld.fontys.dao.TweetRepository;
 import nl.svendubbeld.fontys.dao.UserRepository;
+import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.TweetDTO;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.parser.HashtagParser;
@@ -13,7 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Stateless
@@ -30,6 +34,9 @@ public class TweetService {
 
     @Inject
     private HashtagParser hashtagParser;
+
+    @Inject
+    private DTOHelper dtoHelper;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -83,6 +90,10 @@ public class TweetService {
 
     public Stream<Tweet> findAll() {
         return tweetRepository.findAll();
+    }
+
+    public List<TweetDTO> findAllAsDTO() {
+        return findAll().map(tweet -> tweet.convert(dtoHelper)).collect(Collectors.toList());
     }
 
     public Stream<Tweet> findByContent(String content) {
