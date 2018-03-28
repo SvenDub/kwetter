@@ -54,7 +54,7 @@ public class User implements ToDTOConvertible<UserDTO> {
      */
     @ManyToMany(cascade = CascadeType.ALL)
     @NotNull
-    private Set<SecurityGroup> securityGroups;
+    private Set<SecurityGroup> securityGroups = new HashSet<>();
 
     /**
      * The users this user follows.
@@ -62,16 +62,16 @@ public class User implements ToDTOConvertible<UserDTO> {
     @OneToMany
     @JoinTable(name = "User_Following")
     @NotNull
-    private Set<User> following;
+    private Set<User> following = new HashSet<>();
 
     /**
      * The profiles used by this user.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotNull
-    private Set<Profile> profiles;
+    private Set<Profile> profiles = new HashSet<>();
 
-    protected User() {
+    public User() {
     }
 
     public User(String email, String password, Set<SecurityGroup> securityGroups, Set<User> following) {
