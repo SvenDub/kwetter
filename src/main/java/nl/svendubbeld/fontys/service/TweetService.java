@@ -99,4 +99,12 @@ public class TweetService {
     public Stream<Tweet> findByContent(String content) {
         return tweetRepository.findByContent(content);
     }
+
+    public void remove(Tweet tweet) {
+        tweetRepository.remove(tweet);
+    }
+
+    public void remove(TweetDTO tweet) {
+        tweetRepository.removeById(tweet.getId());
+    }
 }

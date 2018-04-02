@@ -33,6 +33,15 @@ public interface CrudRepository<T, I> {
     void remove(T entity);
 
     /**
+     * Remove an entity by its id.
+     *
+     * @param id The id of the entity to remove.
+     */
+    default void removeById(I id) {
+        remove(findById(id));
+    }
+
+    /**
      * Find an entity by its primary Id.
      *
      * @param id The Id of the entity.

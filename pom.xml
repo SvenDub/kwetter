@@ -114,6 +114,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>cruze</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.ocpsoft.rewrite</groupId>
             <artifactId>rewrite-servlet</artifactId>
             <version>3.4.1.Final</version>
@@ -402,6 +408,13 @@
             <name>Artifactory</name>
             <layout>default</layout>
             <url>http://192.168.25.98:8081/artifactory/maven-central-remote</url>
+        </repository>
+
+        <repository>
+            <id>primefaces</id>
+            <name>Primefaces</name>
+            <layout>default</layout>
+            <url>https://repository.primefaces.org/</url>
         </repository>
     </repositories>
 

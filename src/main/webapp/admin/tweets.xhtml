@@ -9,7 +9,7 @@
         <ui:param name="pageTitle" value="Tweets"/>
         <ui:define name="content">
             <h:form>
-                <p:dataTable value="#{adminController.tweetModel}" var="tweet" widgetVar="tweetTable" reflow="true" paginator="true"
+                <p:dataTable id="tweetTable" value="#{adminController.tweetModel}" var="tweet" widgetVar="tweetTable" reflow="true" paginator="true"
                              rowsPerPageTemplate="10,50,100" rows="10">
                     <f:facet name="header">
                     </f:facet>
@@ -30,7 +30,7 @@
                         <h:outputText value="#{tweet.flagCount}"/>
                     </p:column>
                     <p:column headerText="Actions">
-                        <p:commandButton icon="fa fa-trash" value="Delete"/>
+                        <p:commandButton icon="fa fa-trash" value="Delete" actionListener="#{adminController.deleteTweet}" update="tweetTable"/>
                     </p:column>
                 </p:dataTable>
             </h:form>

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -77,6 +78,13 @@ public class AdminController implements Serializable {
         user.setSecurityGroups((Set<SecurityGroupDTO>) e.getNewValue());
 
         userService.editSecurityGroups(user);
+    }
+
+    public void deleteTweet(ActionEvent event) {
+        TweetDTO tweet = tweetModel.getRowData();
+
+        tweetService.remove(tweet);
+        tweets.remove(tweet);
     }
 
     public void logout() throws IOException {
