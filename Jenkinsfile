@@ -18,12 +18,12 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean test  -B'
                 }
-                stash name: 'test-reports', includes: 'target/surefire-reports/**,target/jacoco.exec'
+                stash name: 'test-reports', includes: '**/target/surefire-reports/**,**/target/jacoco.exec'
             }
             post {
                 always {
-                    junit 'target/surefire-reports/*.xml'
-                    jacoco(execPattern: 'target/jacoco.exec')
+                    junit '**/target/surefire-reports/*.xml'
+                    jacoco(execPattern: '**/target/jacoco.exec')
                 }
             }
         }
@@ -32,12 +32,12 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean test -P arquillian-glassfish-embedded,!default -B'
                 }
-                stash name: 'embedded-test-reports', includes: 'target/surefire-reports/**'
+                stash name: 'embedded-test-reports', includes: '**/target/surefire-reports/**'
             }
             post {
                 always {
-                    cucumber 'target/cucumber-report/*.json'
-                    junit 'target/surefire-reports/*.xml'
+                    cucumber '**/target/cucumber-report/*.json'
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
@@ -64,7 +64,7 @@ pipeline {
             }
             steps {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
-                    sh 'mvn -s $SETTINGS clean package -DskipTests -B'
+                    sh 'mvn -s $SETTINGS clean deploy -DskipTests -B'
                 }
                 sshPublisher(publishers: [sshPublisherDesc(configName: '192.168.25.98', transfers: [sshTransfer(excludes: '**', execCommand: 'docker stack deploy kwetter_sven -c /home/dockeruser/sven/stack.yml')])])
             }
