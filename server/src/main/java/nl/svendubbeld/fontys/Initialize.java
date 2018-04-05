@@ -64,8 +64,10 @@ public class Initialize {
             userService.addUser(new User("sven" + i +"@svendubbeld.nl", "pass", Collections.singleton(defaultSecurityGroup), Collections.emptySet()));
         }
 
-        Tweet tweet = new Tweet(user, "Hello World, @SvenDub! #fontys #kwetter", null);
+        Tweet tweet = new Tweet(null, "Hello World, @SvenDub! #fontys #kwetter", null);
         tweetService.addTweet(tweet, "SvenDub");
+
+        tweetService.addTweet(new Tweet(null, "Zippen en inleveren die hap. #twitter #bootstrap", new Location("Middelharnis", 51.756199f, 4.174982f)), "SvenDub");
 
         securityService.createUserGroupsView();
     }

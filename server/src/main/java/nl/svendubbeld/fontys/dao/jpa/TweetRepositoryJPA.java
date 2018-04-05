@@ -51,6 +51,7 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Tweet> criteriaQuery = cb.createQuery(getEntityClass());
         Root<Tweet> root = criteriaQuery.from(getEntityClass());
+        criteriaQuery.orderBy(cb.desc(root.get("date")));
 
         ParameterExpression<User> parameterOwner = cb.parameter(User.class, "user");
         ParameterExpression<Set> parameterFollowing = cb.parameter(Set.class, "following");
