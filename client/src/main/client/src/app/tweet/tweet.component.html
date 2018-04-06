@@ -9,7 +9,7 @@
         <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a href="#" data-toggle="tooltip" title="{{getAbsoluteDate()}}">{{getRelativeDate()}}</a></h6>
       </div>
     </div>
-    <p class="card-text">{{tweet.content}}</p>
+    <p class="card-text"><ng-template appTweetContent></ng-template></p>
     <a class="card-link" href="#"><fa name="reply"></fa></a>
   </div>
 </div>

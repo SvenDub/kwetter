@@ -6,11 +6,14 @@ import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {HeaderComponent} from './header/header.component';
 import {HomeComponent} from './home/home.component';
-import { TimelineComponent } from './timeline/timeline.component';
+import {TimelineComponent} from './timeline/timeline.component';
 import {SharedModule} from './shared/shared.module';
 import {FormsModule} from '@angular/forms';
-import { TweetComponent } from './tweet/tweet.component';
-import { ProfileComponent } from './profile/profile.component';
+import {TweetComponent} from './tweet/tweet.component';
+import {ProfileComponent} from './profile/profile.component';
+import {TweetContentDirective} from './tweet-content.directive';
+import {AnchorComponent} from './anchor/anchor.component';
+import {TextComponent} from './text/text.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { ProfileComponent } from './profile/profile.component';
     HomeComponent,
     TimelineComponent,
     TweetComponent,
-    ProfileComponent
+    ProfileComponent,
+    TweetContentDirective,
+    AnchorComponent,
+    TextComponent
   ],
   imports: [
     AngularFontAwesomeModule,
@@ -30,7 +36,13 @@ import { ProfileComponent } from './profile/profile.component';
     SharedModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ],
+  entryComponents: [
+    AnchorComponent,
+    TextComponent
+  ]
 })
 export class AppModule {
 }
