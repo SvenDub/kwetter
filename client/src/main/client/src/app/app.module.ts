@@ -11,9 +11,6 @@ import {SharedModule} from './shared/shared.module';
 import {FormsModule} from '@angular/forms';
 import {TweetComponent} from './tweet/tweet.component';
 import {ProfileComponent} from './profile/profile.component';
-import {TweetContentDirective} from './tweet-content.directive';
-import {AnchorComponent} from './anchor/anchor.component';
-import {TextComponent} from './text/text.component';
 
 @NgModule({
   declarations: [
@@ -22,10 +19,7 @@ import {TextComponent} from './text/text.component';
     HomeComponent,
     TimelineComponent,
     TweetComponent,
-    ProfileComponent,
-    TweetContentDirective,
-    AnchorComponent,
-    TextComponent
+    ProfileComponent
   ],
   imports: [
     AngularFontAwesomeModule,
@@ -38,10 +32,6 @@ import {TextComponent} from './text/text.component';
   providers: [],
   bootstrap: [
     AppComponent
-  ],
-  entryComponents: [
-    AnchorComponent,
-    TextComponent
   ]
 })
 export class AppModule {

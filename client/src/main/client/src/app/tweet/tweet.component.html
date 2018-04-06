@@ -9,7 +9,13 @@
         <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a href="#" data-toggle="tooltip" title="{{getAbsoluteDate()}}">{{getRelativeDate()}}</a></h6>
       </div>
     </div>
-    <p class="card-text"><ng-template appTweetContent></ng-template></p>
+    <p class="card-text">
+      <ng-container *ngFor="let word of getWords()" [ngSwitch]="word.type"><!-- Comments required to trick HTML in not rendering new lines
+     --><ng-template [ngSwitchCase]="'hashtag'"><a [routerLink]="['/trend/' + word.link]">{{word.value}}</a></ng-template><!--
+     --><ng-template [ngSwitchCase]="'mention'"><a [routerLink]="['/u/' + word.link]">{{word.value}}</a></ng-template><!--
+     --><ng-template ngSwitchDefault>{{word.value}}</ng-template><!--
+   --></ng-container>
+    </p>
     <a class="card-link" href="#"><fa name="reply"></fa></a>
   </div>
 </div>
