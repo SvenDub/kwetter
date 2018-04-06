@@ -3,6 +3,7 @@ package nl.svendubbeld.fontys.dao.jpa;
 import nl.svendubbeld.fontys.dao.UserRepository;
 import nl.svendubbeld.fontys.model.User;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -19,7 +20,11 @@ public class UserRepositoryJPA extends JPARepository<User, Long> implements User
         TypedQuery<User> query = getEntityManager().createNamedQuery("user.findByEmail", getEntityClass());
         query.setParameter("email", email);
 
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -27,7 +32,11 @@ public class UserRepositoryJPA extends JPARepository<User, Long> implements User
         TypedQuery<User> query = getEntityManager().createNamedQuery("user.findByUsername", getEntityClass());
         query.setParameter("username", username);
 
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

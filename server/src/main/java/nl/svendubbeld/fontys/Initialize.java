@@ -53,20 +53,26 @@ public class Initialize {
         SecurityGroup adminSecurityGroup = new SecurityGroup("Administrators", adminPermissionSet);
         securityService.addGroup(adminSecurityGroup);
 
-        User user = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
-        Profile profile = user.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
+        User adminUser = new User("admin@svendubbeld.nl", "pass", Collections.singleton(adminSecurityGroup), Collections.emptySet());
+        Profile adminProfile = adminUser.createProfile("admin", "Big Admin", "Proud Kwetter admin.", new Location("In your computer"), "https://kwetter.svendubbeld.nl/");
+
+        userService.addUser(adminUser);
+        profileService.addProfile(adminProfile);
+
+        User user = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.singleton(adminUser));
+        Profile profile = user.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT.", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
         userService.addUser(user);
         profileService.addProfile(profile);
 
-        userService.addUser(new User("admin@svendubbeld.nl", "pass", Collections.singleton(adminSecurityGroup), Collections.emptySet()));
         for (int i = 0; i < 20; i++) {
             userService.addUser(new User("sven" + i +"@svendubbeld.nl", "pass", Collections.singleton(defaultSecurityGroup), Collections.emptySet()));
         }
 
-        Tweet tweet = new Tweet(null, "Hello World, @SvenDub! #fontys #kwetter", null);
+        Tweet tweet = new Tweet(null, "Hello World, @admin! #fontys #kwetter", null);
         tweetService.addTweet(tweet, "SvenDub");
 
+        tweetService.addTweet(new Tweet(null, "Zippen en inleveren die hap. #twitter #bootstrap", new Location("Middelharnis", 51.756199f, 4.174982f)), "admin");
         tweetService.addTweet(new Tweet(null, "Zippen en inleveren die hap. #twitter #bootstrap", new Location("Middelharnis", 51.756199f, 4.174982f)), "SvenDub");
 
         securityService.createUserGroupsView();

@@ -11,5 +11,4 @@ export class TweetService {
   getTimeline() {
     return this.http.get<Tweet[]>('/api/me/timeline', {headers: {'X-API-KEY': 'SvenDub'}});
   }
-
 }

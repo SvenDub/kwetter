@@ -107,4 +107,8 @@ public class TweetService {
     public void remove(TweetDTO tweet) {
         tweetRepository.removeById(tweet.getId());
     }
+
+    public Stream<Tweet> findByUsername(String username) {
+        return tweetRepository.findByOwner(username);
+    }
 }

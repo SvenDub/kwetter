@@ -65,6 +65,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public Stream<User> findAll() {
         return userRepository.findAll();
     }

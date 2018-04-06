@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 @Path("/tweets")
 @SentryLogged
-public class TweetController {
+public class TweetController extends BaseController {
 
     @Inject
     private TweetService tweetService;
@@ -41,10 +41,10 @@ public class TweetController {
         Tweet tweet = tweetService.findById(id);
 
         if (tweet == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return notFound();
         }
 
-        return Response.ok(tweet.convert(dtoHelper)).build();
+        return ok(tweet.convert(dtoHelper));
     }
 
     @GET
@@ -53,10 +53,9 @@ public class TweetController {
     public Response searchTweets(@QueryParam("query") String query) {
         Stream<Tweet> tweets = tweetService.searchTweets(query);
 
-        return Response.ok(tweets
+        return ok(tweets
                 .map(tweet -> tweet.convert(dtoHelper))
-                .collect(Collectors.toList()))
-                .build();
+                .collect(Collectors.toList()));
     }
 
     @POST
