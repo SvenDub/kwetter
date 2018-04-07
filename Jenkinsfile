@@ -6,13 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
-                    sh 'mvn -s $SETTINGS clean compile -B'
-                }
-            }
-        }
         stage('Test') {
             steps {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
