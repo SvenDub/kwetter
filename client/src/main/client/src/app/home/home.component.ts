@@ -9,7 +9,7 @@ import {Tweet} from '../shared/models/tweet.model';
 })
 export class HomeComponent implements OnInit {
 
-  private tweets: Tweet[];
+  tweets: Tweet[];
 
   constructor(private tweetService: TweetService) { }
 

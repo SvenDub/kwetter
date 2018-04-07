@@ -18,7 +18,7 @@ export class TweetComponent implements OnInit {
   ngOnInit() {
   }
 
-  private getWords() {
+  getWordGroups() {
     const mentions = new Map<string, User>();
     Object.keys(this.tweet.mentions).forEach(key => {
       mentions.set(key, this.tweet.mentions[key]);
@@ -49,11 +49,11 @@ export class TweetComponent implements OnInit {
       });
   }
 
-  private getRelativeDate() {
+  getRelativeDate() {
     return moment(this.tweet.date).fromNow();
   }
 
-  private getAbsoluteDate() {
+  getAbsoluteDate() {
     return moment(this.tweet.date).format('lll');
   }
 

@@ -13,9 +13,9 @@ import {TweetService} from '../api/tweet.service';
 })
 export class ProfileComponent implements OnInit {
 
-  private username: string;
-  private user: User;
-  private tweets: Tweet[];
+  username: string;
+  user: User;
+  tweets: Tweet[];
 
   constructor(private route: ActivatedRoute, private userService: UserService, private tweetService: TweetService) {
   }
