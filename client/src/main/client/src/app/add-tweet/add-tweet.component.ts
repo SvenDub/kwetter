@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TweetService} from '../api/tweet.service';
 import {Tweet} from '../shared/models/tweet.model';
 
@@ -11,6 +11,8 @@ export class AddTweetComponent implements OnInit {
 
   content: string;
   errorMessage: string;
+
+  @ViewChild('submit') submit: ElementRef;
 
   constructor(private tweetService: TweetService) {
   }
@@ -38,6 +40,11 @@ export class AddTweetComponent implements OnInit {
 
   isDisabled() {
     return !this.content || this.content.length > 140;
+  }
+
+  onEnterKey(event: KeyboardEvent) {
+    (<HTMLButtonElement>this.submit.nativeElement).click();
+    event.preventDefault();
   }
 
 }
