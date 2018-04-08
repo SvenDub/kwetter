@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-auto">
         <h5 class="card-title"><a [routerLink]="['/u/' + tweet.owner.profile.username]">{{tweet.owner.profile.name}}</a></h5>
-        <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a href="#" data-toggle="tooltip" title="{{getAbsoluteDate()}}">{{getRelativeDate()}}</a></h6>
+        <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a [routerLink]="['/tweet/' + tweet.id]" data-toggle="tooltip" title="{{getAbsoluteDate()}}">{{getRelativeDate()}}</a></h6>
       </div>
     </div>
     <p class="card-text">
@@ -16,6 +16,8 @@
      --><ng-template ngSwitchDefault>{{group.value}}</ng-template><!--
    --></ng-container>
     </p>
-    <a class="card-link" href="#"><fa name="reply"></fa></a>
+    <a class="card-link"><fa name="reply"></fa></a>
+    <a class="card-link"><fa name="heart"></fa></a>
+    <a class="card-link"><fa name="flag"></fa></a>
   </div>
 </div>
