@@ -1,6 +1,7 @@
 package nl.svendubbeld.fontys.rest;
 
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 public abstract class BaseController {
 
@@ -14,5 +15,9 @@ public abstract class BaseController {
 
     protected Response notFound() {
         return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    protected Response created(Object entity, URI location) {
+        return Response.created(location).entity(entity).build();
     }
 }

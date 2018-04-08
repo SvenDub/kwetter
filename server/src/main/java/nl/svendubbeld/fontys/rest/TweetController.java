@@ -79,8 +79,6 @@ public class TweetController extends BaseController {
                 .path(TweetController.class, "getTweet")
                 .build(tweet.getId());
 
-        return Response
-                .created(location)
-                .build();
+        return created(tweet.convert(dtoHelper), location);
     }
 }

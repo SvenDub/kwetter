@@ -61,6 +61,7 @@ public class TweetService {
         tweet.setHashtags(hashtagParser.parse(tweet.getContent()));
         tweet.setLikedBy(Collections.emptySet());
         tweet.setDate(OffsetDateTime.now());
+        tweet.setFlags(Collections.emptySet());
 
         tweetRepository.create(tweet);
 
