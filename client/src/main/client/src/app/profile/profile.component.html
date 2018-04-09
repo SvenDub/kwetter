@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row justify-content-center" *ngIf="user">
-    <div class="col-sm-3">
+    <div class="col-md-3">
       <img width="100%" src="/api/users/{{user.profile.username}}/picture?size=512" class="rounded-circle mb-3">
       <h5 class="mb-1">{{user.profile.name}}</h5>
       <h6 class="text-muted mb-3">@{{user.profile.username}}</h6>
@@ -10,22 +10,22 @@
         <span *ngIf="!(user.profile.location.latitude && user.profile.location.longitude) && user.profile.location.label"><fa name="map-marker"></fa> {{user.profile.location.label}}</span>
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-md-6">
       <app-timeline [tweets]="tweets"></app-timeline>
     </div>
-    <div class="col-sm-3">
+    <div class="col-md-3">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col">
           Who to follow
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col">
           Trends
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col">
           About
         </div>
       </div>
