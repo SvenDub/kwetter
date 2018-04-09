@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,7 +75,7 @@ public class MeController extends BaseController {
     @GET
     @Path("/autocomplete")
     @Transactional
-    public Response getAutocomplete(@HeaderParam(Headers.API_KEY) String apiKey, @QueryParam("q") @DefaultValue("") String query) {
+    public Response getAutocomplete(@HeaderParam(Headers.API_KEY) String apiKey, @QueryParam("q") @DefaultValue("") String query, @QueryParam("limit") @DefaultValue("5") int limit) {
         if (!userService.exists(apiKey)) {
             return unauthorized();
         }
@@ -82,6 +83,8 @@ public class MeController extends BaseController {
         return ok(userService.findByUsername(apiKey)
                 .getFollowing()
                 .stream()
+                .filter(user -> user.getCurrentProfile().isPresent())
+                .sorted(Comparator.comparing(user -> user.getCurrentProfile().get().getUsername()))
                 .filter(user -> {
                     Optional<Profile> optionalProfile = user.getCurrentProfile();
                     if (optionalProfile.isPresent()) {
@@ -91,6 +94,7 @@ public class MeController extends BaseController {
                     }
                     return false;
                 })
+                .limit(limit)
                 .map(user -> user.convert(dtoHelper))
                 .collect(Collectors.toList()));
     }
