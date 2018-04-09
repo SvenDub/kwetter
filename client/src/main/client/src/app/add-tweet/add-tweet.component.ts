@@ -1,6 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TweetService} from '../api/tweet.service';
 import {Tweet} from '../shared/models/tweet.model';
+import {Subject} from 'rxjs/Subject';
+import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import {User} from '../shared/models/user.model';
 
 @Component({
   selector: 'app-add-tweet',
@@ -14,10 +17,24 @@ export class AddTweetComponent implements OnInit {
 
   @ViewChild('submit') submit: ElementRef;
 
+  private autocompleteRequested: Subject<string>;
+  autocompleteValues: User[];
+  autocompleteSelection: number;
+
   constructor(private tweetService: TweetService) {
+    this.autocompleteRequested = new Subject<string>();
   }
 
   ngOnInit() {
+    this.autocompleteRequested.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(value => this.tweetService.getAutocomplete(value))
+    )
+      .subscribe(value => {
+        this.autocompleteValues = value;
+        this.autocompleteSelection = 0;
+      });
   }
 
   tweet() {
@@ -45,6 +62,43 @@ export class AddTweetComponent implements OnInit {
   onEnterKey(event: KeyboardEvent) {
     (<HTMLButtonElement>this.submit.nativeElement).click();
     event.preventDefault();
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (this.autocompleteValues != null) {
+      if (event.keyCode === 38) { // up
+        this.autocompleteSelection = Math.max(this.autocompleteSelection - 1, 0);
+        event.preventDefault();
+      } else if (event.keyCode === 40) { // down
+        this.autocompleteSelection = Math.min(this.autocompleteSelection + 1, this.autocompleteValues.length - 1);
+        event.preventDefault();
+      } else if (event.keyCode === 13) { // enter
+        const pattern = /@[a-zA-Z0-9_]*$/;
+        this.content = this.content.replace(pattern, `@${this.autocompleteValues[this.autocompleteSelection].profile.username} `);
+        this.autocompleteValues = null;
+        this.autocompleteSelection = 0;
+        event.preventDefault();
+      }
+    }
+  }
+
+  onInput(event: Event) {
+    const textarea = (<HTMLTextAreaElement>event.target);
+    if (textarea.selectionStart === textarea.selectionEnd && textarea.selectionStart > 0) {
+      const pattern = /@[a-zA-Z0-9_]*/g;
+
+      let results: RegExpExecArray;
+      while ((results = pattern.exec(this.content)) !== null) {
+        if (results.index + results[0].length === textarea.selectionStart) {
+          const query = results[0].substr(1);
+          this.autocompleteRequested.next(query);
+          return;
+        }
+      }
+
+      this.autocompleteValues = null;
+      this.autocompleteSelection = 0;
+    }
   }
 
 }

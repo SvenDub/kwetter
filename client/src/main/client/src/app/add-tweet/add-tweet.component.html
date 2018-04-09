@@ -13,8 +13,15 @@
               required
               maxlength="140"
               (keydown.control.enter)="onEnterKey($event)"
+              (keydown)="onKeyDown($event)"
+              (input)="onInput($event)"
               rows="5">
     </textarea>
+    <ul class="list-group" *ngIf="autocompleteValues !== null">
+      <li class="list-group-item" [class.active]="i === autocompleteSelection" *ngFor="let user of autocompleteValues; index as i">
+        @{{user.profile.username}} - {{user.profile.name}}
+      </li>
+    </ul>
   </div>
   <div class="form-group">
     <button type="submit" class="btn btn-primary pull-right" [disabled]="isDisabled()" #submit>Tweet</button>

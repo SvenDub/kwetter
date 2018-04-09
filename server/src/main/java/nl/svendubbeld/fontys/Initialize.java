@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,7 +60,13 @@ public class Initialize {
         userService.addUser(adminUser);
         profileService.addProfile(adminProfile);
 
-        User user = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.singleton(adminUser));
+        User admin2User = new User("admin2@svendubbeld.nl", "pass", Collections.singleton(adminSecurityGroup), Collections.emptySet());
+        Profile admin2Profile = admin2User.createProfile("admin2", "Big Admin", "Proud Kwetter admin.", new Location("In your computer"), "https://kwetter.svendubbeld.nl/");
+
+        userService.addUser(admin2User);
+        profileService.addProfile(admin2Profile);
+
+        User user = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), new HashSet<>(Arrays.asList(adminUser, admin2User)));
         Profile profile = user.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT.", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
         userService.addUser(user);

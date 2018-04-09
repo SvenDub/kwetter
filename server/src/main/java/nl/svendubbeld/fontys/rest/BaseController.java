@@ -20,4 +20,8 @@ public abstract class BaseController {
     protected Response created(Object entity, URI location) {
         return Response.created(location).entity(entity).build();
     }
+
+    protected Response unauthorized() {
+        return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
 }
