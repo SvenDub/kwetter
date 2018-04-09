@@ -15,13 +15,15 @@
               (keydown.control.enter)="onEnterKey($event)"
               (keydown)="onKeyDown($event)"
               (input)="onInput($event)"
-              rows="5">
+              rows="5"
+              #textarea>
     </textarea>
-    <ul class="list-group" *ngIf="autocompleteValues !== null">
-      <li class="list-group-item" [class.active]="i === autocompleteSelection" *ngFor="let user of autocompleteValues; index as i">
+    <div class="list-group" *ngIf="autocompleteValues !== null">
+      <a class="list-group-item list-group-item-action" [class.active]="i === autocompleteSelection"
+         *ngFor="let user of autocompleteValues; index as i" (click)="acceptSuggestion(i); false;" href="">
         @{{user.profile.username}} - {{user.profile.name}}
-      </li>
-    </ul>
+      </a>
+    </div>
   </div>
   <div class="form-group">
     <button type="submit" class="btn btn-primary pull-right" [disabled]="isDisabled()" #submit>Tweet</button>

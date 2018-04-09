@@ -16,10 +16,11 @@ export class AddTweetComponent implements OnInit {
   errorMessage: string;
 
   @ViewChild('submit') submit: ElementRef;
+  @ViewChild('textarea') textarea: ElementRef;
 
   private autocompleteRequested: Subject<string>;
   autocompleteValues: User[];
-  autocompleteSelection: number;
+  autocompleteSelection = 0;
 
   constructor(private tweetService: TweetService) {
     this.autocompleteRequested = new Subject<string>();
@@ -33,7 +34,7 @@ export class AddTweetComponent implements OnInit {
     )
       .subscribe(value => {
         this.autocompleteValues = value;
-        this.autocompleteSelection = 0;
+        this.autocompleteSelection = Math.min(this.autocompleteSelection, this.autocompleteValues.length - 1);
       });
   }
 
@@ -73,10 +74,7 @@ export class AddTweetComponent implements OnInit {
         this.autocompleteSelection = Math.min(this.autocompleteSelection + 1, this.autocompleteValues.length - 1);
         event.preventDefault();
       } else if (event.keyCode === 13) { // enter
-        const pattern = /@[a-zA-Z0-9_]*$/;
-        this.content = this.content.replace(pattern, `@${this.autocompleteValues[this.autocompleteSelection].profile.username} `);
-        this.autocompleteValues = null;
-        this.autocompleteSelection = 0;
+        this.acceptSuggestion(this.autocompleteSelection);
         event.preventDefault();
       }
     }
@@ -99,6 +97,14 @@ export class AddTweetComponent implements OnInit {
       this.autocompleteValues = null;
       this.autocompleteSelection = 0;
     }
+  }
+
+  acceptSuggestion(index: number) {
+    const pattern = /@[a-zA-Z0-9_]*$/;
+    this.content = this.content.replace(pattern, `@${this.autocompleteValues[index].profile.username} `);
+    this.autocompleteValues = null;
+    this.autocompleteSelection = 0;
+    (<HTMLTextAreaElement>this.textarea.nativeElement).focus();
   }
 
 }
