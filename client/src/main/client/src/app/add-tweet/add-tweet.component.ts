@@ -34,7 +34,7 @@ export class AddTweetComponent implements OnInit {
     )
       .subscribe(value => {
         this.autocompleteValues = value;
-        this.autocompleteSelection = Math.min(this.autocompleteSelection, this.autocompleteValues.length - 1);
+        this.autocompleteSelection = Math.max(0, Math.min(this.autocompleteSelection, this.autocompleteValues.length - 1));
       });
   }
 
