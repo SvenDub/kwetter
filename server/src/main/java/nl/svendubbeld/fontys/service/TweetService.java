@@ -112,4 +112,8 @@ public class TweetService {
     public Stream<Tweet> findByUsername(String username) {
         return tweetRepository.findByOwner(username);
     }
+
+    public Tweet edit(Tweet tweet) {
+        return tweetRepository.edit(tweet);
+    }
 }

@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Tweet} from '../shared/models/tweet.model';
 import * as moment from 'moment';
 import {User} from '../shared/models/user.model';
+import {TweetService} from '../api/tweet.service';
 
 @Component({
   selector: 'app-tweet',
@@ -12,7 +13,7 @@ export class TweetComponent implements OnInit {
 
   @Input() tweet: Tweet;
 
-  constructor() {
+  constructor(private tweetService: TweetService) {
   }
 
   ngOnInit() {
@@ -57,4 +58,7 @@ export class TweetComponent implements OnInit {
     return moment(this.tweet.date).format('lll');
   }
 
+  like() {
+    this.tweetService.like(this.tweet).subscribe(value => this.tweet = value);
+  }
 }

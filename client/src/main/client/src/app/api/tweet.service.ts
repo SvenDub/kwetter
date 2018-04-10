@@ -26,4 +26,8 @@ export class TweetService {
   getAutocomplete(query: string) {
     return this.http.get<User[]>('/api/me/autocomplete', {headers: {'X-API-KEY': 'SvenDub'}, params: {'q': query}});
   }
+
+  like(tweet: Tweet) {
+    return this.http.post<Tweet>(`/api/tweets/${tweet.id}/like`, null, {headers: {'X-API-KEY': 'SvenDub'}});
+  }
 }

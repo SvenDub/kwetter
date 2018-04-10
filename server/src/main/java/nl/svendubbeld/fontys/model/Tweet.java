@@ -53,7 +53,7 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
     /**
      * The users who liked the tweet.
      */
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "Tweet_LikedBy")
     @NotNull
     private Set<User> likedBy;
@@ -145,6 +145,10 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
 
     public void setLikedBy(Set<User> likedBy) {
         this.likedBy = new HashSet<>(likedBy);
+    }
+
+    public boolean addLikedBy(User user) {
+        return likedBy.add(user);
     }
 
     /**

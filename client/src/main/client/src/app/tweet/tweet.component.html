@@ -17,7 +17,7 @@
    --></ng-container>
     </p>
     <a class="card-link"><fa name="reply"></fa></a>
-    <a class="card-link"><fa name="heart"></fa></a>
+    <a class="card-link" href="#" (click)="like(); false;"><fa name="heart"></fa>{{tweet.likedBy.length}}</a>
     <a class="card-link"><fa name="flag"></fa></a>
   </div>
 </div>
