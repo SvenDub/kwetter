@@ -1,1 +1,4 @@
 <app-tweet *ngFor="let tweet of tweets" [tweet]="tweet" (replyClicked)="replyClicked.emit($event)"></app-tweet>
+<div class="d-flex justify-content-center text-muted" *ngIf="!tweets || tweets.length === 0">
+  No tweets found :(
+</div>

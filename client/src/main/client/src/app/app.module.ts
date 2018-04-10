@@ -17,6 +17,7 @@ import { HashtagComponent } from './hashtag/hashtag.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { TrendsComponent } from './trends/trends.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
+import { MentionsComponent } from './mentions/mentions.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
     HashtagComponent,
     NotFoundComponent,
     TrendsComponent,
-    ProfileCardComponent
+    ProfileCardComponent,
+    MentionsComponent
   ],
   imports: [
     AngularFontAwesomeModule,

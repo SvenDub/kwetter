@@ -33,7 +33,11 @@ export class TweetService {
   }
 
   getTrends() {
-    return this.http.get<{[p: string]: number}>('/api/me/trends', {headers: {'X-API-KEY': 'SvenDub'}});
+    return this.http.get<{ [p: string]: number }>('/api/me/trends', {headers: {'X-API-KEY': 'SvenDub'}});
+  }
+
+  getMentions() {
+    return this.http.get<Tweet[]>('/api/me/mentions', {headers: {'X-API-KEY': 'SvenDub'}});
   }
 
   like(tweet: Tweet) {

@@ -56,6 +56,7 @@ public class MeController extends BaseController {
         Stream<Tweet> tweets = tweetService.getMentions(apiKey);
 
         return ok(tweets
+                .sorted(Comparator.comparing(Tweet::getDate).reversed())
                 .map(tweet -> tweet.convert(dtoHelper))
                 .collect(Collectors.toList())
         );

@@ -4,11 +4,13 @@ import {HomeComponent} from './home/home.component';
 import {ProfileComponent} from './profile/profile.component';
 import {HashtagComponent} from './hashtag/hashtag.component';
 import {NotFoundComponent} from './not-found/not-found.component';
+import {MentionsComponent} from './mentions/mentions.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
   {path: 'u/:username', component: ProfileComponent},
   {path: 'hashtag/:hashtag', component: HashtagComponent},
+  {path: 'mentions', component: MentionsComponent},
   {path: '**', component: NotFoundComponent}
 ];
 
