@@ -11,7 +11,7 @@
     </div>
     <p class="card-text">
       <ng-container *ngFor="let group of getWordGroups()" [ngSwitch]="group.type"><!-- Comments required to trick HTML in not rendering new lines
-     --><ng-template [ngSwitchCase]="'hashtag'"><a [routerLink]="['/trend/' + group.link]">{{group.value}}</a></ng-template><!--
+     --><ng-template [ngSwitchCase]="'hashtag'"><a [routerLink]="['/hashtag/' + group.link]">{{group.value}}</a></ng-template><!--
      --><ng-template [ngSwitchCase]="'mention'"><a [routerLink]="['/u/' + group.link]">{{group.value}}</a></ng-template><!--
      --><ng-template ngSwitchDefault>{{group.value}}</ng-template><!--
    --></ng-container>

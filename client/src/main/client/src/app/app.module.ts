@@ -13,6 +13,8 @@ import {TweetComponent} from './tweet/tweet.component';
 import {ProfileComponent} from './profile/profile.component';
 import {AddTweetComponent} from './add-tweet/add-tweet.component';
 import { AboutComponent } from './about/about.component';
+import { HashtagComponent } from './hashtag/hashtag.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { AboutComponent } from './about/about.component';
     TweetComponent,
     ProfileComponent,
     AddTweetComponent,
-    AboutComponent
+    AboutComponent,
+    HashtagComponent,
+    NotFoundComponent
   ],
   imports: [
     AngularFontAwesomeModule,

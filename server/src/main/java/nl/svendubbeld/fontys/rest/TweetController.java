@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,6 +56,7 @@ public class TweetController extends BaseController {
         Stream<Tweet> tweets = tweetService.searchTweets(query);
 
         return ok(tweets
+                .sorted(Comparator.comparing(Tweet::getDate).reversed())
                 .map(tweet -> tweet.convert(dtoHelper))
                 .collect(Collectors.toList()));
     }
@@ -121,5 +123,17 @@ public class TweetController extends BaseController {
         tweetService.edit(tweet);
 
         return ok(tweet.convert(dtoHelper));
+    }
+
+    @GET
+    @Path("/hashtag/{hashtag}")
+    @Transactional
+    public Response getByHashtag(@PathParam("hashtag") String hashtag) {
+        Stream<Tweet> tweets = tweetService.findByHashtag(hashtag);
+
+        return ok(tweets
+                .sorted(Comparator.comparing(Tweet::getDate))
+                .map(tweet -> tweet.convert(dtoHelper))
+                .collect(Collectors.toList()));
     }
 }

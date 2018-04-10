@@ -116,4 +116,13 @@ public class TweetService {
     public Tweet edit(Tweet tweet) {
         return tweetRepository.edit(tweet);
     }
+
+    public Stream<Tweet> findByHashtag(String hashtag) {
+        String hashtagWithHash = hashtag;
+        if (!hashtag.startsWith("#")) {
+            hashtagWithHash = "#" + hashtag;
+        }
+
+        return tweetRepository.findByHashtag(hashtagWithHash);
+    }
 }

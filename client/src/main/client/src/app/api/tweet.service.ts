@@ -27,6 +27,10 @@ export class TweetService {
     return this.http.get<User[]>('/api/me/autocomplete', {headers: {'X-API-KEY': 'SvenDub'}, params: {'q': query}});
   }
 
+  getByHashtag(hashtag: string) {
+    return this.http.get<Tweet[]>(`/api/tweets/hashtag/${hashtag}`);
+  }
+
   like(tweet: Tweet) {
     return this.http.post<Tweet>(`/api/tweets/${tweet.id}/like`, null, {headers: {'X-API-KEY': 'SvenDub'}});
   }

@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
         @NamedQuery(name = "tweet.findByContent", query = "select t from Tweet t where lower(t.content) like concat('%', lower(:content), '%')"),
         @NamedQuery(name = "tweet.getTimeline", query = "select t from Tweet t where t.owner in :following or t.owner = :user"),
         @NamedQuery(name = "tweet.getMentions", query = "select t from Tweet t where :user = value(t.mentions)"),
-        @NamedQuery(name = "tweet.getTrends", query = "select h, count(h) from Tweet t join t.hashtags h group by h")
+        @NamedQuery(name = "tweet.getTrends", query = "select h, count(h) from Tweet t join t.hashtags h group by h"),
+        @NamedQuery(name = "tweet.findByHashtag", query = "select t from Tweet t where :hashtag member of t.hashtags")
 })
 public class Tweet implements ToDTOConvertible<TweetDTO> {
 

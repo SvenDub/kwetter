@@ -92,4 +92,12 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
         return query.getResultStream()
                 .collect(Collectors.toMap(o -> ((String) o[0]), o -> ((Long) o[1])));
     }
+
+    @Override
+    public Stream<Tweet> findByHashtag(String hashtag) {
+        TypedQuery<Tweet> query = getEntityManager().createNamedQuery("tweet.findByHashtag", getEntityClass());
+        query.setParameter("hashtag", hashtag);
+
+        return query.getResultStream();
+    }
 }

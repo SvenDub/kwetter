@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -63,6 +64,7 @@ public class UserController extends BaseController {
         Stream<Tweet> tweets = tweetService.findByUsername(username);
 
         return ok(tweets
+                .sorted(Comparator.comparing(Tweet::getDate).reversed())
                 .map(tweet -> tweet.convert(dtoHelper))
                 .collect(Collectors.toList()));
     }

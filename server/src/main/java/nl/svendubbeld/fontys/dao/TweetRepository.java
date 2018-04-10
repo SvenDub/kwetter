@@ -57,4 +57,12 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
      * @return A stream of strings with the trends.
      */
     Map<String, Long> getTrends();
+
+    /**
+     * Get all tweets with a specific hashtag.
+     *
+     * @param hashtag The hashtag to search for.
+     * @return A stream of tweets with the hashtag.
+     */
+    Stream<Tweet> findByHashtag(String hashtag);
 }
