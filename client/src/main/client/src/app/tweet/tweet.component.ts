@@ -61,4 +61,8 @@ export class TweetComponent implements OnInit {
   like() {
     this.tweetService.like(this.tweet).subscribe(value => this.tweet = value);
   }
+
+  flag() {
+    this.tweetService.flag(this.tweet).subscribe(value => this.tweet = value);
+  }
 }

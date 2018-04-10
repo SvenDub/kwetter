@@ -205,6 +205,10 @@ public class Tweet implements ToDTOConvertible<TweetDTO> {
         this.flags = flags;
     }
 
+    public boolean addFlag(User user) {
+        return flags.add(user);
+    }
+
     @Override
     public TweetDTO convert(DTOHelper dtoHelper) {
         TweetDTO dto = new TweetDTO();

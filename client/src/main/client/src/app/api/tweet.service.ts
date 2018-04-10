@@ -30,4 +30,8 @@ export class TweetService {
   like(tweet: Tweet) {
     return this.http.post<Tweet>(`/api/tweets/${tweet.id}/like`, null, {headers: {'X-API-KEY': 'SvenDub'}});
   }
+
+  flag(tweet: Tweet) {
+    return this.http.post<Tweet>(`/api/tweets/${tweet.id}/flag`, null, {headers: {'X-API-KEY': 'SvenDub'}});
+  }
 }

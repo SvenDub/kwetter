@@ -101,4 +101,25 @@ public class TweetController extends BaseController {
 
         return ok(tweet.convert(dtoHelper));
     }
+
+    @POST
+    @Path("/{id}/flag")
+    @Transactional
+    public Response flag(@PathParam("id") long id, @HeaderParam(Headers.API_KEY) String apiKey) {
+        if (!userService.exists(apiKey)) {
+            return unauthorized();
+        }
+
+        User user = userService.findByUsername(apiKey);
+        Tweet tweet = tweetService.findById(id);
+
+        if (tweet == null) {
+            return notFound();
+        }
+
+        tweet.addFlag(user);
+        tweetService.edit(tweet);
+
+        return ok(tweet.convert(dtoHelper));
+    }
 }
