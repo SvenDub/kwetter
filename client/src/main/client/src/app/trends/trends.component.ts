@@ -17,6 +17,10 @@ export class TrendsComponent implements OnInit {
     this.tweetService.getTrends()
       .subscribe(trends => {
         this.trends = Object.entries(trends)
+          .map(value => <[string, number]>[
+            value[0].substr(1),
+            value[1]
+          ])
           .sort((a, b) => b[1] - a[1]);
       });
   }

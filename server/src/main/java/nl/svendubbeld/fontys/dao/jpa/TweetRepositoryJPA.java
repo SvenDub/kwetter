@@ -90,7 +90,7 @@ public class TweetRepositoryJPA extends JPARepository<Tweet, Long> implements Tw
         TypedQuery<Object[]> query = getEntityManager().createNamedQuery("tweet.getTrends", Object[].class);
 
         return query.getResultStream()
-                .collect(Collectors.toMap(o -> ((String) o[0]).substring(1), o -> ((Long) o[1])));
+                .collect(Collectors.toMap(o -> ((String) o[0]), o -> ((Long) o[1])));
     }
 
     @Override
