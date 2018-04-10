@@ -4,6 +4,7 @@ import {Tweet} from '../shared/models/tweet.model';
 import {Subject} from 'rxjs/Subject';
 import {tap} from 'rxjs/operators';
 import {User} from '../shared/models/user.model';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TweetService {
@@ -29,6 +30,10 @@ export class TweetService {
 
   getByHashtag(hashtag: string) {
     return this.http.get<Tweet[]>(`/api/tweets/hashtag/${hashtag}`);
+  }
+
+  getTrends() {
+    return this.http.get<{[p: string]: number}>('/api/me/trends', {headers: {'X-API-KEY': 'SvenDub'}});
   }
 
   like(tweet: Tweet) {

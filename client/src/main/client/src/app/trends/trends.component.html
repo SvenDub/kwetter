@@ -1,0 +1,6 @@
+<div class="card">
+  <h5 class="card-header">Trends</h5>
+  <div class="list-group list-group-flush">
+    <a [routerLink]="['/hashtag/' + trend[0]]" class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let trend of trends">#{{trend[0]}} <span class="badge badge-primary badge-pill">{{trend[1]}}</span></a>
+  </div>
+</div>
