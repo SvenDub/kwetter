@@ -16,7 +16,7 @@
      --><ng-template ngSwitchDefault>{{group.value}}</ng-template><!--
    --></ng-container>
     </p>
-    <a class="card-link"><fa name="reply"></fa></a>
+    <a class="card-link" href="#" (click)="replyClicked.emit(tweet); false;"><fa name="reply"></fa></a>
     <a class="card-link" href="#" (click)="like(); false;"><fa name="heart"></fa>{{tweet.likedBy.length}}</a>
     <a class="card-link" href="#" (click)="flag(); false;"><fa name="flag"></fa></a>
   </div>

@@ -1,1 +1,1 @@
-<app-tweet *ngFor="let tweet of tweets" [tweet]="tweet"></app-tweet>
+<app-tweet *ngFor="let tweet of tweets" [tweet]="tweet" (replyClicked)="replyClicked.emit($event)"></app-tweet>

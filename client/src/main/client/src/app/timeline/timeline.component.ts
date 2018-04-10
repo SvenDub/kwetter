@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Tweet} from '../shared/models/tweet.model';
 
 @Component({
@@ -9,6 +9,7 @@ import {Tweet} from '../shared/models/tweet.model';
 export class TimelineComponent implements OnInit {
 
   @Input() tweets: Tweet[];
+  @Output() replyClicked = new EventEmitter<Tweet>();
 
   constructor() {
   }

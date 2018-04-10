@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {TweetService} from '../api/tweet.service';
 import {Tweet} from '../shared/models/tweet.model';
 import {Subject} from 'rxjs/Subject';
@@ -11,6 +11,8 @@ import {User} from '../shared/models/user.model';
   styleUrls: ['./add-tweet.component.css']
 })
 export class AddTweetComponent implements OnInit {
+
+  @Input() replyClicked: EventEmitter<Tweet>;
 
   content: string;
   errorMessage: string;
@@ -36,6 +38,13 @@ export class AddTweetComponent implements OnInit {
         this.autocompleteValues = value;
         this.autocompleteSelection = Math.max(0, Math.min(this.autocompleteSelection, this.autocompleteValues.length - 1));
       });
+
+    if (this.replyClicked) {
+      this.replyClicked.subscribe(value => {
+        this.content = `@${(<Tweet>value).owner.profile.username} `.concat(this.content ? this.content : '');
+        (<HTMLTextAreaElement>this.textarea.nativeElement).focus();
+      });
+    }
   }
 
   tweet() {

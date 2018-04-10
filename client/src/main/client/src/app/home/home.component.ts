@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {TweetService} from '../api/tweet.service';
 import {Tweet} from '../shared/models/tweet.model';
 
@@ -11,6 +11,8 @@ export class HomeComponent implements OnInit {
 
   tweets: Tweet[];
 
+  replyClicked = new EventEmitter<Tweet>();
+
   constructor(private tweetService: TweetService) {
   }
 
@@ -20,6 +22,10 @@ export class HomeComponent implements OnInit {
 
     this.tweetService.tweetPlaced$
       .subscribe(tweet => this.tweets.unshift(tweet));
+  }
+
+  onReplyClicked(tweet: Tweet) {
+    this.replyClicked.emit(tweet);
   }
 
 }

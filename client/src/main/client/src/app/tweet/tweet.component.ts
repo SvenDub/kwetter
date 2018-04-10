@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Tweet} from '../shared/models/tweet.model';
 import * as moment from 'moment';
 import {User} from '../shared/models/user.model';
@@ -12,6 +12,7 @@ import {TweetService} from '../api/tweet.service';
 export class TweetComponent implements OnInit {
 
   @Input() tweet: Tweet;
+  @Output() replyClicked = new EventEmitter<Tweet>();
 
   constructor(private tweetService: TweetService) {
   }
