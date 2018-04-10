@@ -1,13 +1,12 @@
 package nl.svendubbeld.fontys.rest;
 
-import com.timgroup.jgravatar.Gravatar;
-import com.timgroup.jgravatar.GravatarDefaultImage;
-import com.timgroup.jgravatar.GravatarRating;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.TweetService;
 import nl.svendubbeld.fontys.service.UserService;
+import nl.svendubbeld.fontys.service.gravatar.GravatarRequest;
+import nl.svendubbeld.fontys.service.gravatar.GravatarService;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -27,6 +26,9 @@ public class UserController extends BaseController {
 
     @Inject
     private DTOHelper dtoHelper;
+
+    @Inject
+    private GravatarService gravatarService;
 
     @GET
     @Path("/{username}")
@@ -48,10 +50,7 @@ public class UserController extends BaseController {
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            Gravatar gravatar = new Gravatar(size, GravatarRating.GENERAL_AUDIENCES, GravatarDefaultImage.RETRO);
-            byte[] jpg = gravatar.download(user.getEmail());
-
-            return ok(jpg);
+            return ok(gravatarService.get(new GravatarRequest(user.getEmail(), size)));
         } else {
             return notFound();
         }
