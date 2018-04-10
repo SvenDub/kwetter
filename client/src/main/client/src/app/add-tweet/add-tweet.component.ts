@@ -100,11 +100,25 @@ export class AddTweetComponent implements OnInit {
   }
 
   acceptSuggestion(index: number) {
-    const pattern = /@[a-zA-Z0-9_]*$/;
-    this.content = this.content.replace(pattern, `@${this.autocompleteValues[index].profile.username} `);
-    this.autocompleteValues = null;
-    this.autocompleteSelection = 0;
-    (<HTMLTextAreaElement>this.textarea.nativeElement).focus();
+    const pattern = /@[a-zA-Z0-9_]*/g;
+    const textarea = <HTMLTextAreaElement>this.textarea.nativeElement;
+    const selection = textarea.selectionStart;
+    const replaceValue = `@${this.autocompleteValues[index].profile.username} `;
+
+    let results: RegExpExecArray;
+    while ((results = pattern.exec(this.content)) !== null) {
+      if (results.index + results[0].length === selection) {
+        const replacePattern = /@[a-zA-Z0-9_]*/y;
+        replacePattern.lastIndex = results.index;
+
+        this.content = this.content.replace(replacePattern, replaceValue);
+
+        this.autocompleteValues = null;
+        this.autocompleteSelection = 0;
+
+        return;
+      }
+    }
   }
 
 }
