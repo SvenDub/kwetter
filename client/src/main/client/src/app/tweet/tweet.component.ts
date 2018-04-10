@@ -59,6 +59,11 @@ export class TweetComponent implements OnInit {
     return moment(this.tweet.date).format('lll');
   }
 
+  getLikesCount() {
+    // .size should exist on Set, but it doesn't. So we use .length which shouldn't exist but does. ¯\_(ツ)_/¯
+    return (<object>this.tweet.likedBy)['length'];
+  }
+
   like() {
     this.tweetService.like(this.tweet).subscribe(value => this.tweet = value);
   }

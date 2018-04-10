@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import moment = require('moment');
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-about',
