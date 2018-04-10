@@ -4,6 +4,7 @@ import {TweetService} from './tweet.service';
 import {SharedModule} from '../shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
 import {UserService} from './user.service';
+import {LoginService} from './login.service';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import {UserService} from './user.service';
     SharedModule
   ],
   providers: [
+    LoginService,
     TweetService,
     UserService
   ],

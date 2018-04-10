@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {LoginService} from '../api/login.service';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  username = 'SvenDub';
+
+  constructor(private loginService: LoginService) {
+  }
 
   ngOnInit() {
+  }
+
+  login() {
+    this.loginService.apiKey = this.username;
   }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {User} from '../shared/models/user.model';
 import {UserService} from '../api/user.service';
 
@@ -9,14 +9,12 @@ import {UserService} from '../api/user.service';
 })
 export class ProfileCardComponent implements OnInit {
 
-  user: User;
+  @Input() user: User;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit() {
-    this.userService.getByUsername('SvenDub')
-      .subscribe(value => this.user = value);
   }
 
 }

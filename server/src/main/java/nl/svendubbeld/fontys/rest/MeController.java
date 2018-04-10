@@ -4,6 +4,7 @@ import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.Tweet;
+import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.TweetService;
 import nl.svendubbeld.fontys.service.UserService;
 
@@ -28,6 +29,18 @@ public class MeController extends BaseController {
 
     @Inject
     private DTOHelper dtoHelper;
+
+    @GET
+    @Transactional
+    public Response getMe(@HeaderParam(Headers.API_KEY) String apiKey) {
+        User user = userService.findByUsername(apiKey);
+
+        if (user != null) {
+            return ok(user.convert(dtoHelper));
+        } else {
+            return notFound();
+        }
+    }
 
     @GET
     @Path("/timeline")

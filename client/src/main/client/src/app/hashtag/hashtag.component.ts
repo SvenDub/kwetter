@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Tweet} from '../shared/models/tweet.model';
 import {TweetService} from '../api/tweet.service';
 import {ActivatedRoute, Params} from '@angular/router';
+import {UserService} from '../api/user.service';
+import {LoginService} from '../api/login.service';
+import {User} from '../shared/models/user.model';
 
 @Component({
   selector: 'app-hashtag',
@@ -11,9 +14,10 @@ import {ActivatedRoute, Params} from '@angular/router';
 export class HashtagComponent implements OnInit {
 
   tweets: Tweet[];
+  user: User;
   hashtag: string;
 
-  constructor(private route: ActivatedRoute, private tweetService: TweetService) {
+  constructor(private route: ActivatedRoute, private tweetService: TweetService, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -27,6 +31,9 @@ export class HashtagComponent implements OnInit {
         }
       }
     );
+
+    this.userService.getMe()
+      .subscribe(user => this.user = user);
   }
 
 }

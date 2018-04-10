@@ -12,5 +12,9 @@
         <a class="nav-link" [routerLink]="['/mentions']">Mentions</a>
       </li>
     </ul>
+    <form class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
+      <input class="form-control mr-sm-2" type="text" placeholder="Login" aria-label="Login" [(ngModel)]="username" name="username">
+      <button class="btn my-2 my-sm-0" type="submit">Login</button>
+    </form>
   </div>
 </nav>
