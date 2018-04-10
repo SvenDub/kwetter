@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mt-2">
   <div class="row justify-content-center" *ngIf="user">
     <div class="col-md-3">
       <img width="100%" src="/api/users/{{user.profile.username}}/picture?size=512" class="rounded-circle mb-3">
@@ -26,7 +26,7 @@
       </div>
       <div class="row">
         <div class="col">
-          About
+          <app-about></app-about>
         </div>
       </div>
     </div>

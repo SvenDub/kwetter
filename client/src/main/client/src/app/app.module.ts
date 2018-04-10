@@ -12,6 +12,7 @@ import {FormsModule} from '@angular/forms';
 import {TweetComponent} from './tweet/tweet.component';
 import {ProfileComponent} from './profile/profile.component';
 import {AddTweetComponent} from './add-tweet/add-tweet.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {AddTweetComponent} from './add-tweet/add-tweet.component';
     TimelineComponent,
     TweetComponent,
     ProfileComponent,
-    AddTweetComponent
+    AddTweetComponent,
+    AboutComponent
   ],
   imports: [
     AngularFontAwesomeModule,
