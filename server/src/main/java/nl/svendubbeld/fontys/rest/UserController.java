@@ -68,4 +68,46 @@ public class UserController extends BaseController {
                 .map(tweet -> tweet.convert(dtoHelper))
                 .collect(Collectors.toList()));
     }
+
+    @POST
+    @Path("/{username}/follow")
+    @Transactional
+    public Response follow(@PathParam("username") String username, @HeaderParam(Headers.API_KEY) String apiKey) {
+        User me = userService.findByUsername(apiKey);
+
+        if (me == null) {
+            return unauthorized();
+        }
+
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            me.addFollowing(user);
+            userService.edit(me);
+            return ok();
+        } else {
+            return notFound();
+        }
+    }
+
+    @POST
+    @Path("/{username}/unfollow")
+    @Transactional
+    public Response unfollow(@PathParam("username") String username, @HeaderParam(Headers.API_KEY) String apiKey) {
+        User me = userService.findByUsername(apiKey);
+
+        if (me == null) {
+            return unauthorized();
+        }
+
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            me.removeFollowing(user);
+            userService.edit(me);
+            return ok();
+        } else {
+            return notFound();
+        }
+    }
 }

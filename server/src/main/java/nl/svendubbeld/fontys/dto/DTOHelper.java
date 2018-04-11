@@ -41,4 +41,16 @@ public class DTOHelper {
     public UserService getUserService() {
         return userService;
     }
+
+    public <T> T convertToDTO(ToDTOConvertible<T> entity) {
+        return entity.convert(this);
+    }
+
+    public <T> T convertToDTOSecure(ToDTOSecureConvertible<T> entity) {
+        return entity.convertSecure(this);
+    }
+
+    public <T> T convertToEntity(ToEntityConvertible<T> dto) {
+        return dto.convert(this);
+    }
 }

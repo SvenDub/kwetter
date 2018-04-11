@@ -36,7 +36,7 @@ public class MeController extends BaseController {
         User user = userService.findByUsername(apiKey);
 
         if (user != null) {
-            return ok(user.convert(dtoHelper));
+            return ok(user.convertSecure(dtoHelper));
         } else {
             return notFound();
         }

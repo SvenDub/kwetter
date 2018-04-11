@@ -1,13 +1,23 @@
 <div class="container mt-2">
   <div class="row justify-content-center" *ngIf="user">
     <div class="col-md-3">
-      <img width="100%" src="/api/users/{{user.profile.username}}/picture?size=512" class="rounded-circle mb-3">
-      <h5 class="mb-1">{{user.profile.name}}</h5>
-      <h6 class="text-muted mb-3">@{{user.profile.username}}</h6>
-      <p *ngIf="user.profile.bio">{{user.profile.bio}}</p>
-      <div *ngIf="user.profile.location">
-        <span *ngIf="user.profile.location.latitude && user.profile.location.longitude"><fa name="map-marker"></fa> <a href="{{getLocationQuery(user.profile.location)}}" target="_blank" >{{user.profile.location.label}}</a></span>
-        <span *ngIf="!(user.profile.location.latitude && user.profile.location.longitude) && user.profile.location.label"><fa name="map-marker"></fa> {{user.profile.location.label}}</span>
+      <div class="row mb-2">
+        <div class="col">
+          <img width="100%" src="/api/users/{{user.profile.username}}/picture?size=512" class="rounded-circle mb-3">
+          <h5 class="mb-1">{{user.profile.name}}</h5>
+          <h6 class="text-muted mb-3">@{{user.profile.username}}</h6>
+          <p *ngIf="user.profile.bio">{{user.profile.bio}}</p>
+          <div *ngIf="user.profile.location">
+            <span *ngIf="user.profile.location.latitude && user.profile.location.longitude"><fa name="map-marker"></fa> <a href="{{getLocationQuery(user.profile.location)}}" target="_blank" >{{user.profile.location.label}}</a></span>
+            <span *ngIf="!(user.profile.location.latitude && user.profile.location.longitude) && user.profile.location.label"><fa name="map-marker"></fa> {{user.profile.location.label}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isMe()">
+        <div class="col">
+          <button class="btn btn-outline-primary" *ngIf="!isFollowing()" (click)="follow()">Follow</button>
+          <button class="btn btn-primary" *ngIf="isFollowing()" (click)="unfollow()">Following</button>
+        </div>
       </div>
     </div>
     <div class="col-md-6">

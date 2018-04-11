@@ -5,6 +5,7 @@ import {UserService} from '../api/user.service';
 import {Location} from '../shared/models/location.model';
 import {Tweet} from '../shared/models/tweet.model';
 import {TweetService} from '../api/tweet.service';
+import {UserSecure} from '../shared/models/user-secure.model';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ export class ProfileComponent implements OnInit {
   username: string;
   user: User;
   tweets: Tweet[];
+  me: UserSecure;
 
   constructor(private route: ActivatedRoute, private userService: UserService, private tweetService: TweetService) {
   }
@@ -26,13 +28,19 @@ export class ProfileComponent implements OnInit {
         if (params['username']) {
           this.username = params['username'];
 
-          this.userService.getByUsername(this.username)
-            .subscribe(user => this.user = user);
-          this.userService.getTweets(this.username)
-            .subscribe(tweets => this.tweets = tweets);
+          this.refresh();
         }
       }
     );
+  }
+
+  refresh() {
+    this.userService.getByUsername(this.username)
+      .subscribe(user => this.user = user);
+    this.userService.getTweets(this.username)
+      .subscribe(tweets => this.tweets = tweets);
+    this.userService.getMe()
+      .subscribe(me => this.me = me);
   }
 
   getLocationQuery(location: Location) {
@@ -41,6 +49,24 @@ export class ProfileComponent implements OnInit {
     } else {
       return null;
     }
+  }
+
+  follow() {
+    this.userService.follow(this.username)
+      .subscribe(() => this.refresh());
+  }
+
+  unfollow() {
+    this.userService.unfollow(this.username)
+      .subscribe(() => this.refresh());
+  }
+
+  isFollowing() {
+    return this.me.following.some(value => value.id === this.user.id);
+  }
+
+  isMe() {
+    return this.me.id === this.user.id;
   }
 
 }

@@ -1,6 +1,5 @@
 package nl.svendubbeld.fontys.dto;
 
-import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.User;
 
 import java.util.Set;
@@ -12,7 +11,7 @@ public class UserDTOSecure extends UserDTO {
 
     private Set<SecurityGroupDTO> securityGroups;
 
-    private Set<ProfileDTO> following;
+    private Set<UserDTO> following;
 
     private Set<ProfileDTO> profiles;
 
@@ -32,11 +31,11 @@ public class UserDTOSecure extends UserDTO {
         this.securityGroups = securityGroups;
     }
 
-    public Set<ProfileDTO> getFollowing() {
+    public Set<UserDTO> getFollowing() {
         return following;
     }
 
-    public void setFollowing(Set<ProfileDTO> following) {
+    public void setFollowing(Set<UserDTO> following) {
         this.following = following;
     }
 
@@ -53,14 +52,13 @@ public class UserDTOSecure extends UserDTO {
         User user = super.convert(dtoHelper);
 
         user.setEmail(getEmail());
-        user.setSecurityGroups(getSecurityGroups().stream().map(securityGroupDTO -> securityGroupDTO.convert(dtoHelper)).collect(Collectors.toSet()));
+        user.setSecurityGroups(getSecurityGroups().stream().map(dtoHelper::convertToEntity).collect(Collectors.toSet()));
         user.setFollowing(getFollowing().stream()
-                .map(profileDTO -> profileDTO.convert(dtoHelper))
-                .map(Profile::getId)
-                .map(aLong -> dtoHelper.getProfileService().findById(aLong))
-                .map(Profile::getUser)
+                .map(dtoHelper::convertToEntity)
+                .map(User::getId)
+                .map(dtoHelper.getUserService()::findById)
                 .collect(Collectors.toSet()));
-        user.setProfiles(getProfiles().stream().map(profileDTO -> profileDTO.convert(dtoHelper)).collect(Collectors.toSet()));
+        user.setProfiles(getProfiles().stream().map(dtoHelper::convertToEntity).collect(Collectors.toSet()));
 
         return user;
     }

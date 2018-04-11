@@ -7,10 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -136,6 +133,14 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
         this.following = following;
     }
 
+    public boolean addFollowing(User user) {
+        return following.add(user);
+    }
+
+    public boolean removeFollowing(User user) {
+        return following.remove(user);
+    }
+
     /**
      * @return The profiles used by this user.
      */
@@ -169,7 +174,7 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
         UserDTO dto = new UserDTO();
 
         dto.setId(getId());
-        getCurrentProfile().map(profile -> profile.convert(dtoHelper)).ifPresent(dto::setProfile);
+        getCurrentProfile().map(dtoHelper::convertToDTO).ifPresent(dto::setProfile);
         dto.setTweetsCount(dtoHelper.getUserService().getTweetsCount(this));
         dto.setFollowersCount(dtoHelper.getUserService().getFollowersCount(this));
         dto.setFollowingCount(dtoHelper.getUserService().getFollowingCount(this));
@@ -182,19 +187,30 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
         UserDTOSecure dto = new UserDTOSecure();
 
         dto.setId(getId());
-        getCurrentProfile().map(profile -> profile.convert(dtoHelper)).ifPresent(dto::setProfile);
+        getCurrentProfile().map(dtoHelper::convertToDTO).ifPresent(dto::setProfile);
         dto.setTweetsCount(dtoHelper.getUserService().getTweetsCount(this));
         dto.setFollowersCount(dtoHelper.getUserService().getFollowersCount(this));
         dto.setFollowingCount(dtoHelper.getUserService().getFollowingCount(this));
         dto.setEmail(getEmail());
-        dto.setSecurityGroups(getSecurityGroups().stream().map(securityGroup -> securityGroup.convert(dtoHelper)).collect(Collectors.toSet()));
+        dto.setSecurityGroups(getSecurityGroups().stream().map(dtoHelper::convertToDTO).collect(Collectors.toSet()));
         dto.setFollowing(getFollowing().stream()
-                .map(User::getCurrentProfile)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(profile -> profile.convert(dtoHelper)).collect(Collectors.toSet()));
-        dto.setProfiles(getProfiles().stream().map(profile -> profile.convert(dtoHelper)).collect(Collectors.toSet()));
+                .map(dtoHelper::convertToDTO)
+                .collect(Collectors.toSet()));
+        dto.setProfiles(getProfiles().stream().map(dtoHelper::convertToDTO).collect(Collectors.toSet()));
 
         return dto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
