@@ -65,4 +65,12 @@ public interface TweetRepository extends CrudRepository<Tweet, Long> {
      * @return A stream of tweets with the hashtag.
      */
     Stream<Tweet> findByHashtag(String hashtag);
+
+    /**
+     * Get all tweets that are liked by a certain user.
+     *
+     * @param user The user.
+     * @return A stream of tweets liked by the user.
+     */
+    Stream<Tweet> findByLikes(User user);
 }

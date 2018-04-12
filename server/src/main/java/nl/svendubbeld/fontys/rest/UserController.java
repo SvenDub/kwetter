@@ -70,6 +70,22 @@ public class UserController extends BaseController {
     }
 
     @GET
+    @Path("/{username}/likes")
+    @Transactional
+    public Response getLikesByUsername(@PathParam("username") String username) {
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return notFound();
+        }
+
+        return ok(tweetService.findByLikes(user)
+                .sorted(Comparator.comparing(Tweet::getDate).reversed())
+                .map(dtoHelper::convertToDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @GET
     @Path("/{username}/following")
     @Transactional
     public Response getFollowingByUsername(@PathParam("username") String username) {

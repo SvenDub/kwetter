@@ -94,7 +94,7 @@ public class TweetService {
     }
 
     public List<TweetDTO> findAllAsDTO() {
-        return findAll().map(tweet -> tweet.convert(dtoHelper)).collect(Collectors.toList());
+        return findAll().map(dtoHelper::convertToDTO).collect(Collectors.toList());
     }
 
     public Stream<Tweet> findByContent(String content) {
@@ -124,5 +124,9 @@ public class TweetService {
         }
 
         return tweetRepository.findByHashtag(hashtagWithHash);
+    }
+
+    public Stream<Tweet> findByLikes(User user) {
+        return tweetRepository.findByLikes(user);
     }
 }

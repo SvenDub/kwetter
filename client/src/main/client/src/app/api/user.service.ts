@@ -31,6 +31,10 @@ export class UserService {
     return this.http.get<User[]>(`/api/users/${username}/followers`, {headers: {'X-API-KEY': this.loginService.apiKey}});
   }
 
+  getLikes(username: string) {
+    return this.http.get<Tweet[]>(`/api/users/${username}/likes`, {headers: {'X-API-KEY': this.loginService.apiKey}});
+  }
+
   follow(username: string) {
     return this.http.post(`/api/users/${username}/follow`, null, {headers: {'X-API-KEY': this.loginService.apiKey}});
   }
