@@ -48,4 +48,8 @@ export class TweetService {
   flag(tweet: Tweet) {
     return this.http.post<Tweet>(`/api/tweets/${tweet.id}/flag`, null, {headers: {'X-API-KEY': this.loginService.apiKey}});
   }
+
+  search(query: string) {
+    return this.http.get<Tweet[]>(`/api/tweets/search`, {headers: {'X-API-KEY': this.loginService.apiKey}, params: {'query': query}});
+  }
 }

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../api/login.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,8 +10,9 @@ import {LoginService} from '../api/login.service';
 export class HeaderComponent implements OnInit {
 
   username = 'SvenDub';
+  query: string;
 
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService, private router: Router) {
   }
 
   ngOnInit() {
@@ -18,6 +20,10 @@ export class HeaderComponent implements OnInit {
 
   login() {
     this.loginService.apiKey = this.username;
+  }
+
+  onInput() {
+    this.router.navigate(['/search/', {query: this.query}]);
   }
 
 }

@@ -13,14 +13,14 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="row mb-4">
+      <div class="row">
         <div class="col">
-          <app-add-tweet [replyClicked]="replyClicked"></app-add-tweet>
+          <h4>Showing tweets for <em>{{query}}</em>:</h4>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <app-timeline [tweets]="tweets" (replyClicked)="onReplyClicked($event)"></app-timeline>
+          <app-timeline [tweets]="tweets"></app-timeline>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {HashtagComponent} from './hashtag/hashtag.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {MentionsComponent} from './mentions/mentions.component';
 import {EditProfileComponent} from './edit-profile/edit-profile.component';
+import {SearchComponent} from './search/search.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'u/:username/edit', component: EditProfileComponent},
   {path: 'hashtag/:hashtag', component: HashtagComponent},
   {path: 'mentions', component: MentionsComponent},
+  {path: 'search', component: SearchComponent},
   {path: '**', component: NotFoundComponent}
 ];
 

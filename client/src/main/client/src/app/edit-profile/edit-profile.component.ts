@@ -3,6 +3,7 @@ import {UserService} from '../api/user.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {User} from '../shared/models/user.model';
 import {Profile} from '../shared/models/profile.model';
+import {Location} from '../shared/models/location.model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -15,6 +16,8 @@ export class EditProfileComponent implements OnInit {
   user: User;
   profile: Profile;
   errorMessage: string;
+  following: User[];
+  followers: User[];
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
   }
@@ -37,6 +40,10 @@ export class EditProfileComponent implements OnInit {
         this.user = me;
         this.profile = JSON.parse(JSON.stringify(me.profile));
       });
+    this.userService.getFollowing(this.username)
+      .subscribe(following => this.following = following);
+    this.userService.getFollowers(this.username)
+      .subscribe(followers => this.followers = followers);
   }
 
   createProfile() {
@@ -46,5 +53,13 @@ export class EditProfileComponent implements OnInit {
         () => {
           this.errorMessage = 'Could not create profile. Check that all fields are correct and the username is not taken.';
         });
+  }
+
+  getLocationQuery(location: Location) {
+    if (location.latitude && location.longitude) {
+      return `https://maps.google.com/maps/place/${location.latitude},${location.longitude}`;
+    } else {
+      return null;
+    }
   }
 }

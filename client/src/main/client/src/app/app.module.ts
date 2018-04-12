@@ -20,6 +20,7 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { MentionsComponent } from './mentions/mentions.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     ProfileCardComponent,
     MentionsComponent,
     UserListComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    SearchComponent
   ],
   imports: [
     AngularFontAwesomeModule,
