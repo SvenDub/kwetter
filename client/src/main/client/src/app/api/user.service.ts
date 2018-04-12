@@ -4,6 +4,7 @@ import {User} from '../shared/models/user.model';
 import {Tweet} from '../shared/models/tweet.model';
 import {LoginService} from './login.service';
 import {UserSecure} from '../shared/models/user-secure.model';
+import {Profile} from '../shared/models/profile.model';
 
 @Injectable()
 export class UserService {
@@ -41,5 +42,9 @@ export class UserService {
 
   unfollow(username: string) {
     return this.http.post(`/api/users/${username}/unfollow`, null, {headers: {'X-API-KEY': this.loginService.apiKey}});
+  }
+
+  updateProfile(profile: Profile) {
+    return this.http.post<Profile>(`/api/me/profile`, profile, {headers: {'X-API-KEY': this.loginService.apiKey}});
   }
 }

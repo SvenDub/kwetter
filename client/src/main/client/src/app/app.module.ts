@@ -19,6 +19,7 @@ import { TrendsComponent } from './trends/trends.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { MentionsComponent } from './mentions/mentions.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { UserListComponent } from './user-list/user-list.component';
     TrendsComponent,
     ProfileCardComponent,
     MentionsComponent,
-    UserListComponent
+    UserListComponent,
+    EditProfileComponent
   ],
   imports: [
     AngularFontAwesomeModule,

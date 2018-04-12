@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
   following: User[];
   followers: User[];
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private tweetService: TweetService) {
+  constructor(private route: ActivatedRoute, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -71,11 +71,11 @@ export class ProfileComponent implements OnInit {
   }
 
   isFollowing() {
-    return this.me.following.some(value => value.id === this.user.id);
+    return this.me && this.user && this.me.following.some(value => value.id === this.user.id);
   }
 
   isMe() {
-    return this.me.id === this.user.id;
+    return this.me && this.user && this.me.id === this.user.id;
   }
 
 }

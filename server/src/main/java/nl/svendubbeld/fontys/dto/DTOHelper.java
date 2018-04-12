@@ -43,14 +43,26 @@ public class DTOHelper {
     }
 
     public <T> T convertToDTO(ToDTOConvertible<T> entity) {
+        if (entity == null) {
+            return null;
+        }
+
         return entity.convert(this);
     }
 
     public <T> T convertToDTOSecure(ToDTOSecureConvertible<T> entity) {
+        if (entity == null) {
+            return null;
+        }
+
         return entity.convertSecure(this);
     }
 
     public <T> T convertToEntity(ToEntityConvertible<T> dto) {
+        if (dto == null) {
+            return null;
+        }
+
         return dto.convert(this);
     }
 }

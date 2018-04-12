@@ -2,6 +2,7 @@ package nl.svendubbeld.fontys.test.embedded.cucumber;
 
 import cucumber.api.java.en.Given;
 import io.restassured.RestAssured;
+import nl.svendubbeld.fontys.exception.UserExistsException;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -21,7 +22,7 @@ public class CommonStepdefs {
     private World world;
 
     @Given("^The test data set \"([^\"]*)\" is loaded$")
-    public void loadTestData(String dataSet) {
+    public void loadTestData(String dataSet) throws UserExistsException {
         loader.loadTestData(dataSet);
     }
 

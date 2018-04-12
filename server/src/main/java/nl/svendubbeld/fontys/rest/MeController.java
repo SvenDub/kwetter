@@ -1,10 +1,13 @@
 package nl.svendubbeld.fontys.rest;
 
 import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.ProfileDTO;
+import nl.svendubbeld.fontys.exception.UserExistsException;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
+import nl.svendubbeld.fontys.service.ProfileService;
 import nl.svendubbeld.fontys.service.TweetService;
 import nl.svendubbeld.fontys.service.UserService;
 
@@ -25,6 +28,9 @@ public class MeController extends BaseController {
     private UserService userService;
 
     @Inject
+    private ProfileService profileService;
+
+    @Inject
     private TweetService tweetService;
 
     @Inject
@@ -36,7 +42,7 @@ public class MeController extends BaseController {
         User user = userService.findByUsername(apiKey);
 
         if (user != null) {
-            return ok(user.convertSecure(dtoHelper));
+            return ok(dtoHelper.convertToDTOSecure(user));
         } else {
             return notFound();
         }
@@ -53,7 +59,7 @@ public class MeController extends BaseController {
         Stream<Tweet> tweets = tweetService.getTimeline(apiKey);
 
         return ok(tweets
-                .map(tweet -> tweet.convert(dtoHelper))
+                .map(dtoHelper::convertToDTO)
                 .collect(Collectors.toList())
         );
     }
@@ -70,7 +76,7 @@ public class MeController extends BaseController {
 
         return ok(tweets
                 .sorted(Comparator.comparing(Tweet::getDate).reversed())
-                .map(tweet -> tweet.convert(dtoHelper))
+                .map(dtoHelper::convertToDTO)
                 .collect(Collectors.toList())
         );
     }
@@ -109,7 +115,22 @@ public class MeController extends BaseController {
                     return false;
                 })
                 .limit(limit)
-                .map(user -> user.convert(dtoHelper))
+                .map(dtoHelper::convertToDTO)
                 .collect(Collectors.toList()));
+    }
+
+    @POST
+    @Path("/profile")
+    @Transactional
+    public Response createProfile(@HeaderParam(Headers.API_KEY) String apiKey, ProfileDTO profile) throws UserExistsException {
+        User user = userService.findByUsername(apiKey);
+
+        if (user == null) {
+            return unauthorized();
+        }
+
+        Profile newProfile = profileService.addProfile(user, profile.getUsername(), profile.getName(), profile.getBio(), profile.getLocation(), profile.getWebsite());
+
+        return ok(dtoHelper.convertToDTO(newProfile));
     }
 }

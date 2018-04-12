@@ -63,7 +63,7 @@ public class Location implements ToDTOConvertible<LocationDTO> {
      * @param latitude  The latitude of the location.
      * @param longitude The longitude of the location.
      */
-    public Location(@Nullable String label, float latitude, float longitude) {
+    public Location(@Nullable String label, Float latitude, Float longitude) {
         this.label = label;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -75,7 +75,7 @@ public class Location implements ToDTOConvertible<LocationDTO> {
      * @param latitude  The latitude of the location.
      * @param longitude The longitude of the location.
      */
-    public Location(float latitude, float longitude) {
+    public Location(Float latitude, Float longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

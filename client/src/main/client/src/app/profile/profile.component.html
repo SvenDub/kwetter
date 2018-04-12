@@ -20,6 +20,11 @@
           <button class="btn btn-primary" *ngIf="isFollowing()" (click)="unfollow()">Following</button>
         </div>
       </div>
+      <div class="row mb-4" *ngIf="isMe()">
+        <div class="col">
+          <button class="btn btn-primary" [routerLink]="['edit']">Edit</button>
+        </div>
+      </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
           <app-user-list title="Followers" [users]="followers"></app-user-list>

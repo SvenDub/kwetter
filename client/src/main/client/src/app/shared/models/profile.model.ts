@@ -1,6 +1,6 @@
 import {Location} from './location.model';
 
-export interface Profile {
+export class Profile {
   id: number;
   username: string;
   name: string;

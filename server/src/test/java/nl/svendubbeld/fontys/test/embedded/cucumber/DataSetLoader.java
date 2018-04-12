@@ -1,7 +1,7 @@
 package nl.svendubbeld.fontys.test.embedded.cucumber;
 
+import nl.svendubbeld.fontys.exception.UserExistsException;
 import nl.svendubbeld.fontys.model.Location;
-import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.model.security.Permission;
@@ -30,7 +30,7 @@ public class DataSetLoader {
     @Inject
     private UserService userService;
 
-    public void loadTestData(String dataSet) {
+    public void loadTestData(String dataSet) throws UserExistsException {
         // TODO: Load specific data set
 
         clear();
@@ -42,19 +42,17 @@ public class DataSetLoader {
         securityService.addGroup(defaultSecurityGroup);
 
         User userSvenDub = new User("s.dubbeld@student.fontys.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.emptySet());
-        Profile profileSvenDub = userSvenDub.createProfile("SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
         userService.addUser(userSvenDub);
-        profileService.addProfile(profileSvenDub);
+        profileService.addProfile(userSvenDub, "SvenDub", "Sven Dubbeld", "Student FHICT", new Location("Middelharnis", 51.756199f, 4.174982f), "https://svendubbeld.nl");
 
         tweetService.addTweet(new Tweet(userSvenDub, "Hello World!", null), "SvenDub");
         tweetService.addTweet(new Tweet(userSvenDub, "Hi there!", null), "SvenDub");
 
         User userDeEnigeEchteSven = new User("sven@svendubbeld.nl", "password", Collections.singleton(defaultSecurityGroup), Collections.singleton(userSvenDub));
-        Profile profileDeEnigeEchteSven = userDeEnigeEchteSven.createProfile("DeEnigeEchteSven", "Sven #2", "", null, "https://example.org");
 
         userService.addUser(userDeEnigeEchteSven);
-        profileService.addProfile(profileDeEnigeEchteSven);
+        profileService.addProfile(userDeEnigeEchteSven, "DeEnigeEchteSven", "Sven #2", "", (Location) null, "https://example.org");
 
         tweetService.addTweet(new Tweet(userDeEnigeEchteSven, "Hello everyone", null), "DeEnigeEchteSven");
     }
