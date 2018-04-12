@@ -2,6 +2,8 @@ package nl.svendubbeld.fontys.dao;
 
 import nl.svendubbeld.fontys.model.User;
 
+import java.util.stream.Stream;
+
 /**
  * A repository for users.
  */
@@ -54,4 +56,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return Whether the user exists.
      */
     boolean exists(String username);
+
+    /**
+     * Gets all the users who follow a user.
+     *
+     * @param user The user.
+     * @return The users following the user.
+     */
+    Stream<User> findFollowers(User user);
 }

@@ -5,6 +5,7 @@ import nl.svendubbeld.fontys.model.User;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.stream.Stream;
 
 /**
  * A JPA repository for users.
@@ -69,5 +70,17 @@ public class UserRepositoryJPA extends JPARepository<User, Long> implements User
         query.setParameter("username", username);
 
         return query.getSingleResult();
+    }
+
+    @Override
+    public Stream<User> findFollowers(User user) {
+        TypedQuery<User> query = getEntityManager().createNamedQuery("user.findFollowers", getEntityClass());
+        query.setParameter("user", user);
+
+        try {
+            return query.getResultStream();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

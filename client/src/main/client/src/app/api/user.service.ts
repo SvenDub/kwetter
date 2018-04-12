@@ -23,6 +23,14 @@ export class UserService {
     return this.http.get<UserSecure>(`/api/me`, {headers: {'X-API-KEY': this.loginService.apiKey}});
   }
 
+  getFollowing(username: string) {
+    return this.http.get<User[]>(`/api/users/${username}/following`, {headers: {'X-API-KEY': this.loginService.apiKey}});
+  }
+
+  getFollowers(username: string) {
+    return this.http.get<User[]>(`/api/users/${username}/followers`, {headers: {'X-API-KEY': this.loginService.apiKey}});
+  }
+
   follow(username: string) {
     return this.http.post(`/api/users/${username}/follow`, null, {headers: {'X-API-KEY': this.loginService.apiKey}});
   }

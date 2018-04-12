@@ -125,6 +125,11 @@ public class PatternMentionsParserTest {
         }
 
         @Override
+        public Stream<User> findFollowers(User user) {
+            return null;
+        }
+
+        @Override
         public void create(User entity) {
             throw new NotImplementedException();
         }

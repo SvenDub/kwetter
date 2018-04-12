@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit {
   user: User;
   tweets: Tweet[];
   me: UserSecure;
+  following: User[];
+  followers: User[];
 
   constructor(private route: ActivatedRoute, private userService: UserService, private tweetService: TweetService) {
   }
@@ -41,6 +43,10 @@ export class ProfileComponent implements OnInit {
       .subscribe(tweets => this.tweets = tweets);
     this.userService.getMe()
       .subscribe(me => this.me = me);
+    this.userService.getFollowing(this.username)
+      .subscribe(following => this.following = following);
+    this.userService.getFollowers(this.username)
+      .subscribe(followers => this.followers = followers);
   }
 
   getLocationQuery(location: Location) {

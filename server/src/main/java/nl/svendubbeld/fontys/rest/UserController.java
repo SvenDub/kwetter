@@ -38,7 +38,7 @@ public class UserController extends BaseController {
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            return ok(user.convert(dtoHelper));
+            return ok(dtoHelper.convertToDTO(user));
         } else {
             return notFound();
         }
@@ -65,7 +65,40 @@ public class UserController extends BaseController {
 
         return ok(tweets
                 .sorted(Comparator.comparing(Tweet::getDate).reversed())
-                .map(tweet -> tweet.convert(dtoHelper))
+                .map(dtoHelper::convertToDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @GET
+    @Path("/{username}/following")
+    @Transactional
+    public Response getFollowingByUsername(@PathParam("username") String username) {
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return notFound();
+        }
+
+        return ok(user.getFollowing()
+                .stream()
+                .map(dtoHelper::convertToDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @GET
+    @Path("/{username}/followers")
+    @Transactional
+    public Response getFollowersByUsername(@PathParam("username") String username) {
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return notFound();
+        }
+
+        Stream<User> followers = userService.findFollowers(user);
+
+        return ok(followers
+                .map(dtoHelper::convertToDTO)
                 .collect(Collectors.toList()));
     }
 

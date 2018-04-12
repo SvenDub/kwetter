@@ -11,12 +11,23 @@
             <span *ngIf="user.profile.location.latitude && user.profile.location.longitude"><fa name="map-marker"></fa> <a href="{{getLocationQuery(user.profile.location)}}" target="_blank" >{{user.profile.location.label}}</a></span>
             <span *ngIf="!(user.profile.location.latitude && user.profile.location.longitude) && user.profile.location.label"><fa name="map-marker"></fa> {{user.profile.location.label}}</span>
           </div>
+          <p *ngIf="user.profile.website"><fa name="globe"></fa> <a href="{{user.profile.website}}" target="_blank">{{user.profile.website}}</a></p>
         </div>
       </div>
-      <div class="row" *ngIf="!isMe()">
+      <div class="row mb-4" *ngIf="!isMe()">
         <div class="col">
           <button class="btn btn-outline-primary" *ngIf="!isFollowing()" (click)="follow()">Follow</button>
           <button class="btn btn-primary" *ngIf="isFollowing()" (click)="unfollow()">Following</button>
+        </div>
+      </div>
+      <div class="row mb-4 d-none d-md-block">
+        <div class="col">
+          <app-user-list title="Followers" [users]="followers"></app-user-list>
+        </div>
+      </div>
+      <div class="row mb-4 d-none d-md-block">
+        <div class="col">
+          <app-user-list title="Following" [users]="following"></app-user-list>
         </div>
       </div>
     </div>

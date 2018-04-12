@@ -74,7 +74,7 @@ public class UserService {
     }
 
     public List<UserDTOSecure> findAllAsDTOSecure() {
-        return findAll().map(user -> user.convertSecure(dtoHelper)).collect(Collectors.toList());
+        return findAll().map(dtoHelper::convertToDTOSecure).collect(Collectors.toList());
     }
 
     public User edit(User user) {
@@ -82,7 +82,7 @@ public class UserService {
     }
 
     public UserDTOSecure editSecurityGroups(UserDTOSecure dto) {
-        User convertedUser = dto.convert(dtoHelper);
+        User convertedUser = dtoHelper.convertToEntity(dto);
 
         User user = findById(convertedUser.getId());
         user.setSecurityGroups(convertedUser.getSecurityGroups());
@@ -95,5 +95,9 @@ public class UserService {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(hash);
+    }
+
+    public Stream<User> findFollowers(User user) {
+        return userRepository.findFollowers(user);
     }
 }
