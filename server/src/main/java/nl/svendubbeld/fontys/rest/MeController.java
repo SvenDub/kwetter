@@ -1,12 +1,12 @@
 package nl.svendubbeld.fontys.rest;
 
+import nl.svendubbeld.fontys.auth.Secured;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.ProfileDTO;
 import nl.svendubbeld.fontys.exception.UserExistsException;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.Tweet;
-import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.ProfileService;
 import nl.svendubbeld.fontys.service.TweetService;
 
@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 @Path("/me")
 @SentryLogged
+@Secured
 public class MeController extends BaseController {
 
     @Inject
@@ -36,26 +37,14 @@ public class MeController extends BaseController {
     @GET
     @Transactional
     public Response getMe() {
-        User user = getUser();
-
-        if (user != null) {
-            return ok(dtoHelper.convertToDTOSecure(user));
-        } else {
-            return notFound();
-        }
+        return ok(dtoHelper.convertToDTOSecure(getUser()));
     }
 
     @GET
     @Path("/timeline")
     @Transactional
     public Response getTimeline() {
-        User user = getUser();
-
-        if (user == null) {
-            return unauthorized();
-        }
-
-        Stream<Tweet> tweets = tweetService.getTimeline(user);
+        Stream<Tweet> tweets = tweetService.getTimeline(getUser());
 
         return ok(tweets
                 .map(dtoHelper::convertToDTO)
@@ -67,13 +56,7 @@ public class MeController extends BaseController {
     @Path("/mentions")
     @Transactional
     public Response getMentions() {
-        User user = getUser();
-
-        if (user == null) {
-            return unauthorized();
-        }
-
-        Stream<Tweet> tweets = tweetService.getMentions(user);
+        Stream<Tweet> tweets = tweetService.getMentions(getUser());
 
         return ok(tweets
                 .sorted(Comparator.comparing(Tweet::getDate).reversed())
@@ -86,12 +69,6 @@ public class MeController extends BaseController {
     @Path("/trends")
     @Transactional
     public Response getTrends() {
-        User user = getUser();
-
-        if (user == null) {
-            return unauthorized();
-        }
-
         return ok(tweetService.getTrends());
     }
 
@@ -99,13 +76,7 @@ public class MeController extends BaseController {
     @Path("/autocomplete")
     @Transactional
     public Response getAutocomplete(@QueryParam("q") @DefaultValue("") String query, @QueryParam("limit") @DefaultValue("5") int limit) {
-        User user = getUser();
-
-        if (user == null) {
-            return unauthorized();
-        }
-
-        return ok(user
+        return ok(getUser()
                 .getFollowing()
                 .stream()
                 .filter(u -> u.getCurrentProfile().isPresent())
@@ -129,13 +100,7 @@ public class MeController extends BaseController {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createProfile(ProfileDTO profile) throws UserExistsException {
-        User user = getUser();
-
-        if (user == null) {
-            return unauthorized();
-        }
-
-        Profile newProfile = profileService.addProfile(user, profile.getUsername(), profile.getName(), profile.getBio(), profile.getLocation(), profile.getWebsite());
+        Profile newProfile = profileService.addProfile(getUser(), profile.getUsername(), profile.getName(), profile.getBio(), profile.getLocation(), profile.getWebsite());
 
         return ok(dtoHelper.convertToDTO(newProfile));
     }

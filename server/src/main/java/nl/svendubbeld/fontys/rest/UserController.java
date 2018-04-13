@@ -1,5 +1,6 @@
 package nl.svendubbeld.fontys.rest;
 
+import nl.svendubbeld.fontys.auth.Secured;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
@@ -120,19 +121,14 @@ public class UserController extends BaseController {
 
     @POST
     @Path("/{username}/follow")
+    @Secured
     @Transactional
     public Response follow(@PathParam("username") String username) {
-        User me = getUser();
-
-        if (me == null) {
-            return unauthorized();
-        }
-
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            me.addFollowing(user);
-            userService.edit(me);
+            getUser().addFollowing(user);
+            userService.edit(getUser());
             return ok();
         } else {
             return notFound();
@@ -141,19 +137,14 @@ public class UserController extends BaseController {
 
     @POST
     @Path("/{username}/unfollow")
+    @Secured
     @Transactional
     public Response unfollow(@PathParam("username") String username) {
-        User me = getUser();
-
-        if (me == null) {
-            return unauthorized();
-        }
-
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            me.removeFollowing(user);
-            userService.edit(me);
+            getUser().removeFollowing(user);
+            userService.edit(getUser());
             return ok();
         } else {
             return notFound();

@@ -119,6 +119,12 @@ public class Permission implements ToDTOConvertible<PermissionDTO> {
         return dto;
     }
 
+    public static Permission of(String key) {
+        Permission permission = new Permission();
+        permission.setKey(key);
+        return permission;
+    }
+
     public static final class Keys {
 
         public static final String LOG_IN = "log_in";
