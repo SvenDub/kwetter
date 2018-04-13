@@ -64,14 +64,15 @@ public class TweetController extends BaseController {
     @POST
     @Consumes
     @Transactional
-    public Response addTweet(TweetDTO dto, @HeaderParam(Headers.API_KEY) String apiKey) {
+    public Response addTweet(TweetDTO dto) {
         Tweet tweet = dto.convert(dtoHelper);
+        User user = getUser();
 
-        if (!userService.exists(apiKey)) {
+        if (user == null) {
             return unauthorized();
         }
 
-        tweet = tweetService.addTweet(tweet, apiKey);
+        tweet = tweetService.addTweet(tweet, user);
 
         URI location = UriBuilder
                 .fromPath(context.getContextPath())
@@ -86,12 +87,13 @@ public class TweetController extends BaseController {
     @POST
     @Path("/{id}/like")
     @Transactional
-    public Response like(@PathParam("id") long id, @HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
+    public Response like(@PathParam("id") long id) {
+        User user = getUser();
+
+        if (user == null) {
             return unauthorized();
         }
 
-        User user = userService.findByUsername(apiKey);
         Tweet tweet = tweetService.findById(id);
 
         if (tweet == null) {
@@ -107,12 +109,13 @@ public class TweetController extends BaseController {
     @POST
     @Path("/{id}/flag")
     @Transactional
-    public Response flag(@PathParam("id") long id, @HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
+    public Response flag(@PathParam("id") long id) {
+        User user = getUser();
+
+        if (user == null) {
             return unauthorized();
         }
 
-        User user = userService.findByUsername(apiKey);
         Tweet tweet = tweetService.findById(id);
 
         if (tweet == null) {

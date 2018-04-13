@@ -9,11 +9,11 @@ import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.ProfileService;
 import nl.svendubbeld.fontys.service.TweetService;
-import nl.svendubbeld.fontys.service.UserService;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Comparator;
 import java.util.Optional;
@@ -23,9 +23,6 @@ import java.util.stream.Stream;
 @Path("/me")
 @SentryLogged
 public class MeController extends BaseController {
-
-    @Inject
-    private UserService userService;
 
     @Inject
     private ProfileService profileService;
@@ -38,8 +35,8 @@ public class MeController extends BaseController {
 
     @GET
     @Transactional
-    public Response getMe(@HeaderParam(Headers.API_KEY) String apiKey) {
-        User user = userService.findByUsername(apiKey);
+    public Response getMe() {
+        User user = getUser();
 
         if (user != null) {
             return ok(dtoHelper.convertToDTOSecure(user));
@@ -51,12 +48,14 @@ public class MeController extends BaseController {
     @GET
     @Path("/timeline")
     @Transactional
-    public Response getTimeline(@HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
+    public Response getTimeline() {
+        User user = getUser();
+
+        if (user == null) {
             return unauthorized();
         }
 
-        Stream<Tweet> tweets = tweetService.getTimeline(apiKey);
+        Stream<Tweet> tweets = tweetService.getTimeline(user);
 
         return ok(tweets
                 .map(dtoHelper::convertToDTO)
@@ -67,12 +66,14 @@ public class MeController extends BaseController {
     @GET
     @Path("/mentions")
     @Transactional
-    public Response getMentions(@HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
+    public Response getMentions() {
+        User user = getUser();
+
+        if (user == null) {
             return unauthorized();
         }
 
-        Stream<Tweet> tweets = tweetService.getMentions(apiKey);
+        Stream<Tweet> tweets = tweetService.getMentions(user);
 
         return ok(tweets
                 .sorted(Comparator.comparing(Tweet::getDate).reversed())
@@ -84,8 +85,10 @@ public class MeController extends BaseController {
     @GET
     @Path("/trends")
     @Transactional
-    public Response getTrends(@HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
+    public Response getTrends() {
+        User user = getUser();
+
+        if (user == null) {
             return unauthorized();
         }
 
@@ -95,18 +98,20 @@ public class MeController extends BaseController {
     @GET
     @Path("/autocomplete")
     @Transactional
-    public Response getAutocomplete(@HeaderParam(Headers.API_KEY) String apiKey, @QueryParam("q") @DefaultValue("") String query, @QueryParam("limit") @DefaultValue("5") int limit) {
-        if (!userService.exists(apiKey)) {
+    public Response getAutocomplete(@QueryParam("q") @DefaultValue("") String query, @QueryParam("limit") @DefaultValue("5") int limit) {
+        User user = getUser();
+
+        if (user == null) {
             return unauthorized();
         }
 
-        return ok(userService.findByUsername(apiKey)
+        return ok(user
                 .getFollowing()
                 .stream()
-                .filter(user -> user.getCurrentProfile().isPresent())
-                .sorted(Comparator.comparing(user -> user.getCurrentProfile().get().getUsername()))
-                .filter(user -> {
-                    Optional<Profile> optionalProfile = user.getCurrentProfile();
+                .filter(u -> u.getCurrentProfile().isPresent())
+                .sorted(Comparator.comparing(u -> u.getCurrentProfile().get().getUsername()))
+                .filter(u -> {
+                    Optional<Profile> optionalProfile = u.getCurrentProfile();
                     if (optionalProfile.isPresent()) {
                         Profile profile = optionalProfile.get();
                         return profile.getUsername().toLowerCase().startsWith(query.toLowerCase())
@@ -122,8 +127,9 @@ public class MeController extends BaseController {
     @POST
     @Path("/profile")
     @Transactional
-    public Response createProfile(@HeaderParam(Headers.API_KEY) String apiKey, ProfileDTO profile) throws UserExistsException {
-        User user = userService.findByUsername(apiKey);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createProfile(ProfileDTO profile) throws UserExistsException {
+        User user = getUser();
 
         if (user == null) {
             return unauthorized();

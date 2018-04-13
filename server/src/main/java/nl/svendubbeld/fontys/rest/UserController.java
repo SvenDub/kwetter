@@ -121,8 +121,8 @@ public class UserController extends BaseController {
     @POST
     @Path("/{username}/follow")
     @Transactional
-    public Response follow(@PathParam("username") String username, @HeaderParam(Headers.API_KEY) String apiKey) {
-        User me = userService.findByUsername(apiKey);
+    public Response follow(@PathParam("username") String username) {
+        User me = getUser();
 
         if (me == null) {
             return unauthorized();
@@ -142,8 +142,8 @@ public class UserController extends BaseController {
     @POST
     @Path("/{username}/unfollow")
     @Transactional
-    public Response unfollow(@PathParam("username") String username, @HeaderParam(Headers.API_KEY) String apiKey) {
-        User me = userService.findByUsername(apiKey);
+    public Response unfollow(@PathParam("username") String username) {
+        User me = getUser();
 
         if (me == null) {
             return unauthorized();
