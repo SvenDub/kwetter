@@ -27,12 +27,12 @@
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Followers" [users]="followers"></app-user-list>
+          <app-user-list title="Followers" [users]="followers" [count]="followers.length"></app-user-list>
         </div>
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Following" [users]="following"></app-user-list>
+          <app-user-list title="Following" [users]="following" [count]="following.length"></app-user-list>
         </div>
       </div>
     </div>

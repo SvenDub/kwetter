@@ -10,6 +10,7 @@ export class UserListComponent implements OnInit {
 
   @Input() title: string;
   @Input() users: User[];
+  @Input() count: number = 0;
 
   constructor() { }
 
