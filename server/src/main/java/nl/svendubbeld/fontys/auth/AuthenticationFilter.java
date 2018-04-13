@@ -51,7 +51,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         Set<Permission> permissions = user.getSecurityGroups().stream().map(SecurityGroup::getPermissions).flatMap(Collection::stream).collect(Collectors.toSet());
 
-        SecurityContext currenctSecurityContext = requestContext.getSecurityContext();
+        SecurityContext currentSecurityContext = requestContext.getSecurityContext();
         requestContext.setSecurityContext(new SecurityContext() {
             @Override
             public Principal getUserPrincipal() {
@@ -65,7 +65,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             @Override
             public boolean isSecure() {
-                return currenctSecurityContext.isSecure();
+                return currentSecurityContext.isSecure();
             }
 
             @Override
