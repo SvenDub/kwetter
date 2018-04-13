@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../api/login.service';
 import {Router} from '@angular/router';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-header',
@@ -9,17 +10,27 @@ import {Router} from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  username = 'SvenDub';
+  username: string;
+  password: string;
   query: string;
+  loggedIn: boolean;
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(private loginService: LoginService, private router: Router, private jwtHelper: JwtHelperService) {
   }
 
   ngOnInit() {
+    this.loggedIn = !this.jwtHelper.isTokenExpired();
   }
 
   login() {
-    this.loginService.apiKey = this.username;
+    this.loginService.login(this.username, this.password)
+      .subscribe(resp => {
+        const authorizationHeader = resp.headers.get('Authorization');
+        const token = authorizationHeader.substr('Bearer'.length).trim();
+
+        localStorage.setItem('access_token', token);
+        window.location.reload();
+      });
   }
 
   onInput() {

@@ -12,15 +12,16 @@ import {FormsModule} from '@angular/forms';
 import {TweetComponent} from './tweet/tweet.component';
 import {ProfileComponent} from './profile/profile.component';
 import {AddTweetComponent} from './add-tweet/add-tweet.component';
-import { AboutComponent } from './about/about.component';
-import { HashtagComponent } from './hashtag/hashtag.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { TrendsComponent } from './trends/trends.component';
-import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { MentionsComponent } from './mentions/mentions.component';
-import { UserListComponent } from './user-list/user-list.component';
-import { EditProfileComponent } from './edit-profile/edit-profile.component';
-import { SearchComponent } from './search/search.component';
+import {AboutComponent} from './about/about.component';
+import {HashtagComponent} from './hashtag/hashtag.component';
+import {NotFoundComponent} from './not-found/not-found.component';
+import {TrendsComponent} from './trends/trends.component';
+import {ProfileCardComponent} from './profile-card/profile-card.component';
+import {MentionsComponent} from './mentions/mentions.component';
+import {UserListComponent} from './user-list/user-list.component';
+import {EditProfileComponent} from './edit-profile/edit-profile.component';
+import {SearchComponent} from './search/search.component';
+import {JwtModule} from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,18 @@ import { SearchComponent } from './search/search.component';
     AppRoutingModule,
     BrowserModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem('access_token'),
+        whitelistedDomains: [
+          /^null$/
+        ],
+        blacklistedRoutes: [
+          '/api/auth/'
+        ]
+      }
+    })
   ],
   providers: [],
   bootstrap: [

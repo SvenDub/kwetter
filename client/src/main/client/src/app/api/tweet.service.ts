@@ -17,39 +17,39 @@ export class TweetService {
   }
 
   getTimeline() {
-    return this.http.get<Tweet[]>('/api/me/timeline', {headers: {'X-API-KEY': this.loginService.apiKey}});
+    return this.http.get<Tweet[]>('/api/me/timeline');
   }
 
   addTweet(tweet: Tweet) {
-    return this.http.post<Tweet>('/api/tweets', tweet, {headers: {'X-API-KEY': this.loginService.apiKey}})
+    return this.http.post<Tweet>('/api/tweets', tweet)
       .pipe(tap(value => this.tweetPlaced.next(value)));
   }
 
   getAutocomplete(query: string) {
-    return this.http.get<User[]>('/api/me/autocomplete', {headers: {'X-API-KEY': this.loginService.apiKey}, params: {'q': query}});
+    return this.http.get<User[]>('/api/me/autocomplete', {params: {'q': query}});
   }
 
   getByHashtag(hashtag: string) {
-    return this.http.get<Tweet[]>(`/api/tweets/hashtag/${hashtag}`, {headers: {'X-API-KEY': this.loginService.apiKey}});
+    return this.http.get<Tweet[]>(`/api/tweets/hashtag/${hashtag}`);
   }
 
   getTrends() {
-    return this.http.get<{ [p: string]: number }>('/api/me/trends', {headers: {'X-API-KEY': this.loginService.apiKey}});
+    return this.http.get<{ [p: string]: number }>('/api/me/trends');
   }
 
   getMentions() {
-    return this.http.get<Tweet[]>('/api/me/mentions', {headers: {'X-API-KEY': this.loginService.apiKey}});
+    return this.http.get<Tweet[]>('/api/me/mentions');
   }
 
   like(tweet: Tweet) {
-    return this.http.post<Tweet>(`/api/tweets/${tweet.id}/like`, null, {headers: {'X-API-KEY': this.loginService.apiKey}});
+    return this.http.post<Tweet>(`/api/tweets/${tweet.id}/like`, null);
   }
 
   flag(tweet: Tweet) {
-    return this.http.post<Tweet>(`/api/tweets/${tweet.id}/flag`, null, {headers: {'X-API-KEY': this.loginService.apiKey}});
+    return this.http.post<Tweet>(`/api/tweets/${tweet.id}/flag`, null);
   }
 
   search(query: string) {
-    return this.http.get<Tweet[]>(`/api/tweets/search`, {headers: {'X-API-KEY': this.loginService.apiKey}, params: {'query': query}});
+    return this.http.get<Tweet[]>(`/api/tweets/search`, {params: {'query': query}});
   }
 }
