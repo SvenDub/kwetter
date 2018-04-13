@@ -91,7 +91,7 @@ public class UserService {
         return edit(user).convertSecure(dtoHelper);
     }
 
-    private static String encodeSHA256(String password) throws NoSuchAlgorithmException {
+    public static String encodeSHA256(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(hash);
