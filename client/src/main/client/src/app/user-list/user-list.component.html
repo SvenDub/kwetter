@@ -1,0 +1,10 @@
+<div class="card">
+  <h5 class="card-header d-flex justify-content-between align-items-center">{{title}}<span class="badge badge-primary badge-pill" *ngIf="count !== undefined && count !== null"> {{count}}</span></h5>
+  <div class="list-group list-group-flush">
+    <a class="list-group-item list-group-item-action d-flex flex-row align-items-center" *ngFor="let user of users" [routerLink]="['/u/' + user.profile.username]">
+      <img width="24" height="24" src="/api/users/{{user.profile.username}}/picture?size=24" alt="Profile picture for {{user.profile.name}}" class="mr-2">
+      <h6 class="mb-0 mr-2">{{user.profile.name}}</h6>
+      <span class="mb-0 text-muted">@{{user.profile.username}}</span>
+    </a>
+  </div>
+</div>

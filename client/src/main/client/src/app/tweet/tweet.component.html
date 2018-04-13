@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-auto">
+        <img width="48" height="48" src="/api/users/{{tweet.owner.profile.username}}/picture?size=48" alt="Profile picture for {{tweet.owner.profile.name}}">
+      </div>
+      <div class="col pl-0">
+        <h5 class="card-title"><a [routerLink]="['/u/' + tweet.owner.profile.username]">{{tweet.owner.profile.name}}</a></h5>
+        <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a [routerLink]="['/tweet/' + tweet.id]" data-toggle="tooltip" title="{{getAbsoluteDate()}}">{{getRelativeDate()}}</a></h6>
+      </div>
+    </div>
+    <p class="card-text">
+      <ng-container *ngFor="let group of getWordGroups()" [ngSwitch]="group.type"><!-- Comments required to trick HTML in not rendering new lines
+     --><ng-template [ngSwitchCase]="'hashtag'"><a [routerLink]="['/hashtag/' + group.link]">{{group.value}}</a></ng-template><!--
+     --><ng-template [ngSwitchCase]="'mention'"><a [routerLink]="['/u/' + group.link]">{{group.value}}</a></ng-template><!--
+     --><ng-template ngSwitchDefault>{{group.value}}</ng-template><!--
+   --></ng-container>
+    </p>
+    <a class="card-link" href="#" (click)="replyClicked.emit(tweet); false;"><fa name="reply"></fa></a>
+    <a class="card-link" href="#" (click)="like(); false;"><fa name="heart"></fa>{{getLikesCount()}}</a>
+    <a class="card-link" href="#" (click)="flag(); false;"><fa name="flag"></fa></a>
+  </div>
+</div>

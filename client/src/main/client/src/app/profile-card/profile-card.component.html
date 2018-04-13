@@ -1,0 +1,36 @@
+<div class="card" *ngIf="user">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-auto">
+        <img width="48" height="48" src="/api/users/{{user.profile.username}}/picture?size=48"
+             alt="Profile picture for {{user.profile.name}}">
+      </div>
+      <div class="col pl-0">
+        <h5 class="card-title"><a [routerLink]="['/u/' + user.profile.username]">{{user.profile.name}}</a></h5>
+        <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + user.profile.username]">@{{user.profile.username}}</a></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <span class="text-small">Tweets</span>
+      </div>
+      <div class="col-4">
+        <span class="text-small">Following</span>
+      </div>
+      <div class="col-4">
+        <span class="text-small">Followers</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        {{user.tweetsCount}}
+      </div>
+      <div class="col-4">
+        {{user.followingCount}}
+      </div>
+      <div class="col-4">
+        {{user.followersCount}}
+      </div>
+    </div>
+  </div>
+</div>
