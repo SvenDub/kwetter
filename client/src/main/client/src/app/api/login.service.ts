@@ -8,7 +8,12 @@ export class LoginService {
   }
 
   login(username: string, password: string) {
-    return this.http.post('/api/auth/login', {'username': username, 'password': password}, {observe: 'response'});
+    return this.http.post('/api/auth/login', null, {
+      headers: {
+        'Authorization': 'Basic ' + btoa(`${username}:${password}`)
+      },
+      observe: 'response'
+    });
   }
 
 }

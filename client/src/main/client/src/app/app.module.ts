@@ -56,7 +56,7 @@ import {JwtModule} from '@auth0/angular-jwt';
           /^null$/
         ],
         blacklistedRoutes: [
-          '/api/auth/'
+          '/api/auth/login'
         ]
       }
     })
