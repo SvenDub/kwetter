@@ -23,6 +23,10 @@ import {EditProfileComponent} from './edit-profile/edit-profile.component';
 import {SearchComponent} from './search/search.component';
 import {JwtModule} from '@auth0/angular-jwt';
 
+export function getAccessToken() {
+  return localStorage.getItem('access_token');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,10 +55,8 @@ import {JwtModule} from '@auth0/angular-jwt';
     SharedModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => localStorage.getItem('access_token'),
-        whitelistedDomains: [
-          /^null$/
-        ],
+        tokenGetter: getAccessToken,
+        whitelistedDomains: new Array(new RegExp('^null$')),
         blacklistedRoutes: [
           '/api/auth/login',
           '/api/auth/refresh'
