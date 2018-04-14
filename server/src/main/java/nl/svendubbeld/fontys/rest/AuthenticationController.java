@@ -1,10 +1,10 @@
 package nl.svendubbeld.fontys.rest;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.Base64Codec;
 import nl.svendubbeld.fontys.auth.AuthenticationFilter;
 import nl.svendubbeld.fontys.auth.KeyGenerator;
+import nl.svendubbeld.fontys.auth.TokenResponse;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.UserService;
@@ -19,7 +19,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.Date;
 
 @Path("/auth")
@@ -56,24 +58,50 @@ public class AuthenticationController extends BaseController {
         }
 
         if (authenticated) {
-            String token = issueToken(username);
+            String accessToken = issueToken(username, "access_token", Duration.ofHours(1));
+            String refreshToken = issueToken(username, "refresh_token", Duration.ofDays(30));
 
-            return Response.ok()
-                    .header(HttpHeaders.AUTHORIZATION, AuthenticationFilter.AUTHENTICATION_SCHEME + " " + token)
-                    .build();
+            return ok(new TokenResponse(accessToken, refreshToken));
         } else {
             return unauthorized();
         }
     }
 
-    private String issueToken(String username) {
+    @POST
+    @Path("/refresh")
+    public Response refresh(@HeaderParam(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        String refreshToken = authorizationHeader.substring(AuthenticationFilter.AUTHENTICATION_SCHEME.length()).trim();
+
+        try {
+            Key key = keyGenerator.generateKey();
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(refreshToken);
+
+            if ("refresh_token".equals(claimsJws.getHeader().get("use"))) {
+                String username = claimsJws.getBody().getSubject();
+                String accessToken = issueToken(username, "access_token", Duration.ofHours(1));
+
+                return ok(new TokenResponse(accessToken, refreshToken));
+            } else {
+                return unauthorized();
+            }
+        } catch (SignatureException e) {
+            logger.warn("Invalid signature detected!", e);
+            return unauthorized();
+        } catch (ExpiredJwtException e) {
+            logger.warn("JWT Token expired", e);
+            return unauthorized();
+        }
+    }
+
+    private String issueToken(String username, String type, TemporalAmount lifetime) {
         Key key = keyGenerator.generateKey();
 
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
+                .setHeaderParam("use", type)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(OffsetDateTime.now().plusHours(1).toInstant().toEpochMilli()))
+                .setExpiration(new Date(OffsetDateTime.now().plus(lifetime).toInstant().toEpochMilli()))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }

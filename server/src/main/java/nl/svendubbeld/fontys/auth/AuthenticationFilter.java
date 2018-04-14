@@ -1,9 +1,6 @@
 package nl.svendubbeld.fontys.auth;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.model.security.Permission;
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
@@ -59,10 +56,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             Key key = keyGenerator.generateKey();
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 
-            username = claimsJws.getBody().getSubject();
-            user = userService.findByUsername(username);
+            if ("access_token".equals(claimsJws.getHeader().get("use"))) {
+                username = claimsJws.getBody().getSubject();
+                user = userService.findByUsername(username);
+            }
         } catch (SignatureException e) {
             logger.warn("Invalid signature detected!", e);
+        } catch (ExpiredJwtException e) {
+            logger.warn("JWT Token expired", e);
         }
 
         if (user == null) {

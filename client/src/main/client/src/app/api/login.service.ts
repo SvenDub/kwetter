@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {TokenResponse} from '../shared/models/token-response.model';
 
 @Injectable()
 export class LoginService {
@@ -8,12 +9,23 @@ export class LoginService {
   }
 
   login(username: string, password: string) {
-    return this.http.post('/api/auth/login', null, {
+    return this.http.post<TokenResponse>('/api/auth/login', null, {
       headers: {
         'Authorization': 'Basic ' + btoa(`${username}:${password}`)
-      },
-      observe: 'response'
+      }
     });
   }
 
+  refresh(refreshToken: string) {
+    return this.http.post<TokenResponse>('/api/auth/refresh', null, {
+      headers: {
+        'Authorization': `Bearer ${refreshToken}`
+      }
+    });
+  }
+
+  logout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+  }
 }

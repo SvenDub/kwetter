@@ -12,22 +12,35 @@ export class AppComponent implements OnInit {
   username: string;
   password: string;
   loggedIn: boolean;
+  checkingRefresh = false;
 
   constructor(private loginService: LoginService, private jwtHelper: JwtHelperService) {
   }
 
   ngOnInit() {
     this.loggedIn = !this.jwtHelper.isTokenExpired();
+    if (!this.loggedIn && !this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
+      this.refreshToken();
+    }
   }
 
   login() {
     this.loginService.login(this.username, this.password)
       .subscribe(resp => {
-        const authorizationHeader = resp.headers.get('Authorization');
-        const token = authorizationHeader.substr('Bearer'.length).trim();
+        localStorage.setItem('access_token', resp.accessToken);
+        localStorage.setItem('refresh_token', resp.refreshToken);
+        this.loggedIn = !this.jwtHelper.isTokenExpired();
+      });
+  }
 
-        localStorage.setItem('access_token', token);
-        window.location.reload();
+  refreshToken() {
+    this.checkingRefresh = true;
+    this.loginService.refresh(localStorage.getItem('refresh_token'))
+      .subscribe(resp => {
+        localStorage.setItem('access_token', resp.accessToken);
+        localStorage.setItem('refresh_token', resp.refreshToken);
+        this.checkingRefresh = false;
+        this.loggedIn = !this.jwtHelper.isTokenExpired();
       });
   }
 }
