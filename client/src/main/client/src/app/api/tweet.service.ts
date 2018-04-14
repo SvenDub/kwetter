@@ -5,7 +5,6 @@ import {Subject} from 'rxjs/Subject';
 import {tap} from 'rxjs/operators';
 import {User} from '../shared/models/user.model';
 import 'rxjs/add/operator/map';
-import {LoginService} from './login.service';
 
 @Injectable()
 export class TweetService {
@@ -13,7 +12,7 @@ export class TweetService {
   private tweetPlaced = new Subject<Tweet>();
   tweetPlaced$ = this.tweetPlaced.asObservable();
 
-  constructor(private http: HttpClient, private loginService: LoginService) {
+  constructor(private http: HttpClient) {
   }
 
   getTimeline() {

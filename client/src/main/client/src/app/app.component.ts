@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
     if (!this.loggedIn && !this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
       this.refreshToken();
     }
+    this.loginService.onLogout$.subscribe(() => this.loggedIn = false);
   }
 
   login() {

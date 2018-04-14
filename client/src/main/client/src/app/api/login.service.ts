@@ -1,9 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {TokenResponse} from '../shared/models/token-response.model';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class LoginService {
+
+  private onLogout = new Subject();
+  onLogout$ = this.onLogout.asObservable();
 
   constructor(private http: HttpClient) {
   }
@@ -27,5 +31,6 @@ export class LoginService {
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    this.onLogout.next();
   }
 }

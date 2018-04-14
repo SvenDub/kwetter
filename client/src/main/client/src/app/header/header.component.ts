@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.loginService.logout();
-    window.location.reload();
     return false;
   }
 }
