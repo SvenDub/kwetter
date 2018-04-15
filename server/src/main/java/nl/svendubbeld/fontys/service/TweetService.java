@@ -53,9 +53,7 @@ public class TweetService {
         }
     }
 
-    public Tweet addTweet(Tweet tweet, String username) {
-        User user = userRepository.findByUsername(username);
-
+    public Tweet addTweet(Tweet tweet, User user) {
         tweet.setOwner(user);
         tweet.setMentions(mentionsParser.parse(tweet.getContent()));
         tweet.setHashtags(hashtagParser.parse(tweet.getContent()));
@@ -68,16 +66,31 @@ public class TweetService {
         return tweet;
     }
 
+    public Tweet addTweet(Tweet tweet, String username) {
+        User user = userRepository.findByUsername(username);
+
+        return addTweet(tweet, user);
+    }
+
+    public Stream<Tweet> getTimeline(User user) {
+        return tweetRepository.getTimeline(user);
+    }
+
     public Stream<Tweet> getTimeline(String username) {
         User user = userRepository.findByUsername(username);
 
-        return tweetRepository.getTimeline(user);
+        return getTimeline(user);
+    }
+
+
+    public Stream<Tweet> getMentions(User user) {
+        return tweetRepository.getMentions(user);
     }
 
     public Stream<Tweet> getMentions(String username) {
         User user = userRepository.findByUsername(username);
 
-        return tweetRepository.getMentions(user);
+        return getMentions(user);
     }
 
     public Map<String, Long> getTrends() {

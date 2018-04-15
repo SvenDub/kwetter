@@ -1,2 +1,31 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
+<ng-container *ngIf="loggedIn">
+  <app-header></app-header>
+  <router-outlet></router-outlet>
+</ng-container>
+<ng-container *ngIf="!loggedIn && !checkingRefresh">
+  <nav class="navbar navbar-expand navbar-dark bg-primary">
+    <div class="navbar-brand">
+      Kwetter
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row justify-content-center mt-2">
+      <div class="col">
+        <form (ngSubmit)="login()" *ngIf="!loggedIn">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" placeholder="Username" aria-label="Username" [(ngModel)]="username" name="username"
+                   id="username">
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input class="form-control" type="password" placeholder="Password" aria-label="Password" [(ngModel)]="password"
+                   name="password" id="password">
+          </div>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-container>

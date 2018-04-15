@@ -5,6 +5,7 @@ import {SharedModule} from '../shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
 import {UserService} from './user.service';
 import {LoginService} from './login.service';
+import {httpInterceptorProviders} from './http-interceptors';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {LoginService} from './login.service';
   providers: [
     LoginService,
     TweetService,
-    UserService
+    UserService,
+    httpInterceptorProviders
   ],
   declarations: []
 })

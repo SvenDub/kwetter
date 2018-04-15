@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5.2-jdk-8'
+            args '-v $HOME/.m2:/root/.m2'
         }
     }
 
@@ -25,12 +26,13 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean test -P arquillian-glassfish-embedded,!default -B'
                 }
-                stash name: 'embedded-test-reports', includes: '**/target/surefire-reports/**'
+                stash name: 'embedded-test-reports', includes: '**/target/surefire-reports/**,**/target/jacoco-it.exec'
             }
             post {
                 always {
                     cucumber '**/target/cucumber-report/*.json'
                     junit '**/target/surefire-reports/*.xml'
+                    jacoco(execPattern: '**/target/jacoco-it.exec')
                 }
             }
         }

@@ -1,12 +1,11 @@
 package nl.svendubbeld.fontys.rest;
 
+import nl.svendubbeld.fontys.auth.Secured;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.TweetDTO;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Tweet;
-import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.TweetService;
-import nl.svendubbeld.fontys.service.UserService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -26,9 +25,6 @@ public class TweetController extends BaseController {
 
     @Inject
     private TweetService tweetService;
-
-    @Inject
-    private UserService userService;
 
     @Inject
     private DTOHelper dtoHelper;
@@ -63,15 +59,11 @@ public class TweetController extends BaseController {
 
     @POST
     @Consumes
+    @Secured
     @Transactional
-    public Response addTweet(TweetDTO dto, @HeaderParam(Headers.API_KEY) String apiKey) {
+    public Response addTweet(TweetDTO dto) {
         Tweet tweet = dto.convert(dtoHelper);
-
-        if (!userService.exists(apiKey)) {
-            return unauthorized();
-        }
-
-        tweet = tweetService.addTweet(tweet, apiKey);
+        tweet = tweetService.addTweet(tweet, getUser());
 
         URI location = UriBuilder
                 .fromPath(context.getContextPath())
@@ -85,20 +77,16 @@ public class TweetController extends BaseController {
 
     @POST
     @Path("/{id}/like")
+    @Secured
     @Transactional
-    public Response like(@PathParam("id") long id, @HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
-            return unauthorized();
-        }
-
-        User user = userService.findByUsername(apiKey);
+    public Response like(@PathParam("id") long id) {
         Tweet tweet = tweetService.findById(id);
 
         if (tweet == null) {
             return notFound();
         }
 
-        tweet.addLikedBy(user);
+        tweet.addLikedBy(getUser());
         tweetService.edit(tweet);
 
         return ok(tweet.convert(dtoHelper));
@@ -106,20 +94,16 @@ public class TweetController extends BaseController {
 
     @POST
     @Path("/{id}/flag")
+    @Secured
     @Transactional
-    public Response flag(@PathParam("id") long id, @HeaderParam(Headers.API_KEY) String apiKey) {
-        if (!userService.exists(apiKey)) {
-            return unauthorized();
-        }
-
-        User user = userService.findByUsername(apiKey);
+    public Response flag(@PathParam("id") long id) {
         Tweet tweet = tweetService.findById(id);
 
         if (tweet == null) {
             return notFound();
         }
 
-        tweet.addFlag(user);
+        tweet.addFlag(getUser());
         tweetService.edit(tweet);
 
         return ok(tweet.convert(dtoHelper));

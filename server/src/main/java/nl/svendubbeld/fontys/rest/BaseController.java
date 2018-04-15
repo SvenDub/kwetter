@@ -1,9 +1,29 @@
 package nl.svendubbeld.fontys.rest;
 
+import nl.svendubbeld.fontys.model.User;
+import nl.svendubbeld.fontys.service.UserService;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.net.URI;
 
 public abstract class BaseController {
+
+    @Context
+    private SecurityContext securityContext;
+
+    protected SecurityContext getSecurityContext() {
+        return securityContext;
+    }
+
+    @Inject
+    private UserService userService;
+
+    protected User getUser() {
+        return userService.findByUsername(securityContext.getUserPrincipal().getName());
+    }
 
     protected Response ok() {
         return Response.ok().build();

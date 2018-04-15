@@ -38,13 +38,6 @@
 
     <repositories>
         <repository>
-            <id>artifactory</id>
-            <name>Artifactory</name>
-            <layout>default</layout>
-            <url>http://192.168.25.98:8081/artifactory/maven-central-remote</url>
-        </repository>
-
-        <repository>
             <id>primefaces</id>
             <name>Primefaces</name>
             <layout>default</layout>
