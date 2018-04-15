@@ -7,7 +7,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import nl.svendubbeld.fontys.dto.TweetDTO;
-import nl.svendubbeld.fontys.rest.Headers;
 import org.apache.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -69,7 +68,8 @@ public class HomePageStepdefs {
         tweet.setContent(content);
 
         response = given()
-                .header(Headers.API_KEY, world.getToken())
+                .auth()
+                .oauth2(world.getToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(tweet)
                 .when()
@@ -91,7 +91,8 @@ public class HomePageStepdefs {
     @When("^I load my timeline$")
     public void loadTimeline() {
         response = given()
-                .header(Headers.API_KEY, world.getToken())
+                .auth()
+                .oauth2(world.getToken())
                 .when()
                 .get("/me/timeline");
     }
@@ -104,7 +105,8 @@ public class HomePageStepdefs {
     @When("^I load my mentions$")
     public void loadMentions() {
         response = given()
-                .header(Headers.API_KEY, world.getToken())
+                .auth()
+                .oauth2(world.getToken())
                 .when()
                 .get("/me/mentions");
     }
@@ -117,7 +119,8 @@ public class HomePageStepdefs {
     @When("^I load popular trends$")
     public void loadTrends() {
         response = given()
-                .header(Headers.API_KEY, world.getToken())
+                .auth()
+                .oauth2(world.getToken())
                 .when()
                 .get("/me/trends");
     }
