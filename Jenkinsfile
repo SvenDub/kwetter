@@ -26,13 +26,13 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean test -P arquillian-glassfish-embedded,!default -B'
                 }
-                stash name: 'embedded-test-reports', includes: '**/target/surefire-reports/**'
+                stash name: 'embedded-test-reports', includes: '**/target/surefire-reports/**', '**/target/jacoco-it.exec'
             }
             post {
                 always {
                     cucumber '**/target/cucumber-report/*.json'
                     junit '**/target/surefire-reports/*.xml'
-                    jacoco(execPattern: '**/target/jacoco.exec')
+                    jacoco(execPattern: '**/target/jacoco-it.exec')
                 }
             }
         }
