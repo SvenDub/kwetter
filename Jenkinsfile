@@ -32,6 +32,7 @@ pipeline {
                 always {
                     cucumber '**/target/cucumber-report/*.json'
                     junit '**/target/surefire-reports/*.xml'
+                    jacoco(execPattern: '**/target/jacoco.exec')
                 }
             }
         }
