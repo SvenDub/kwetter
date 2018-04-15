@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5.2-jdk-8'
-            args '-v $HOME/.m2:/root/.m2 -v /usr/local/share/.cache/yarn:/usr/local/share/.cache/yarn'
+            args '-v $HOME/.m2:/root/.m2 -v $HOME.cache/yarn:/root/.cache/yarn'
         }
     }
 

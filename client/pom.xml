@@ -37,6 +37,9 @@
                             <goals>
                                 <goal>yarn</goal>
                             </goals>
+                            <configuration>
+                                <arguments>--mutex file:~/.cache/yarn/mutex --cache-folder ~/.cache/yarn/v1 install</arguments>
+                            </configuration>
                         </execution>
                         <execution>
                             <id>yarn build</id>
@@ -44,7 +47,7 @@
                                 <goal>yarn</goal>
                             </goals>
                             <configuration>
-                                <arguments>build --output-path=${basedir}/target/webapp/client/ --base-href=/client/</arguments>
+                                <arguments>--mutex file:~/.cache/yarn/mutex --cache-folder ~/.cache/yarn/v1 build --output-path=${basedir}/target/webapp/client/ --base-href=/client/</arguments>
                             </configuration>
                         </execution>
                     </executions>
