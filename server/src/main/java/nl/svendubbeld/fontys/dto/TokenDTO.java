@@ -2,6 +2,8 @@ package nl.svendubbeld.fontys.dto;
 
 import nl.svendubbeld.fontys.model.security.Token;
 
+import java.time.OffsetDateTime;
+
 public class TokenDTO implements ToEntityConvertible<Token> {
 
     private long id;
@@ -9,6 +11,8 @@ public class TokenDTO implements ToEntityConvertible<Token> {
     private String uuid;
 
     private boolean revoked;
+
+    private OffsetDateTime lastUsed;
 
     public TokenDTO() {
     }
@@ -37,6 +41,14 @@ public class TokenDTO implements ToEntityConvertible<Token> {
         this.revoked = revoked;
     }
 
+    public OffsetDateTime getLastUsed() {
+        return lastUsed;
+    }
+
+    public void setLastUsed(OffsetDateTime lastUsed) {
+        this.lastUsed = lastUsed;
+    }
+
     @Override
     public Token convert(DTOHelper dtoHelper) {
         Token token = new Token();
@@ -44,6 +56,7 @@ public class TokenDTO implements ToEntityConvertible<Token> {
         token.setId(id);
         token.setUuid(uuid);
         token.setRevoked(revoked);
+        token.setLastUsed(lastUsed);
 
         return token;
     }

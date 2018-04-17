@@ -25,6 +25,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAmount;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Path("/auth")
@@ -97,9 +98,18 @@ public class AuthenticationController extends BaseController {
                 return unauthorized();
             }
 
-            if (user.getTokens().stream().filter(Token::isValid).noneMatch(token -> token.getUuid().equals(uuid))) {
+            Optional<Token> tokenOptional = user.getTokens()
+                    .stream()
+                    .filter(Token::isValid)
+                    .filter(token -> token.getUuid().equals(uuid))
+                    .findFirst();
+            if (!tokenOptional.isPresent()) {
                 return unauthorized();
             }
+
+            Token token = tokenOptional.get();
+            token.setLastUsed(OffsetDateTime.now());
+            userService.edit(user);
 
             String accessToken = issueAccessToken(username, Duration.ofHours(1));
 

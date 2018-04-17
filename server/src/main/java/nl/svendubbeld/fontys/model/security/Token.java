@@ -7,6 +7,8 @@ import nl.svendubbeld.fontys.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +32,10 @@ public class Token implements ToDTOConvertible<TokenDTO> {
     @NotNull
     private boolean revoked;
 
+    @PastOrPresent
+    @NotNull
+    private OffsetDateTime lastUsed;
+
     public Token() {
     }
 
@@ -37,6 +43,7 @@ public class Token implements ToDTOConvertible<TokenDTO> {
         this.uuid = uuid;
         this.user = user;
         this.revoked = revoked;
+        this.lastUsed = OffsetDateTime.now();
     }
 
     public long getId() {
@@ -75,6 +82,14 @@ public class Token implements ToDTOConvertible<TokenDTO> {
         this.revoked = revoked;
     }
 
+    public OffsetDateTime getLastUsed() {
+        return lastUsed;
+    }
+
+    public void setLastUsed(OffsetDateTime lastUsed) {
+        this.lastUsed = lastUsed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -95,6 +110,7 @@ public class Token implements ToDTOConvertible<TokenDTO> {
         dto.setId(id);
         dto.setUuid(uuid);
         dto.setRevoked(revoked);
+        dto.setLastUsed(lastUsed);
 
         return dto;
     }
