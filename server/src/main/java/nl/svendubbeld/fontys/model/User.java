@@ -2,6 +2,7 @@ package nl.svendubbeld.fontys.model;
 
 import nl.svendubbeld.fontys.dto.*;
 import nl.svendubbeld.fontys.model.security.SecurityGroup;
+import nl.svendubbeld.fontys.model.security.Token;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -67,6 +68,13 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotNull
     private Set<Profile> profiles = new HashSet<>();
+
+    /**
+     * The tokens issued to this user.
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotNull
+    private Set<Token> tokens = new HashSet<>();
 
     public User() {
     }
@@ -170,6 +178,18 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
         return profile;
     }
 
+    public Set<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Set<Token> tokens) {
+        this.tokens = tokens;
+    }
+
+    public boolean addToken(Token token) {
+        return tokens.add(token);
+    }
+
     @Override
     public UserDTO convert(DTOHelper dtoHelper) {
         UserDTO dto = new UserDTO();
@@ -198,6 +218,7 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
                 .map(dtoHelper::convertToDTO)
                 .collect(Collectors.toSet()));
         dto.setProfiles(getProfiles().stream().map(dtoHelper::convertToDTO).collect(Collectors.toSet()));
+        dto.setTokens(getTokens().stream().map(dtoHelper::convertToDTO).collect(Collectors.toSet()));
 
         return dto;
     }

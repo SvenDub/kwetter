@@ -15,6 +15,8 @@ public class UserDTOSecure extends UserDTO {
 
     private Set<ProfileDTO> profiles;
 
+    private Set<TokenDTO> tokens;
+
     public String getEmail() {
         return email;
     }
@@ -47,6 +49,14 @@ public class UserDTOSecure extends UserDTO {
         this.profiles = profiles;
     }
 
+    public Set<TokenDTO> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Set<TokenDTO> tokens) {
+        this.tokens = tokens;
+    }
+
     @Override
     public User convert(DTOHelper dtoHelper) {
         User user = super.convert(dtoHelper);
@@ -59,6 +69,7 @@ public class UserDTOSecure extends UserDTO {
                 .map(dtoHelper.getUserService()::findById)
                 .collect(Collectors.toSet()));
         user.setProfiles(getProfiles().stream().map(dtoHelper::convertToEntity).collect(Collectors.toSet()));
+        user.setTokens(getTokens().stream().map(dtoHelper::convertToEntity).collect(Collectors.toSet()));
 
         return user;
     }
