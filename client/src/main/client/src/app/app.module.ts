@@ -22,6 +22,8 @@ import {UserListComponent} from './user-list/user-list.component';
 import {EditProfileComponent} from './edit-profile/edit-profile.component';
 import {SearchComponent} from './search/search.component';
 import {JwtModule} from '@auth0/angular-jwt';
+import {TokenListComponent} from './token-list/token-list.component';
+import {MomentModule} from 'ngx-moment';
 
 export function getAccessToken() {
   return localStorage.getItem('access_token');
@@ -44,7 +46,8 @@ export function getAccessToken() {
     MentionsComponent,
     UserListComponent,
     EditProfileComponent,
-    SearchComponent
+    SearchComponent,
+    TokenListComponent
   ],
   imports: [
     AngularFontAwesomeModule,
@@ -52,6 +55,7 @@ export function getAccessToken() {
     AppRoutingModule,
     BrowserModule,
     FormsModule,
+    MomentModule,
     SharedModule,
     JwtModule.forRoot({
       config: {

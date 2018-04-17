@@ -7,8 +7,11 @@ import nl.svendubbeld.fontys.exception.UserExistsException;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Profile;
 import nl.svendubbeld.fontys.model.Tweet;
+import nl.svendubbeld.fontys.model.User;
+import nl.svendubbeld.fontys.model.security.Token;
 import nl.svendubbeld.fontys.service.ProfileService;
 import nl.svendubbeld.fontys.service.TweetService;
+import nl.svendubbeld.fontys.service.UserService;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -33,6 +36,9 @@ public class MeController extends BaseController {
 
     @Inject
     private DTOHelper dtoHelper;
+
+    @Inject
+    private UserService userService;
 
     @GET
     @Transactional
@@ -103,5 +109,39 @@ public class MeController extends BaseController {
         Profile newProfile = profileService.addProfile(getUser(), profile.getUsername(), profile.getName(), profile.getBio(), profile.getLocation(), profile.getWebsite());
 
         return ok(dtoHelper.convertToDTO(newProfile));
+    }
+
+    @GET
+    @Path("/tokens")
+    @Transactional
+    public Response getTokens() {
+        return ok(getUser()
+                .getTokens()
+                .stream()
+                .sorted(Comparator.comparing(Token::getLastUsed).reversed())
+                .map(dtoHelper::convertToDTO)
+                .collect(Collectors.toList()));
+    }
+
+    @DELETE
+    @Path("/tokens/{id}")
+    @Transactional
+    public Response deleteToken(@PathParam("id") long id) {
+        User user = getUser();
+        Optional<Token> tokenOptional = user
+                .getTokens()
+                .stream()
+                .filter(token -> token.getId() == id)
+                .findFirst();
+
+        if (!tokenOptional.isPresent()) {
+            return notFound();
+        }
+
+        Token token = tokenOptional.get();
+        token.setRevoked(true);
+
+        userService.edit(user);
+        return ok();
     }
 }
