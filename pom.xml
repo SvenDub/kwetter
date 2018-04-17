@@ -5,7 +5,7 @@
 
     <groupId>nl.svendubbeld.fontys</groupId>
     <artifactId>kwetter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -19,19 +19,19 @@
             <dependency>
                 <groupId>nl.svendubbeld.fontys</groupId>
                 <artifactId>kwetter-client</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>nl.svendubbeld.fontys</groupId>
                 <artifactId>kwetter-server</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>nl.svendubbeld.fontys</groupId>
                 <artifactId>kwetter-glassfish</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
