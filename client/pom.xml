@@ -56,7 +56,7 @@
                                 <goal>yarn</goal>
                             </goals>
                             <configuration>
-                                <arguments>test --single-run</arguments>
+                                <arguments>test --single-run --code-coverage</arguments>
                             </configuration>
                         </execution>
                     </executions>
@@ -82,5 +82,10 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <properties>
+        <sonar.sources>src/main/client/src</sonar.sources>
+        <sonar.test.inclusions>src/main/client/src/**/*.spec.ts</sonar.test.inclusions>
+    </properties>
 
 </project>
