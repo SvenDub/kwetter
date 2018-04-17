@@ -1,5 +1,6 @@
 package nl.svendubbeld.fontys.test.embedded.cucumber;
 
+import nl.svendubbeld.fontys.dao.TokenRepository;
 import nl.svendubbeld.fontys.exception.UserExistsException;
 import nl.svendubbeld.fontys.model.Location;
 import nl.svendubbeld.fontys.model.Tweet;
@@ -29,6 +30,9 @@ public class DataSetLoader {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private TokenRepository tokenRepository;
 
     public void loadTestData(String dataSet) throws UserExistsException {
         // TODO: Load specific data set
@@ -60,6 +64,7 @@ public class DataSetLoader {
     private void clear() {
         tweetService.clear();
         profileService.clear();
+        tokenRepository.clear();
         userService.clear();
         securityService.clear();
     }
