@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/resources/template.xhtml">
+        <ui:param name="pageTitle" value="Login Error"/>
+        <ui:define name="left" />
+        <ui:define name="content">
+            <p:outputLabel>#{msgs.loginErrorMessage}</p:outputLabel>
+            <form method='post' action='j_security_check'>
+                <p:messages layout='table' globalOnly='true'/>
+                <p:panelGrid>
+                    <p:row styleClass="ui-no-border">
+                        <p:column>
+                            <p:outputLabel value='Username: ' for="j_username"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id='j_username' name='j_username' autocomplete="username"/>
+                        </p:column>
+                    </p:row>
+                    <p:row styleClass="ui-no-border">
+                        <p:column>
+                            <p:outputLabel value='Password: ' for="j_password"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText type='password' id='j_password' name='j_password' autocomplete="current-password"/>
+                        </p:column>
+                    </p:row>
+                    <p:row styleClass="ui-no-border">
+                        <p:column/>
+                        <p:column>
+                            <button type="submit" name="submit" value="Login"
+                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                <span class="ui-button-text ui-c">Login</span>
+                            </button>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

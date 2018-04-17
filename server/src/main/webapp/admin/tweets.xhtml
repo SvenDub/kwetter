@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+    <ui:composition template="/resources/template.xhtml">
+        <ui:param name="pageTitle" value="Tweets"/>
+        <ui:define name="content">
+            <h:form>
+                <p:dataTable id="tweetTable" value="#{adminController.tweetModel}" var="tweet" widgetVar="tweetTable" reflow="true" paginator="true"
+                             rowsPerPageTemplate="10,50,100" rows="10">
+                    <f:facet name="header">
+                    </f:facet>
+                    <p:column headerText="Id" width="100" filterable="true" filterBy="#{tweet.id}">
+                        #{tweet.id}
+                    </p:column>
+                    <p:column headerText="Username" filterable="true" filterBy="#{tweet.owner.profile.username}">
+                        <p:link value="@#{tweet.owner.profile.username}"/>
+                    </p:column>
+                    <p:column headerText="Content" filterable="true" filterBy="#{tweet.content}">
+                        #{tweet.content}
+                    </p:column>
+                    <p:column headerText="Flags" width="100" filterable="true" filterBy="#{tweet.flagCount}" filterMatchMode="gte">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('tweetTable').filter()" size="3" min="0" converter="javax.faces.Long">
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText value="#{tweet.flagCount}"/>
+                    </p:column>
+                    <p:column headerText="Actions">
+                        <p:commandButton icon="fa fa-trash" value="Delete" actionListener="#{adminController.deleteTweet}" update="tweetTable">
+                            <p:confirm header="Delete tweet" message="Are you sure you want to delete tweet #{tweet.id} from @#{tweet.owner.profile.username}?" icon="fa fa-exclamation-circle" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                </p:confirmDialog>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

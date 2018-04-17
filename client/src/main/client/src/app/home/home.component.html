@@ -1,0 +1,35 @@
+<div class="container mt-2">
+  <div class="row justify-content-center">
+    <div class="col-md-3 d-none d-md-block">
+      <div class="row mb-4">
+        <div class="col">
+          <app-profile-card [user]="user"></app-profile-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <app-trends></app-trends>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-4">
+        <div class="col">
+          <app-add-tweet [replyClicked]="replyClicked"></app-add-tweet>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <app-timeline [tweets]="tweets" (replyClicked)="onReplyClicked($event)"></app-timeline>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 d-none d-md-block">
+      <div class="row">
+        <div class="col">
+          <app-about></app-about>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

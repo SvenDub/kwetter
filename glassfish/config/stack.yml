@@ -1,0 +1,30 @@
+# vim: ts=2 sw=0 sts=-1 et
+
+version: "3.5"
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: "kwetter"
+      MYSQL_USER: "fontys"
+      MYSQL_PASSWORD: "fontys"
+    healthcheck:
+      test: "mysqladmin -ufontys -pfontys processlist || exit 1"
+    volumes:
+      - kwetter-mysql:/var/lib/mysql
+  kwetter:
+    image: svendub/kwetter
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+      - "4848:4848"
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+volumes:
+  kwetter-mysql:

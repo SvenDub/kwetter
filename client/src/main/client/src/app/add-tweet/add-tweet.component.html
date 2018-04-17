@@ -1,0 +1,33 @@
+<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="errorMessage">
+  {{errorMessage}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form (ngSubmit)="tweet()">
+  <div class="form-group">
+    <textarea id="tweet"
+              class="form-control mb-2"
+              placeholder="What's going on?"
+              [(ngModel)]="content" name="content"
+              required
+              maxlength="140"
+              (keydown.control.enter)="onEnterKey($event)"
+              (keydown)="onKeyDown($event)"
+              (input)="onInput($event)"
+              rows="5"
+              #textarea>
+    </textarea>
+    <div class="list-group" *ngIf="autocompleteValues !== null">
+      <a class="list-group-item list-group-item-action d-flex flex-row align-items-center" [class.active]="i === autocompleteSelection"
+         *ngFor="let user of autocompleteValues; index as i" (click)="acceptSuggestion(i); false;" href="">
+        <img width="24" height="24" src="/api/users/{{user.profile.username}}/picture?size=24" alt="Profile picture for {{user.profile.name}}" class="mr-2">
+        <h5 class="mb-0 mr-2">@{{user.profile.username}}</h5>
+        <h6 class="mb-0 text-muted">{{user.profile.name}}</h6>
+      </a>
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary pull-right" [disabled]="isDisabled()" #submit>Tweet</button>
+  </div>
+</form>

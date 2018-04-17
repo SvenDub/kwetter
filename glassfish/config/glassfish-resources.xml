@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE resources PUBLIC
+    "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+    "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+    <jdbc-connection-pool validate-atmost-once-period-in-seconds="60" ping="true"
+        datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" connection-creation-retry-attempts="3" name="kwetter"
+        is-connection-validation-required="true" connection-validation-method="auto-commit" res-type="javax.sql.DataSource">
+        <property name="password" value="fontys"></property>
+        <property name="databaseName" value="kwetter"></property>
+        <property name="serverName" value="mysql"></property>
+        <property name="user" value="fontys"></property>
+        <property name="portNumber" value="3306"></property>
+    </jdbc-connection-pool>
+    <jdbc-resource pool-name="kwetter" jndi-name="jdbc/kwetter"></jdbc-resource>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <ui:composition template="/resources/template.xhtml">
+        <ui:param name="pageTitle" value="Users"/>
+        <ui:define name="content">
+            <h:form>
+                <p:dataTable value="#{adminController.userModel}" var="user" widgetVar="userTable" reflow="true" paginator="true"
+                             rowsPerPageTemplate="10,50,100" rows="10">
+                    <f:facet name="header">
+                        <p:commandButton icon="fa fa-save" onclick="submit()"/>
+                    </f:facet>
+                    <p:column headerText="Id" width="100" filterable="true" filterBy="#{user.id}" filterMatchMode="contains"
+                              sortBy="#{user.id}">
+                        #{user.id}
+                    </p:column>
+                    <p:column headerText="Email" filterable="true" filterBy="#{user.email}" filterMatchMode="contains">
+                        #{user.email}
+                    </p:column>
+                    <p:column headerText="Username" filterable="true" filterBy="#{user.profile.username}">
+                        <p:link value="@#{user.profile.username}" rendered="#{not empty user.profile}"/>
+                    </p:column>
+                    <p:column headerText="Tweets" width="110" sortBy="#{user.tweetsCount}">
+                        #{user.tweetsCount}
+                    </p:column>
+                    <p:column headerText="Followers" width="110" sortBy="#{user.followersCount}">
+                        #{user.followersCount}
+                    </p:column>
+                    <p:column headerText="Following" width="110" sortBy="#{user.followingCount}">
+                        #{user.followingCount}
+                    </p:column>
+                    <p:column headerText="Groups">
+                        <p:selectCheckboxMenu id="multiple" value="#{user.securityGroups}" label="Groups" multiple="true" filter="true"
+                                              filterMatchMode="startsWith" valueChangeListener="#{adminController.securityGroupsChanged}"
+                                              binding="#{user}" style="width: 100%;">
+                            <f:selectItems value="#{adminController.securityGroupList}" var="group" itemLabel="#{group.name}"/>
+                        </p:selectCheckboxMenu>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
