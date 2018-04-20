@@ -42,6 +42,9 @@ export class AppComponent implements OnInit {
         localStorage.setItem('refresh_token', resp.refreshToken);
         this.checkingRefresh = false;
         this.loggedIn = !this.jwtHelper.isTokenExpired();
+      }, () => {
+        console.log('Can\'t log in with invalid token. Logging out.');
+        this.loginService.logout();
       });
   }
 }
