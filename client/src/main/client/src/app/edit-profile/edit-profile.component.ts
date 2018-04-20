@@ -39,6 +39,9 @@ export class EditProfileComponent implements OnInit {
       .subscribe(me => {
         this.user = me;
         this.profile = JSON.parse(JSON.stringify(me.profile));
+        if (this.profile.location === null) {
+          this.profile.location = new Location();
+        }
       });
     this.userService.getFollowing(this.username)
       .subscribe(following => this.following = following);
