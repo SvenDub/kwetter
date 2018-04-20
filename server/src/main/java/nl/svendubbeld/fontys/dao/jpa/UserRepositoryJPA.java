@@ -73,6 +73,14 @@ public class UserRepositoryJPA extends JPARepository<User, Long> implements User
     }
 
     @Override
+    public boolean emailExists(String email) {
+        TypedQuery<Boolean> query = getEntityManager().createNamedQuery("user.emailExists", Boolean.class);
+        query.setParameter("email", email);
+
+        return query.getSingleResult();
+    }
+
+    @Override
     public Stream<User> findFollowers(User user) {
         TypedQuery<User> query = getEntityManager().createNamedQuery("user.findFollowers", getEntityClass());
         query.setParameter("user", user);

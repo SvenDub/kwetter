@@ -4,10 +4,7 @@ import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.SecurityGroupDTO;
 import nl.svendubbeld.fontys.dto.ToDTOConvertible;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.Set;
@@ -17,6 +14,10 @@ import java.util.stream.Collectors;
  * A group with {@link Permission permissions}.
  */
 @Entity
+@SuppressWarnings("squid:S1710")
+@NamedQueries({
+        @NamedQuery(name = "securityGroup.findByName", query = "select s from SecurityGroup s where s.name = :name")
+})
 public class SecurityGroup implements ToDTOConvertible<SecurityGroupDTO> {
 
     /**

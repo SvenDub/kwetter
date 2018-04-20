@@ -64,4 +64,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return The users following the user.
      */
     Stream<User> findFollowers(User user);
+
+    boolean emailExists(String email);
 }

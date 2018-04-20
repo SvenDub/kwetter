@@ -41,14 +41,12 @@ public class MeController extends BaseController {
     private UserService userService;
 
     @GET
-    @Transactional
     public Response getMe() {
         return ok(dtoHelper.convertToDTOSecure(getUser()));
     }
 
     @GET
     @Path("/timeline")
-    @Transactional
     public Response getTimeline() {
         Stream<Tweet> tweets = tweetService.getTimeline(getUser());
 
@@ -60,7 +58,6 @@ public class MeController extends BaseController {
 
     @GET
     @Path("/mentions")
-    @Transactional
     public Response getMentions() {
         Stream<Tweet> tweets = tweetService.getMentions(getUser());
 
@@ -73,14 +70,12 @@ public class MeController extends BaseController {
 
     @GET
     @Path("/trends")
-    @Transactional
     public Response getTrends() {
         return ok(tweetService.getTrends());
     }
 
     @GET
     @Path("/autocomplete")
-    @Transactional
     public Response getAutocomplete(@QueryParam("q") @DefaultValue("") String query, @QueryParam("limit") @DefaultValue("5") int limit) {
         return ok(getUser()
                 .getFollowing()
@@ -103,7 +98,6 @@ public class MeController extends BaseController {
 
     @POST
     @Path("/profile")
-    @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createProfile(ProfileDTO profile) throws UserExistsException {
         Profile newProfile = profileService.addProfile(getUser(), profile.getUsername(), profile.getName(), profile.getBio(), profile.getLocation(), profile.getWebsite());
@@ -113,7 +107,6 @@ public class MeController extends BaseController {
 
     @GET
     @Path("/tokens")
-    @Transactional
     public Response getTokens() {
         return ok(getUser()
                 .getTokens()
@@ -125,7 +118,6 @@ public class MeController extends BaseController {
 
     @DELETE
     @Path("/tokens/{id}")
-    @Transactional
     public Response deleteToken(@PathParam("id") long id) {
         User user = getUser();
         Optional<Token> tokenOptional = user

@@ -96,4 +96,12 @@ public class UserService {
     public Stream<User> findFollowers(User user) {
         return userRepository.findFollowers(user);
     }
+
+    public void remove(User user) {
+        userRepository.remove(user);
+    }
+
+    public boolean emailExists(String email) {
+        return userRepository.emailExists(email);
+    }
 }

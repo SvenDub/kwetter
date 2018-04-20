@@ -5,9 +5,9 @@ import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.parser.MentionsParser;
 import nl.svendubbeld.fontys.parser.PatternMentionsParser;
 import nl.svendubbeld.fontys.test.matcher.PredicateMatcher;
+import org.apache.commons.lang.NotImplementedException;
 import org.junit.Before;
 import org.junit.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -126,7 +126,12 @@ public class PatternMentionsParserTest {
 
         @Override
         public Stream<User> findFollowers(User user) {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        @Override
+        public boolean emailExists(String email) {
+            throw new NotImplementedException();
         }
 
         @Override

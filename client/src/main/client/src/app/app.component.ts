@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {LoginService} from './api/login.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,10 +16,18 @@ export class AppComponent implements OnInit {
   loggedIn: boolean;
   checkingRefresh = false;
 
-  constructor(private loginService: LoginService, private jwtHelper: JwtHelperService) {
+  signUpEmail: string;
+  signUpName: string;
+  signUpUsername: string;
+  signUpPassword: string;
+
+  errorMessage: string;
+
+  constructor(private loginService: LoginService, private jwtHelper: JwtHelperService, private router: Router) {
   }
 
   ngOnInit() {
+    this.errorMessage = null;
     this.loggedIn = !this.jwtHelper.isTokenExpired();
     if (!this.loggedIn && !this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
       this.refreshToken();
@@ -26,6 +36,7 @@ export class AppComponent implements OnInit {
   }
 
   login() {
+    this.errorMessage = null;
     this.loginService.login(this.username, this.password)
       .subscribe(resp => {
         localStorage.setItem('access_token', resp.accessToken);
@@ -35,6 +46,7 @@ export class AppComponent implements OnInit {
   }
 
   refreshToken() {
+    this.errorMessage = null;
     this.checkingRefresh = true;
     this.loginService.refresh(localStorage.getItem('refresh_token'))
       .subscribe(resp => {
@@ -45,6 +57,20 @@ export class AppComponent implements OnInit {
       }, () => {
         console.log('Can\'t log in with invalid token. Logging out.');
         this.loginService.logout();
+      });
+  }
+
+  signUp() {
+    this.errorMessage = null;
+    this.loginService.signUp(this.signUpEmail, this.signUpName, this.signUpUsername, this.signUpPassword)
+      .subscribe(resp => {
+        localStorage.setItem('access_token', resp.accessToken);
+        localStorage.setItem('refresh_token', resp.refreshToken);
+        this.loggedIn = !this.jwtHelper.isTokenExpired();
+        this.router.navigate(['/u/' + this.signUpUsername + '/edit']);
+      }, (err: HttpErrorResponse) => {
+        console.log('Invalid sign up parameters.', err);
+        this.errorMessage = `Can't create account: ${err.error.message ? err.error.message : err.message}`;
       });
   }
 }

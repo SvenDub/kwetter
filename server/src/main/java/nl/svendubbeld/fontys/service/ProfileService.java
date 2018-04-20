@@ -47,4 +47,8 @@ public class ProfileService {
     public Profile findById(long id) {
         return profileRepository.findById(id);
     }
+
+    public void remove(Profile profile) {
+        profileRepository.remove(profile);
+    }
 }

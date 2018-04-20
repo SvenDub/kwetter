@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
         @NamedQuery(name = "user.followersCount", query = "select count(u) from User u where :user member of u.following"),
         @NamedQuery(name = "user.followingCount", query = "select size(u.following) from User u where u = :user"),
         @NamedQuery(name = "user.exists", query = "select case when (count(p.user) > 0) then true else false end from Profile p where p.username = :username and p.createdAt = (select max(subp.createdAt) from Profile subp where subp.username = :username)"),
+        @NamedQuery(name = "user.emailExists", query = "select case when (count(u) > 0) then true else false end from User u where u.email = :email"),
         @NamedQuery(name = "user.findFollowers", query = "select u from User u where :user member of u.following")
 })
 public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<UserDTOSecure> {
@@ -57,7 +58,7 @@ public class User implements ToDTOConvertible<UserDTO>, ToDTOSecureConvertible<U
     /**
      * The users this user follows.
      */
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "User_Following")
     @NotNull
     private Set<User> following = new HashSet<>();

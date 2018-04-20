@@ -8,22 +8,63 @@
       Kwetter
     </div>
   </nav>
-  <div class="container">
-    <div class="row justify-content-center mt-2">
-      <div class="col">
-        <form (ngSubmit)="login()" *ngIf="!loggedIn">
+  <div class="container mt-2">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <h4>Login</h4>
+        <form (ngSubmit)="login()" #loginForm="ngForm">
           <div class="form-group">
             <label for="username">Username</label>
             <input class="form-control" type="text" placeholder="Username" aria-label="Username" [(ngModel)]="username" name="username"
-                   id="username">
+                   id="username" required>
           </div>
 
           <div class="form-group">
             <label for="password">Password</label>
             <input class="form-control" type="password" placeholder="Password" aria-label="Password" [(ngModel)]="password"
-                   name="password" id="password">
+                   name="password" id="password" required>
           </div>
-          <button class="btn btn-primary" type="submit">Login</button>
+          <button class="btn btn-primary" type="submit" [disabled]="loginForm.form.dirty && !loginForm.form.valid">Login</button>
+        </form>
+      </div>
+      <div class="col-md-2 hr-text">
+        OR
+      </div>
+      <div class="col-md-5">
+        <h4>Sign up</h4>
+        <form (ngSubmit)="signUp()" class="validation-hints" #signUpForm="ngForm">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="errorMessage">
+            {{errorMessage}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label for="sign_up_email">Email</label>
+            <input class="form-control" type="email" placeholder="Email" aria-label="Email" [(ngModel)]="signUpEmail" name="email"
+                   id="sign_up_email" required email autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="sign_up_name">Name</label>
+            <input class="form-control" type="text" placeholder="Name" aria-label="Email" [(ngModel)]="signUpName" name="name"
+                   id="sign_up_name" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="sign_up_username">Username</label>
+            <input class="form-control" type="text" placeholder="Username" aria-label="Username" [(ngModel)]="signUpUsername" name="username"
+                   id="sign_up_username" required autocomplete="new-username">
+          </div>
+
+          <div class="form-group">
+            <label for="sign_up_password">Password</label>
+            <input class="form-control" type="password" placeholder="Password" aria-label="Password" [(ngModel)]="signUpPassword"
+                   name="new-password" id="sign_up_password" required autocomplete="new-password">
+          </div>
+
+          <button class="btn btn-primary" type="submit" [disabled]="!signUpForm.form.valid">Sign up</button>
         </form>
       </div>
     </div>
