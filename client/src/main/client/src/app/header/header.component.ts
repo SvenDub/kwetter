@@ -13,6 +13,11 @@ export class HeaderComponent implements OnInit {
   @Input() loggedIn: boolean;
   query: string;
 
+  flagIcons: Map<string, string> = new Map<string, string>([
+    ['nl', 'nl'],
+    ['en', 'gb']
+  ]);
+
   constructor(private router: Router, private loginService: LoginService, private translate: TranslateService) {
   }
 
@@ -30,5 +35,9 @@ export class HeaderComponent implements OnInit {
 
   setLanguage(lang: string) {
     this.translate.use(lang);
+  }
+
+  getLanguage() {
+    return this.translate.currentLang;
   }
 }

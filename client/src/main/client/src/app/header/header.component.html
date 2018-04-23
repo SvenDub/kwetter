@@ -7,11 +7,14 @@
   </div>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" (click)="setLanguage('en')"><span class="flag-icon flag-icon-gb"></span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" (click)="setLanguage('nl')"><span class="flag-icon flag-icon-nl"></span></a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="flag-icon flag-icon-{{flagIcons.get(getLanguage())}}"></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" (click)="setLanguage('en')"><span class="flag-icon flag-icon-gb"></span> English</a>
+          <a class="dropdown-item" (click)="setLanguage('nl')"><span class="flag-icon flag-icon-nl"></span> Nederlands</a>
+        </div>
       </li>
     </ul>
     <ng-container *ngIf="loggedIn">
