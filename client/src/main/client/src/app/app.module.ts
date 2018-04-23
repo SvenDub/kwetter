@@ -24,9 +24,16 @@ import {SearchComponent} from './search/search.component';
 import {JwtModule} from '@auth0/angular-jwt';
 import {TokenListComponent} from './token-list/token-list.component';
 import {MomentModule} from 'ngx-moment';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {HttpClient} from '@angular/common/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 export function getAccessToken() {
   return localStorage.getItem('access_token');
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -47,7 +54,7 @@ export function getAccessToken() {
     UserListComponent,
     EditProfileComponent,
     SearchComponent,
-    TokenListComponent
+    TokenListComponent,
   ],
   imports: [
     AngularFontAwesomeModule,
@@ -66,11 +73,18 @@ export function getAccessToken() {
           '/api/auth/refresh'
         ]
       }
-    })
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      }
+    }),
   ],
   providers: [],
   bootstrap: [
-    AppComponent
+    AppComponent,
   ]
 })
 export class AppModule {

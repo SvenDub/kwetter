@@ -16,17 +16,17 @@
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Followers" [users]="followers" [count]="followers.length"></app-user-list>
+          <app-user-list title="{{'FOLLOWERS' | translate}}" [users]="followers" [count]="followers.length"></app-user-list>
         </div>
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Following" [users]="following" [count]="following.length"></app-user-list>
+          <app-user-list title="{{'FOLLOWING' | translate}}" [users]="following" [count]="following.length"></app-user-list>
         </div>
       </div>
     </div>
     <div class="col-md-6">
-      <h4>Tokens</h4>
+      <h4>{{'TOKENS' | translate}}</h4>
       <div class="list-group" *ngIf="tokens">
         <div class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let token of tokens">
           <del *ngIf="token.revoked"><span>{{token.uuid}}</span></del>

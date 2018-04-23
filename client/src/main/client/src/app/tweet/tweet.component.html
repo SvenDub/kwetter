@@ -6,7 +6,7 @@
       </div>
       <div class="col pl-0">
         <h5 class="card-title"><a [routerLink]="['/u/' + tweet.owner.profile.username]">{{tweet.owner.profile.name}}</a></h5>
-        <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a [routerLink]="['/tweet/' + tweet.id]" data-toggle="tooltip" title="{{tweet.date | amDateFormat:'lll'}}">{{tweet.date | amTimeAgo}}</a></h6>
+        <h6 class="card-subtitle mb-2 text-muted"><a [routerLink]="['/u/' + tweet.owner.profile.username]">@{{tweet.owner.profile.username}}</a> • <a [routerLink]="['/tweet/' + tweet.id]" data-toggle="tooltip" title="{{tweet.date | amLocale:getLocale() | amDateFormat:'lll'}}">{{tweet.date | amLocale:getLocale() | amTimeAgo}}</a></h6>
       </div>
     </div>
     <p class="card-text">

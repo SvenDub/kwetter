@@ -16,34 +16,34 @@
       </div>
       <div class="row mb-4" *ngIf="!isMe()">
         <div class="col">
-          <button class="btn btn-outline-primary" *ngIf="!isFollowing()" (click)="follow()">Follow</button>
-          <button class="btn btn-primary" *ngIf="isFollowing()" (click)="unfollow()">Following</button>
+          <button class="btn btn-outline-primary" *ngIf="!isFollowing()" (click)="follow()">{{'FOLLOW' | translate}}</button>
+          <button class="btn btn-primary" *ngIf="isFollowing()" (click)="unfollow()">{{'FOLLOWING' | translate}}</button>
         </div>
       </div>
       <div class="row mb-4" *ngIf="isMe()">
         <div class="col">
-          <button class="btn btn-primary" [routerLink]="['edit']">Edit</button>
-          <button class="btn btn-outline-primary" [routerLink]="['tokens']">Tokens</button>
+          <button class="btn btn-primary" [routerLink]="['edit']">{{'EDIT' | translate}}</button>
+          <button class="btn btn-outline-primary" [routerLink]="['tokens']">{{'TOKENS' | translate}}</button>
         </div>
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Followers" [users]="followers" [count]="followers?.length"></app-user-list>
+          <app-user-list title="{{'FOLLOWERS' | translate}}" [users]="followers" [count]="followers?.length"></app-user-list>
         </div>
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Following" [users]="following" [count]="following?.length"></app-user-list>
+          <app-user-list title="{{'FOLLOWING' | translate}}" [users]="following" [count]="following?.length"></app-user-list>
         </div>
       </div>
     </div>
     <div class="col-md-6">
       <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="tweets-tab" data-toggle="tab" href="#tweets" role="tab" aria-controls="tweets" aria-selected="true">Tweets</a>
+          <a class="nav-link active" id="tweets-tab" data-toggle="tab" href="#tweets" role="tab" aria-controls="tweets" aria-selected="true">{{'TWEETS' | translate}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="likes-tab" data-toggle="tab" href="#likes" role="tab" aria-controls="likes" aria-selected="false">Likes</a>
+          <a class="nav-link" id="likes-tab" data-toggle="tab" href="#likes" role="tab" aria-controls="likes" aria-selected="false">{{'LIKES' | translate}}</a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">

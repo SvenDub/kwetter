@@ -12,7 +12,7 @@ export class JwtRefreshInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!req.url.startsWith('/api/auth/')) {
+    if (req.url.startsWith('/api') && !req.url.startsWith('/api/auth/')) {
       const token = localStorage.getItem('access_token');
       if (!token || moment(this.jwtHelper.getTokenExpirationDate(token)).subtract(5, 'minutes').isBefore(new Date())) {
         console.log('Refreshing token');
