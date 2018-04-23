@@ -34,7 +34,6 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/{username}")
-    @Transactional
     public Response getUser(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 
@@ -60,7 +59,6 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/{username}/tweets")
-    @Transactional
     public Response getTweetsByUsername(@PathParam("username") String username) {
         Stream<Tweet> tweets = tweetService.findByUsername(username);
 
@@ -72,7 +70,6 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/{username}/likes")
-    @Transactional
     public Response getLikesByUsername(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 
@@ -88,7 +85,6 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/{username}/following")
-    @Transactional
     public Response getFollowingByUsername(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 
@@ -104,7 +100,6 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/{username}/followers")
-    @Transactional
     public Response getFollowersByUsername(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 
@@ -122,7 +117,6 @@ public class UserController extends BaseController {
     @POST
     @Path("/{username}/follow")
     @Secured
-    @Transactional
     public Response follow(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 
@@ -138,7 +132,6 @@ public class UserController extends BaseController {
     @POST
     @Path("/{username}/unfollow")
     @Secured
-    @Transactional
     public Response unfollow(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 

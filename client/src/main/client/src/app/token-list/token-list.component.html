@@ -1,0 +1,61 @@
+<div class="container mt-2">
+  <div class="row justify-content-center" *ngIf="user && user.profile.username === username">
+    <div class="col-md-3">
+      <div class="row mb-2">
+        <div class="col">
+          <img width="100%" src="/api/users/{{user.profile.username}}/picture?size=512" class="rounded-circle mb-3">
+          <h5 class="mb-1">{{user.profile.name}}</h5>
+          <h6 class="text-muted mb-3">@{{user.profile.username}}</h6>
+          <p *ngIf="user.profile.bio">{{user.profile.bio}}</p>
+          <div *ngIf="user.profile.location">
+            <span *ngIf="user.profile.location.latitude && user.profile.location.longitude"><fa name="map-marker"></fa> <a href="{{getLocationQuery(user.profile.location)}}" target="_blank" >{{user.profile.location.label}}</a></span>
+            <span *ngIf="!(user.profile.location.latitude && user.profile.location.longitude) && user.profile.location.label"><fa name="map-marker"></fa> {{user.profile.location.label}}</span>
+          </div>
+          <p *ngIf="user.profile.website"><fa name="globe"></fa> <a href="{{user.profile.website}}" target="_blank">{{user.profile.website}}</a></p>
+        </div>
+      </div>
+      <div class="row mb-4 d-none d-md-block">
+        <div class="col">
+          <app-user-list title="Followers" [users]="followers" [count]="followers.length"></app-user-list>
+        </div>
+      </div>
+      <div class="row mb-4 d-none d-md-block">
+        <div class="col">
+          <app-user-list title="Following" [users]="following" [count]="following.length"></app-user-list>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h4>Tokens</h4>
+      <div class="list-group" *ngIf="tokens">
+        <div class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let token of tokens">
+          <del *ngIf="token.revoked"><span>{{token.uuid}}</span></del>
+          <span *ngIf="!token.revoked"><button class="btn btn-danger" (click)="revoke(token)"><fa name="trash"></fa></button> {{token.uuid}}</span>
+          <span>{{token.lastUsed | amCalendar}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 d-none d-md-block">
+      <div class="row mb-4">
+        <div class="col">
+          <app-trends></app-trends>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <app-about></app-about>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="user && user.profile.username !== username">
+    <div class="col text-center">
+      <p>
+        Hate to break it to you, but you can't just go around checking tokens of other users.
+      </p>
+      <p>
+        Perhaps you meant to see <a [routerLink]="['/u/' + user.profile.username + '/tokens']">your own tokens</a>?
+      </p>
+    </div>
+  </div>
+</div>

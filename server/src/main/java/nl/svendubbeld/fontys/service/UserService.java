@@ -5,8 +5,6 @@ import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.UserDTOSecure;
 import nl.svendubbeld.fontys.exception.EncryptionException;
 import nl.svendubbeld.fontys.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,8 +18,6 @@ import java.util.stream.Stream;
 
 @Stateless
 public class UserService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Inject
     private UserRepository userRepository;
@@ -99,5 +95,13 @@ public class UserService {
 
     public Stream<User> findFollowers(User user) {
         return userRepository.findFollowers(user);
+    }
+
+    public void remove(User user) {
+        userRepository.remove(user);
+    }
+
+    public boolean emailExists(String email) {
+        return userRepository.emailExists(email);
     }
 }

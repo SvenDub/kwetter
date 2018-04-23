@@ -1,7 +1,6 @@
 pipeline {
     agent {
-        docker {
-            image 'maven:3.5.2-jdk-8'
+        dockerfile {
             args '-v $HOME/.m2:/root/.m2'
         }
     }
@@ -12,12 +11,13 @@ pipeline {
                 configFileProvider([configFile(fileId: 'maven_settings', variable: 'SETTINGS')]) {
                     sh 'mvn -s $SETTINGS clean test  -B'
                 }
-                stash name: 'test-reports', includes: '**/target/surefire-reports/**,**/target/jacoco.exec'
+                stash name: 'test-reports', includes: '**/target/surefire-reports/**,**/target/jacoco.exec,**/coverage/lcov.info'
             }
             post {
                 always {
                     junit '**/target/surefire-reports/*.xml'
                     jacoco(execPattern: '**/target/jacoco.exec')
+                    cobertura coberturaReportFile: '**/coverage/cobertura-coverage.xml'
                 }
             }
         }

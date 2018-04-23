@@ -4,7 +4,6 @@ import {User} from '../shared/models/user.model';
 import {UserService} from '../api/user.service';
 import {Location} from '../shared/models/location.model';
 import {Tweet} from '../shared/models/tweet.model';
-import {TweetService} from '../api/tweet.service';
 import {UserSecure} from '../shared/models/user-secure.model';
 
 @Component({

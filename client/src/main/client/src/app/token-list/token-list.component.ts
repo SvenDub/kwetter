@@ -1,25 +1,25 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../api/user.service';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {LoginService} from '../api/login.service';
 import {User} from '../shared/models/user.model';
-import {Profile} from '../shared/models/profile.model';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {UserService} from '../api/user.service';
 import {Location} from '../shared/models/location.model';
+import {Token} from '../shared/models/token.model';
 
 @Component({
-  selector: 'app-edit-profile',
-  templateUrl: './edit-profile.component.html',
-  styleUrls: ['./edit-profile.component.css']
+  selector: 'app-token-list',
+  templateUrl: './token-list.component.html',
+  styleUrls: ['./token-list.component.css']
 })
-export class EditProfileComponent implements OnInit {
+export class TokenListComponent implements OnInit {
 
   username: string;
   user: User;
-  profile: Profile;
-  errorMessage: string;
   following: User[];
   followers: User[];
+  tokens: Token[];
 
-  constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
+  constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private loginService: LoginService) {
   }
 
   ngOnInit() {
@@ -38,24 +38,13 @@ export class EditProfileComponent implements OnInit {
     this.userService.getMe()
       .subscribe(me => {
         this.user = me;
-        this.profile = JSON.parse(JSON.stringify(me.profile));
-        if (this.profile.location === null) {
-          this.profile.location = new Location();
-        }
       });
     this.userService.getFollowing(this.username)
       .subscribe(following => this.following = following);
     this.userService.getFollowers(this.username)
       .subscribe(followers => this.followers = followers);
-  }
-
-  createProfile() {
-    this.errorMessage = '';
-    this.userService.updateProfile(this.profile)
-      .subscribe(profile => this.router.navigate(['/u/' + profile.username]),
-        () => {
-          this.errorMessage = 'Could not create profile. Check that all fields are correct and the username is not taken.';
-        });
+    this.loginService.getTokens()
+      .subscribe(tokens => this.tokens = tokens);
   }
 
   getLocationQuery(location: Location) {
@@ -64,5 +53,10 @@ export class EditProfileComponent implements OnInit {
     } else {
       return null;
     }
+  }
+
+  revoke(token: Token) {
+    this.loginService.deleteToken(token)
+      .subscribe(() => this.refresh());
   }
 }

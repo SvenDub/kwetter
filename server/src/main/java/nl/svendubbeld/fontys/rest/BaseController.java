@@ -4,11 +4,13 @@ import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.UserService;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.net.URI;
 
+@Transactional
 public abstract class BaseController {
 
     @Context

@@ -28,6 +28,7 @@
                     <executions>
                         <execution>
                             <id>install node and yarn</id>
+                            <phase>initialize</phase>
                             <goals>
                                 <goal>install-node-and-yarn</goal>
                             </goals>
@@ -40,11 +41,22 @@
                         </execution>
                         <execution>
                             <id>yarn build</id>
+                            <phase>prepare-package</phase>
                             <goals>
                                 <goal>yarn</goal>
                             </goals>
                             <configuration>
                                 <arguments>build --output-path=${basedir}/target/webapp/client/ --base-href=/client/</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>yarn test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>yarn</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>test --single-run --code-coverage</arguments>
                             </configuration>
                         </execution>
                     </executions>
@@ -70,5 +82,10 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <properties>
+        <sonar.sources>src/main/client/src</sonar.sources>
+        <sonar.test.inclusions>src/main/client/src/**/*.spec.ts</sonar.test.inclusions>
+    </properties>
 
 </project>

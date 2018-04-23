@@ -34,7 +34,6 @@ public class TweetController extends BaseController {
 
     @GET
     @Path("/{id}")
-    @Transactional
     public Response getTweet(@PathParam("id") long id) {
         Tweet tweet = tweetService.findById(id);
 
@@ -47,7 +46,6 @@ public class TweetController extends BaseController {
 
     @GET
     @Path("/search")
-    @Transactional
     public Response searchTweets(@QueryParam("query") String query) {
         Stream<Tweet> tweets = tweetService.searchTweets(query);
 
@@ -60,7 +58,6 @@ public class TweetController extends BaseController {
     @POST
     @Consumes
     @Secured
-    @Transactional
     public Response addTweet(TweetDTO dto) {
         Tweet tweet = dto.convert(dtoHelper);
         tweet = tweetService.addTweet(tweet, getUser());
@@ -78,7 +75,6 @@ public class TweetController extends BaseController {
     @POST
     @Path("/{id}/like")
     @Secured
-    @Transactional
     public Response like(@PathParam("id") long id) {
         Tweet tweet = tweetService.findById(id);
 
@@ -95,7 +91,6 @@ public class TweetController extends BaseController {
     @POST
     @Path("/{id}/flag")
     @Secured
-    @Transactional
     public Response flag(@PathParam("id") long id) {
         Tweet tweet = tweetService.findById(id);
 
@@ -111,7 +106,6 @@ public class TweetController extends BaseController {
 
     @GET
     @Path("/hashtag/{hashtag}")
-    @Transactional
     public Response getByHashtag(@PathParam("hashtag") String hashtag) {
         Stream<Tweet> tweets = tweetService.findByHashtag(hashtag);
 
