@@ -16,12 +16,12 @@
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Followers" [users]="followers" [count]="followers.length"></app-user-list>
+          <app-user-list title="{{'FOLLOWERS' | translate}}" [users]="followers" [count]="followers.length"></app-user-list>
         </div>
       </div>
       <div class="row mb-4 d-none d-md-block">
         <div class="col">
-          <app-user-list title="Following" [users]="following" [count]="following.length"></app-user-list>
+          <app-user-list title="{{'FOLLOWING' | translate}}" [users]="following" [count]="following.length"></app-user-list>
         </div>
       </div>
     </div>
@@ -34,31 +34,31 @@
           </button>
         </div>
         <div class="form-group">
-          <label for="username">Name</label>
-          <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp" placeholder="Enter username" required [(ngModel)]="profile.username">
-          <small class="form-text text-muted" id="usernameHelp">Your name is how you are identified. Required.</small>
+          <label for="username">{{'USERNAME' | translate}}</label>
+          <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp" placeholder="{{'USERNAME' | translate}}" required [(ngModel)]="profile.username">
+          <small class="form-text text-muted" id="usernameHelp">{{'USERNAME_HELP' | translate}}</small>
         </div>
         <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp" placeholder="Enter name" required [(ngModel)]="profile.name">
-          <small class="form-text text-muted" id="nameHelp">Your name is how other users see you. Required.</small>
+          <label for="name">{{'NAME' | translate}}</label>
+          <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp" placeholder="{{'NAME' | translate}}" required [(ngModel)]="profile.name">
+          <small class="form-text text-muted" id="nameHelp">{{'NAME_HELP' | translate}}</small>
         </div>
         <div class="form-group">
-          <label for="bio">Bio</label>
-          <textarea class="form-control" id="bio" name="bio" aria-describedby="bioHelp" placeholder="Enter bio" maxlength="160" [(ngModel)]="profile.bio"></textarea>
-          <small class="form-text text-muted" id="bioHelp">Your bio describes you in max 160 characters.</small>
+          <label for="bio">{{'BIO' | translate}}</label>
+          <textarea class="form-control" id="bio" name="bio" aria-describedby="bioHelp" placeholder="{{'BIO' | translate}}" maxlength="160" [(ngModel)]="profile.bio"></textarea>
+          <small class="form-text text-muted" id="bioHelp">{{'BIO_HELP' | translate}}</small>
         </div>
         <div class="form-group">
-          <label for="location">Location</label>
-          <input type="text" class="form-control" id="location" name="location" aria-describedby="locationHelp" placeholder="Enter location" [(ngModel)]="profile.location.label">
-          <small class="form-text text-muted" id="locationHelp">Your current location.</small>
+          <label for="location">{{'LOCATION' | translate}}</label>
+          <input type="text" class="form-control" id="location" name="location" aria-describedby="locationHelp" placeholder="{{'LOCATION' | translate}}" [(ngModel)]="profile.location.label">
+          <small class="form-text text-muted" id="locationHelp">{{'LOCATION_HELP' | translate}}</small>
         </div>
         <div class="form-group">
-          <label for="website">Website</label>
-          <input type="url" class="form-control" id="website" name="website" aria-describedby="websiteHelp" placeholder="Enter website" [(ngModel)]="profile.website">
-          <small class="form-text text-muted" id="websiteHelp">Your website.</small>
+          <label for="website">{{'WEBSITE' | translate}}</label>
+          <input type="url" class="form-control" id="website" name="website" aria-describedby="websiteHelp" placeholder="{{'WEBSITE' | translate}}" [(ngModel)]="profile.website">
+          <small class="form-text text-muted" id="websiteHelp">{{'WEBSITE_HELP' | translate}}</small>
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid">Submit</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid">{{'SUBMIT' | translate}}</button>
       </form>
     </div>
     <div class="col-md-3 d-none d-md-block">

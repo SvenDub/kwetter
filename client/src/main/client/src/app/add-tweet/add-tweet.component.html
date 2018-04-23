@@ -8,7 +8,7 @@
   <div class="form-group">
     <textarea id="tweet"
               class="form-control mb-2"
-              placeholder="What's going on?"
+              placeholder="{{'TWEET_PLACEHOLDER' | translate}}"
               [(ngModel)]="content" name="content"
               required
               maxlength="140"
@@ -28,6 +28,6 @@
     </div>
   </div>
   <div class="form-group">
-    <button type="submit" class="btn btn-primary pull-right" [disabled]="isDisabled()" #submit>Tweet</button>
+    <button type="submit" class="btn btn-primary pull-right" [disabled]="isDisabled()" #submit>{{'TWEET' | translate}}</button>
   </div>
 </form>

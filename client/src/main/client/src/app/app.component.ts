@@ -4,6 +4,7 @@ import {LoginService} from './api/login.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
   errorMessage: string;
 
   constructor(private loginService: LoginService, private jwtHelper: JwtHelperService, private router: Router,
-              private translate: TranslateService) {
+              private translate: TranslateService, private title: Title) {
     this.translate.setDefaultLang('en');
 
     const lang = localStorage.getItem('lang');
@@ -33,8 +34,11 @@ export class AppComponent implements OnInit {
       this.translate.use(lang);
     }
 
+    this.translate.get('BRAND').subscribe(value => this.title.setTitle(value));
+
     this.translate.onLangChange.subscribe((params: LangChangeEvent) => {
       localStorage.setItem('lang', params.lang);
+      this.translate.get('BRAND').subscribe(value => this.title.setTitle(value));
     });
   }
 
