@@ -5,6 +5,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import {Title} from '@angular/platform-browser';
+import {SseService} from './api/sse.service';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ export class AppComponent implements OnInit {
   errorMessage: string;
 
   constructor(private loginService: LoginService, private jwtHelper: JwtHelperService, private router: Router,
-              private translate: TranslateService, private title: Title) {
+              private translate: TranslateService, private title: Title, private sseService: SseService) {
     this.translate.setDefaultLang('en');
 
     const lang = localStorage.getItem('lang');
@@ -49,6 +50,7 @@ export class AppComponent implements OnInit {
       this.refreshToken();
     }
     this.loginService.onLogout$.subscribe(() => this.loggedIn = false);
+    this.sseService.startListener();
   }
 
   login() {

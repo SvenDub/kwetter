@@ -3,13 +3,14 @@ package nl.svendubbeld.fontys.rest;
 import nl.svendubbeld.fontys.auth.Secured;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.TweetDTO;
+import nl.svendubbeld.fontys.events.TweetCreatedEvent;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.service.TweetService;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -31,6 +32,9 @@ public class TweetController extends BaseController {
 
     @Context
     private ServletContext context;
+
+    @Inject
+    private Event<TweetCreatedEvent> tweetEvent;
 
     @GET
     @Path("/{id}")
@@ -69,7 +73,10 @@ public class TweetController extends BaseController {
                 .path(TweetController.class, "getTweet")
                 .build(tweet.getId());
 
-        return created(tweet.convert(dtoHelper), location);
+        TweetDTO convertedTweet = tweet.convert(dtoHelper);
+        tweetEvent.fireAsync(new TweetCreatedEvent(convertedTweet));
+
+        return created(convertedTweet, location);
     }
 
     @POST

@@ -156,7 +156,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
-            <version>2.22.2</version>
+            <version>${jersey.version}</version>
         </dependency>
 
         <dependency>
@@ -172,11 +172,15 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>2.26</version>
+            <version>${jersey.version}</version>
             <scope>provided</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-sse</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -184,7 +188,7 @@
             <dependency>
                 <groupId>org.arquillian</groupId>
                 <artifactId>arquillian-universe</artifactId>
-                <version>${version.arquillian_universe}</version>
+                <version>${arquillian_universe.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
