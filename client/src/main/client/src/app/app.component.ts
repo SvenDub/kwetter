@@ -33,6 +33,8 @@ export class AppComponent implements OnInit {
     const lang = localStorage.getItem('lang');
     if (lang) {
       this.translate.use(lang);
+    } else {
+      this.translate.use(this.translate.getBrowserLang());
     }
 
     this.translate.get('BRAND').subscribe(value => this.title.setTitle(value));
@@ -47,6 +49,8 @@ export class AppComponent implements OnInit {
     this.errorMessage = null;
     this.loggedIn = !this.jwtHelper.isTokenExpired();
 
+    this.loginService.onLogout$.subscribe(() => this.loggedIn = false);
+
     if (this.loggedIn) {
       this.sseService.startListener();
     } else if (!this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
@@ -54,8 +58,6 @@ export class AppComponent implements OnInit {
     } else {
       this.loginService.logout();
     }
-
-    this.loginService.onLogout$.subscribe(() => this.loggedIn = false);
   }
 
   login() {
@@ -65,6 +67,10 @@ export class AppComponent implements OnInit {
         localStorage.setItem('access_token', resp.accessToken);
         localStorage.setItem('refresh_token', resp.refreshToken);
         this.loggedIn = !this.jwtHelper.isTokenExpired();
+
+        if (this.loggedIn) {
+          this.sseService.startListener();
+        }
       });
   }
 
@@ -89,8 +95,11 @@ export class AppComponent implements OnInit {
       .subscribe(resp => {
         localStorage.setItem('access_token', resp.accessToken);
         localStorage.setItem('refresh_token', resp.refreshToken);
+
         this.loggedIn = !this.jwtHelper.isTokenExpired();
         this.router.navigate(['/u/' + this.signUpUsername + '/edit']);
+
+        this.sseService.startListener();
       }, (err: HttpErrorResponse) => {
         console.log('Invalid sign up parameters.', err);
         this.errorMessage = `Can't create account: ${err.error.message ? err.error.message : err.message}`;

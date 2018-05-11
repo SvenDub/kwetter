@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
       .subscribe(tweet => {
         if (!this.tweets.find(value => value.id === tweet.id)) {
           this.tweets.unshift(tweet);
-          this.tweets.sort((a, b) => new Date(b.date) - new Date(a.date));
+          this.tweets.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf());
         }
       });
   }
