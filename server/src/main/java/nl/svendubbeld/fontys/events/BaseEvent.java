@@ -7,12 +7,24 @@ package nl.svendubbeld.fontys.events;
  */
 public class BaseEvent<T> implements AppEvent<T> {
 
+    private String type;
+
     private T payload;
 
-    public BaseEvent(T payload) {
+    /**
+     * @param type    A string describing the type of event.
+     * @param payload The payload.
+     */
+    public BaseEvent(String type, T payload) {
+        this.type = type;
         this.payload = payload;
     }
 
+
+    @Override
+    public String getType() {
+        return type;
+    }
 
     @Override
     public T getPayload() {
@@ -22,7 +34,8 @@ public class BaseEvent<T> implements AppEvent<T> {
     @Override
     public String toString() {
         return "BaseEvent{" +
-                "payload=" + payload +
+                "type='" + type + '\'' +
+                ", payload=" + payload +
                 '}';
     }
 }

@@ -8,6 +8,6 @@ import nl.svendubbeld.fontys.dto.TweetDTO;
 public class TweetCreatedEvent extends BaseEvent<TweetDTO> {
 
     public TweetCreatedEvent(TweetDTO payload) {
-        super(payload);
+        super("tweet.created", payload);
     }
 }

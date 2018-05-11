@@ -8,6 +8,13 @@ package nl.svendubbeld.fontys.events;
 public interface AppEvent<T> {
 
     /**
+     * Returns a string describing the type of event.
+     *
+     * @return The type of event.
+     */
+    String getType();
+
+    /**
      * Get the payload from the event.
      *
      * @return The payload.

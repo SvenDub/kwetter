@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Tweet} from '../shared/models/tweet.model';
 
-declare var EventSource;
-
 @Injectable()
 export class SseService {
 
@@ -11,9 +9,14 @@ export class SseService {
   tweetCreated$ = this.tweetCreated.asObservable();
 
   startListener() {
-    const eventSource = new EventSource('/api/events');
-    eventSource.addEventListener('tweet_created', event => {
-      this.tweetCreated.next(JSON.parse(event.data));
-    });
+    const token = localStorage.getItem('access_token');
+
+    const socket = new WebSocket(`ws://${window.location.host}/ws/events?authToken=${token}`);
+    socket.onmessage = e => {
+      const event = JSON.parse(e.data);
+      if (event.type === 'tweet.created') {
+        this.tweetCreated.next(event.payload);
+      }
+    };
   }
 }

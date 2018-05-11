@@ -46,11 +46,16 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.errorMessage = null;
     this.loggedIn = !this.jwtHelper.isTokenExpired();
-    if (!this.loggedIn && !this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
+
+    if (this.loggedIn) {
+      this.sseService.startListener();
+    } else if (!this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
       this.refreshToken();
+    } else {
+      this.loginService.logout();
     }
+
     this.loginService.onLogout$.subscribe(() => this.loggedIn = false);
-    this.sseService.startListener();
   }
 
   login() {

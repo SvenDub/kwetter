@@ -1,9 +1,7 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {TweetService} from '../api/tweet.service';
 import {Tweet} from '../shared/models/tweet.model';
-import {User} from '../shared/models/user.model';
 import {UserService} from '../api/user.service';
-import {LoginService} from '../api/login.service';
 import {SseService} from '../api/sse.service';
 import {UserSecure} from '../shared/models/user-secure.model';
 
@@ -34,9 +32,9 @@ export class HomeComponent implements OnInit {
 
     this.sseService.tweetCreated$
       .subscribe(tweet => {
-        if (!this.tweets.find(value => value.id === tweet.id) && this.user.following.find(value => value.id === tweet.owner.id)) {
+        if (!this.tweets.find(value => value.id === tweet.id)) {
           this.tweets.unshift(tweet);
-          this.tweets.sort((a, b) => b.date.getUTCMilliseconds() - a.date.getUTCMilliseconds());
+          this.tweets.sort((a, b) => new Date(b.date) - new Date(a.date));
         }
       });
   }

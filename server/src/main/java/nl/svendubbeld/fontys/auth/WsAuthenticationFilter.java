@@ -8,17 +8,13 @@ import nl.svendubbeld.fontys.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import javax.ws.rs.Priorities;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.security.Key;
 import java.security.Principal;
@@ -29,14 +25,10 @@ import java.util.stream.Collectors;
 /**
  * @see <a href="https://stackoverflow.com/a/26778123">https://stackoverflow.com/a/26778123</a>
  */
-@Secured
-@Provider
-@Priority(Priorities.AUTHENTICATION)
-public class AuthenticationFilter implements ContainerRequestFilter {
+@WebFilter("/ws/*")
+public class WsAuthenticationFilter implements Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
-
-    public static final String AUTHENTICATION_SCHEME = "Bearer";
+    private static final Logger logger = LoggerFactory.getLogger(WsAuthenticationFilter.class);
 
     @Inject
     private UserService userService;
@@ -45,22 +37,20 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private KeyGenerator keyGenerator;
 
     @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
     @Transactional
-    public void filter(ContainerRequestContext requestContext) throws IOException {
-        String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        MultivaluedMap<String, String> queryParameters = requestContext.getUriInfo().getQueryParameters();
-        String authorizationQueryParam = queryParameters.getFirst("authToken");
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        if (authorizationHeader == null && authorizationQueryParam == null) {
-            requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
-            return;
-        }
+        String token = request.getParameter("authToken");
 
-        String token;
-        if (authorizationHeader != null) {
-            token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
-        } else {
-            token = authorizationQueryParam;
+        if (token == null || token.trim().isEmpty()) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
 
         User user = null;
@@ -81,15 +71,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
 
         if (user == null) {
-            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         Set<Permission> permissions = user.getSecurityGroups().stream().map(SecurityGroup::getPermissions).flatMap(Collection::stream).collect(Collectors.toSet());
         String finalUsername = username;
 
-        SecurityContext currentSecurityContext = requestContext.getSecurityContext();
-        requestContext.setSecurityContext(new SecurityContext() {
+        filterChain.doFilter(new HttpServletRequestWrapper(request) {
             @Override
             public Principal getUserPrincipal() {
                 return () -> finalUsername;
@@ -99,16 +88,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             public boolean isUserInRole(String role) {
                 return permissions.contains(Permission.of(role));
             }
+        }, servletResponse);
+    }
 
-            @Override
-            public boolean isSecure() {
-                return currentSecurityContext.isSecure();
-            }
+    @Override
+    public void destroy() {
 
-            @Override
-            public String getAuthenticationScheme() {
-                return AUTHENTICATION_SCHEME;
-            }
-        });
     }
 }
