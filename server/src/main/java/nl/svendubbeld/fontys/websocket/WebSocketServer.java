@@ -1,4 +1,4 @@
-package nl.svendubbeld.fontys.websockets;
+package nl.svendubbeld.fontys.websocket;
 
 import nl.svendubbeld.fontys.auth.Secured;
 

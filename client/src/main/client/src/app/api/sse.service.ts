@@ -8,6 +8,9 @@ export class SseService {
   private tweetCreated = new Subject<Tweet>();
   tweetCreated$ = this.tweetCreated.asObservable();
 
+  private tweetLiked = new Subject<Tweet>();
+  tweetLiked$ = this.tweetLiked.asObservable();
+
   private socket: WebSocket;
 
   startListener() {
@@ -20,8 +23,14 @@ export class SseService {
     this.socket = new WebSocket(`ws://${window.location.host}/ws/events?authToken=${token}`);
     this.socket.onmessage = e => {
       const event = JSON.parse(e.data);
-      if (event.type === 'tweet.created') {
-        this.tweetCreated.next(event.payload);
+
+      switch (event.type) {
+        case 'tweet.created':
+          this.tweetCreated.next(event.payload);
+          break;
+        case 'tweet.liked':
+          this.tweetLiked.next(event.payload);
+          break;
       }
     };
   }

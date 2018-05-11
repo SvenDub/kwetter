@@ -1,7 +1,8 @@
-package nl.svendubbeld.fontys.websockets;
+package nl.svendubbeld.fontys.websocket;
 
 import nl.svendubbeld.fontys.dto.TweetDTO;
 import nl.svendubbeld.fontys.events.TweetCreatedEvent;
+import nl.svendubbeld.fontys.events.TweetLikedEvent;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.UserService;
 import org.slf4j.Logger;
@@ -39,6 +40,19 @@ public class SessionHandler {
         sessions.remove(session);
     }
 
+    private void sendObject(Session session, Object object) {
+        try {
+            Jsonb jsonb = jsonProvider.create()
+                    .build();
+            session.getBasicRemote().sendText(jsonb.toJson(object));
+        } catch (JsonbException e) {
+            logger.warn("Could not encode WS message", e);
+        } catch (IOException e) {
+            logger.warn("Could not send WS message", e);
+            sessions.remove(session);
+        }
+    }
+
     @Transactional
     public void onTweetCreated(@ObservesAsync TweetCreatedEvent event) {
         TweetDTO tweet = event.getPayload();
@@ -51,16 +65,22 @@ public class SessionHandler {
             boolean isMentioned = tweet.getMentions().values().stream().anyMatch(u -> u.getId() == user.getId());
 
             if (isFollowing || isOwner || isMentioned) {
-                try {
-                    Jsonb jsonb = jsonProvider.create()
-                            .build();
-                    session.getBasicRemote().sendText(jsonb.toJson(event));
-                } catch (JsonbException e) {
-                    logger.warn("Could not encode WS message", e);
-                } catch (IOException e) {
-                    logger.warn("Could not send WS message", e);
-                    sessions.remove(session);
-                }
+                sendObject(session, event);
+            }
+        });
+    }
+
+    @Transactional
+    public void onTweetLiked(@ObservesAsync TweetLikedEvent event) {
+        TweetDTO tweet = event.getPayload();
+
+        sessions.forEach(session -> {
+            User user = userService.findByUsername(session.getUserPrincipal().getName());
+
+            boolean isOwner = user.getId() == tweet.getOwner().getId();
+
+            if (isOwner) {
+                sendObject(session, event);
             }
         });
     }

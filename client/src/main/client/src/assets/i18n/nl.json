@@ -31,5 +31,8 @@
   "LOCATION_HELP": "Je huidige locatie.",
   "WEBSITE": "Website",
   "WEBSITE_HELP": "Je website.",
-  "SUBMIT": "Bevestigen"
+  "SUBMIT": "Bevestigen",
+  "TOAST": {
+    "LIKE": "Iemand vindt je tweet '{{tweet}}' leuk!"
+  }
 }

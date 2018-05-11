@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {LoginService} from './api/login.service';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import {Title} from '@angular/platform-browser';
 import {SseService} from './api/sse.service';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit {
   errorMessage: string;
 
   constructor(private loginService: LoginService, private jwtHelper: JwtHelperService, private router: Router,
-              private translate: TranslateService, private title: Title, private sseService: SseService) {
+              private translate: TranslateService, private title: Title, private sseService: SseService, private toastr: ToastsManager,
+              vcr: ViewContainerRef) {
     this.translate.setDefaultLang('en');
 
     const lang = localStorage.getItem('lang');
@@ -43,6 +45,8 @@ export class AppComponent implements OnInit {
       localStorage.setItem('lang', params.lang);
       this.translate.get('BRAND').subscribe(value => this.title.setTitle(value));
     });
+
+    this.toastr.setRootViewContainerRef(vcr);
   }
 
   ngOnInit() {
@@ -58,6 +62,11 @@ export class AppComponent implements OnInit {
     } else {
       this.loginService.logout();
     }
+
+    this.sseService.tweetLiked$.subscribe(value => {
+      this.translate.get('TOAST.LIKE', {tweet: value.content})
+        .subscribe(text => this.toastr.info(text));
+    });
   }
 
   login() {
