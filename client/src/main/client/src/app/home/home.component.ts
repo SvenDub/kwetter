@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {TweetService} from '../api/tweet.service';
 import {Tweet} from '../shared/models/tweet.model';
-import {User} from '../shared/models/user.model';
 import {UserService} from '../api/user.service';
-import {LoginService} from '../api/login.service';
+import {SseService} from '../api/sse.service';
+import {UserSecure} from '../shared/models/user-secure.model';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +13,11 @@ import {LoginService} from '../api/login.service';
 export class HomeComponent implements OnInit {
 
   tweets: Tweet[];
-  user: User;
+  user: UserSecure;
 
   replyClicked = new EventEmitter<Tweet>();
 
-  constructor(private tweetService: TweetService, private userService: UserService) {
+  constructor(private tweetService: TweetService, private userService: UserService, private sseService: SseService) {
   }
 
   ngOnInit() {
@@ -29,6 +29,14 @@ export class HomeComponent implements OnInit {
 
     this.userService.getMe()
       .subscribe(user => this.user = user);
+
+    this.sseService.tweetCreated$
+      .subscribe(tweet => {
+        if (!this.tweets.find(value => value.id === tweet.id)) {
+          this.tweets.unshift(tweet);
+          this.tweets.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf());
+        }
+      });
   }
 
   onReplyClicked(tweet: Tweet) {

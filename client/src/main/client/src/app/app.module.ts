@@ -27,6 +27,8 @@ import {MomentModule} from 'ngx-moment';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastModule} from 'ng2-toastr';
 
 export function getAccessToken() {
   return localStorage.getItem('access_token');
@@ -61,9 +63,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ApiModule,
     AppRoutingModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
-    MomentModule,
-    SharedModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: getAccessToken,
@@ -74,6 +75,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         ]
       }
     }),
+    MomentModule,
+    SharedModule,
+    ToastModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

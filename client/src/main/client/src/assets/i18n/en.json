@@ -31,5 +31,8 @@
   "LOCATION_HELP": "Your current location.",
   "WEBSITE": "Website",
   "WEBSITE_HELP": "Your website.",
-  "SUBMIT": "Submit"
+  "SUBMIT": "Submit",
+  "TOAST": {
+    "LIKE": "Someone likes your tweet '{{tweet}}'!"
+  }
 }

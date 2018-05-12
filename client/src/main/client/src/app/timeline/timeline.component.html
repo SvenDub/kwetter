@@ -1,4 +1,6 @@
-<app-tweet *ngFor="let tweet of tweets" [tweet]="tweet" (replyClicked)="replyClicked.emit($event)"></app-tweet>
+<div [@stagger] *ngIf="tweets">
+  <app-tweet [@fade] *ngFor="let tweet of tweets" [tweet]="tweet" (replyClicked)="replyClicked.emit($event)"></app-tweet>
+</div>
 <div class="d-flex justify-content-center text-muted" *ngIf="!tweets || tweets.length === 0">
   {{'NO_TWEETS_FOUND' | translate}}
 </div>

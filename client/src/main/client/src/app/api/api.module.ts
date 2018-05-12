@@ -6,6 +6,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {UserService} from './user.service';
 import {LoginService} from './login.service';
 import {httpInterceptorProviders} from './http-interceptors';
+import {SseService} from './sse.service';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {httpInterceptorProviders} from './http-interceptors';
     LoginService,
     TweetService,
     UserService,
-    httpInterceptorProviders
+    SseService,
+    httpInterceptorProviders,
   ],
   declarations: []
 })

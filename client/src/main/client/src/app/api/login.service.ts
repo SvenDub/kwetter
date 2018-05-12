@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {TokenResponse} from '../shared/models/token-response.model';
 import {Subject} from 'rxjs/Subject';
 import {Token} from '../shared/models/token.model';
-import {e, p} from '@angular/core/src/render3';
 
 @Injectable()
 export class LoginService {

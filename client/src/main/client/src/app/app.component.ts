@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {LoginService} from './api/login.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import {Title} from '@angular/platform-browser';
+import {SseService} from './api/sse.service';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
   selector: 'app-root',
@@ -26,12 +28,15 @@ export class AppComponent implements OnInit {
   errorMessage: string;
 
   constructor(private loginService: LoginService, private jwtHelper: JwtHelperService, private router: Router,
-              private translate: TranslateService, private title: Title) {
+              private translate: TranslateService, private title: Title, private sseService: SseService, private toastr: ToastsManager,
+              vcr: ViewContainerRef) {
     this.translate.setDefaultLang('en');
 
     const lang = localStorage.getItem('lang');
     if (lang) {
       this.translate.use(lang);
+    } else {
+      this.translate.use(this.translate.getBrowserLang());
     }
 
     this.translate.get('BRAND').subscribe(value => this.title.setTitle(value));
@@ -40,15 +45,28 @@ export class AppComponent implements OnInit {
       localStorage.setItem('lang', params.lang);
       this.translate.get('BRAND').subscribe(value => this.title.setTitle(value));
     });
+
+    this.toastr.setRootViewContainerRef(vcr);
   }
 
   ngOnInit() {
     this.errorMessage = null;
     this.loggedIn = !this.jwtHelper.isTokenExpired();
-    if (!this.loggedIn && !this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
-      this.refreshToken();
-    }
+
     this.loginService.onLogout$.subscribe(() => this.loggedIn = false);
+
+    if (this.loggedIn) {
+      this.sseService.startListener();
+    } else if (!this.jwtHelper.isTokenExpired(localStorage.getItem('refresh_token'))) {
+      this.refreshToken();
+    } else {
+      this.loginService.logout();
+    }
+
+    this.sseService.tweetLiked$.subscribe(value => {
+      this.translate.get('TOAST.LIKE', {tweet: value.content})
+        .subscribe(text => this.toastr.info(text));
+    });
   }
 
   login() {
@@ -58,6 +76,10 @@ export class AppComponent implements OnInit {
         localStorage.setItem('access_token', resp.accessToken);
         localStorage.setItem('refresh_token', resp.refreshToken);
         this.loggedIn = !this.jwtHelper.isTokenExpired();
+
+        if (this.loggedIn) {
+          this.sseService.startListener();
+        }
       });
   }
 
@@ -82,8 +104,11 @@ export class AppComponent implements OnInit {
       .subscribe(resp => {
         localStorage.setItem('access_token', resp.accessToken);
         localStorage.setItem('refresh_token', resp.refreshToken);
+
         this.loggedIn = !this.jwtHelper.isTokenExpired();
         this.router.navigate(['/u/' + this.signUpUsername + '/edit']);
+
+        this.sseService.startListener();
       }, (err: HttpErrorResponse) => {
         console.log('Invalid sign up parameters.', err);
         this.errorMessage = `Can't create account: ${err.error.message ? err.error.message : err.message}`;
