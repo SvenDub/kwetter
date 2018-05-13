@@ -1,5 +1,4 @@
-import {AppPage} from './app.po';
-import {browser, by, element, protractor} from 'protractor';
+import {browser, by, element, ExpectedConditions, protractor} from 'protractor';
 
 describe('homepage', () => {
   it('should show a list of tweets', () => {
@@ -19,5 +18,19 @@ describe('homepage', () => {
 
     expect(tweets.count()).toBe(tweetCountBefore + 1);
     expect(tweets.all(by.css('p.card-text')).getText()).toContain(tweetContent);
+  });
+
+  it('should auto fill the tweet box on reply', async () => {
+    browser.get('/');
+
+    const tweets = element.all(by.css('app-tweet'));
+    const tweet = tweets.first();
+    const author = await tweet.all(by.css('h6.card-subtitle > a')).first().getText();
+
+    const replyButton = tweet.element(by.css('fa[name="reply"]')).element(by.xpath('..'));
+    browser.wait(ExpectedConditions.elementToBeClickable(replyButton), 5000);
+    replyButton.click();
+
+    expect(element(by.id('tweet')).getAttribute('ng-reflect-model')).toBe(`${author} `);
   });
 });
