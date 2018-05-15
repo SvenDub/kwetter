@@ -11,11 +11,11 @@ import nl.svendubbeld.fontys.service.TweetService;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -32,7 +32,7 @@ public class TweetController extends BaseController {
     private DTOHelper dtoHelper;
 
     @Context
-    private ServletContext context;
+    private UriInfo uriInfo;
 
     @Inject
     private Event<TweetCreatedEvent> tweetEvent;
@@ -49,7 +49,18 @@ public class TweetController extends BaseController {
             return notFound();
         }
 
-        return ok(tweet.convert(dtoHelper));
+        TweetDTO convertedTweet = tweet.convert(dtoHelper);
+
+        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
+        URI userLink = uriBuilder.path(UserController.class, "getUser")
+                .build(convertedTweet.getOwner()
+                        .getProfile()
+                        .getUsername());
+
+        return Response
+                .ok(convertedTweet)
+                .link(userLink, "user")
+                .build();
     }
 
     @GET
@@ -70,9 +81,7 @@ public class TweetController extends BaseController {
         Tweet tweet = dto.convert(dtoHelper);
         tweet = tweetService.addTweet(tweet, getUser());
 
-        URI location = UriBuilder
-                .fromPath(context.getContextPath())
-                .path("api")
+        URI location = uriInfo.getBaseUriBuilder()
                 .path(TweetController.class)
                 .path(TweetController.class, "getTweet")
                 .build(tweet.getId());
@@ -99,7 +108,18 @@ public class TweetController extends BaseController {
         TweetDTO convertedTweet = tweet.convert(dtoHelper);
         tweetLikedEvent.fireAsync(new TweetLikedEvent(convertedTweet));
 
-        return ok(convertedTweet);
+        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
+        URI userLink = uriBuilder
+                .path(UserController.class)
+                .path(UserController.class, "getUser")
+                .build(convertedTweet.getOwner()
+                        .getProfile()
+                        .getUsername());
+
+        return Response
+                .ok(convertedTweet)
+                .link(userLink, "user")
+                .build();
     }
 
     @POST
@@ -115,7 +135,20 @@ public class TweetController extends BaseController {
         tweet.addFlag(getUser());
         tweetService.edit(tweet);
 
-        return ok(tweet.convert(dtoHelper));
+        TweetDTO convertedTweet = tweet.convert(dtoHelper);
+
+        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
+        URI userLink = uriBuilder
+                .path(UserController.class)
+                .path(UserController.class, "getUser")
+                .build(convertedTweet.getOwner()
+                        .getProfile()
+                        .getUsername());
+
+        return Response
+                .ok(convertedTweet)
+                .link(userLink, "user")
+                .build();
     }
 
     @GET

@@ -3,6 +3,7 @@ package nl.svendubbeld.fontys.rest;
 import nl.svendubbeld.fontys.auth.Secured;
 import nl.svendubbeld.fontys.dto.DTOHelper;
 import nl.svendubbeld.fontys.dto.ProfileDTO;
+import nl.svendubbeld.fontys.dto.UserDTOSecure;
 import nl.svendubbeld.fontys.exception.UserExistsException;
 import nl.svendubbeld.fontys.logging.SentryLogged;
 import nl.svendubbeld.fontys.model.Profile;
@@ -14,10 +15,8 @@ import nl.svendubbeld.fontys.service.TweetService;
 import nl.svendubbeld.fontys.service.UserService;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,9 +39,22 @@ public class MeController extends BaseController {
     @Inject
     private UserService userService;
 
+    @Context
+    private UriInfo uriInfo;
+
     @GET
     public Response getMe() {
-        return ok(dtoHelper.convertToDTOSecure(getUser()));
+        UserDTOSecure convertedUser = dtoHelper.convertToDTOSecure(getUser());
+
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class, "getUser"))
+                .rel("user")
+                .build(convertedUser.getProfile().getUsername());
+
+        return Response
+                .ok(convertedUser)
+                .links(userLink)
+                .build();
     }
 
     @GET
