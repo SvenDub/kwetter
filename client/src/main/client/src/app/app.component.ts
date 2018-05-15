@@ -94,6 +94,7 @@ export class AppComponent implements OnInit {
         this.loggedIn = !this.jwtHelper.isTokenExpired();
       }, () => {
         console.log('Can\'t log in with invalid token. Logging out.');
+        this.checkingRefresh = false;
         this.loginService.logout();
       });
   }

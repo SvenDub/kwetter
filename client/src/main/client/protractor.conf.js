@@ -24,5 +24,12 @@ exports.config = {
       project: 'e2e/tsconfig.e2e.json'
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+
+    browser.get('/');
+
+    element(by.id('username')).sendKeys('SvenDub');
+    element(by.id('password')).sendKeys('password', '\n');
+
+    return browser.waitForAngular();
   }
 };
