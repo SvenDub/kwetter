@@ -2,6 +2,8 @@ package nl.svendubbeld.fontys.rest;
 
 import nl.svendubbeld.fontys.auth.Secured;
 import nl.svendubbeld.fontys.dto.DTOHelper;
+import nl.svendubbeld.fontys.dto.TweetDTO;
+import nl.svendubbeld.fontys.dto.UserDTO;
 import nl.svendubbeld.fontys.model.Tweet;
 import nl.svendubbeld.fontys.model.User;
 import nl.svendubbeld.fontys.service.TweetService;
@@ -10,10 +12,13 @@ import nl.svendubbeld.fontys.service.gravatar.GravatarRequest;
 import nl.svendubbeld.fontys.service.gravatar.GravatarService;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,13 +37,55 @@ public class UserController extends BaseController {
     @Inject
     private GravatarService gravatarService;
 
+    @Context
+    private UriInfo uriInfo;
+
     @GET
     @Path("/{username}")
     public Response getUser(@PathParam("username") String username) {
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            return ok(dtoHelper.convertToDTO(user));
+            UserDTO convertedUser = dtoHelper.convertToDTO(user);
+            Link pictureLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getProfilePicture"))
+                    .rel("profile-picture")
+                    .build(username);
+
+            Link tweetsLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getTweetsByUsername"))
+                    .rel("tweets")
+                    .build(username);
+
+            Link likesLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getLikesByUsername"))
+                    .rel("likes")
+                    .build(username);
+
+            Link followingLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getFollowingByUsername"))
+                    .rel("following")
+                    .build(username);
+
+            Link followersLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getFollowersByUsername"))
+                    .rel("followers")
+                    .build(username);
+
+            Link followLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "follow"))
+                    .rel("follow")
+                    .build(username);
+
+            Link unfollowLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "unfollow"))
+                    .rel("unfollow")
+                    .build(username);
+
+            return Response
+                    .ok(convertedUser)
+                    .links(pictureLink, tweetsLink, likesLink, followingLink, followersLink, followLink, unfollowLink)
+                    .build();
         } else {
             return notFound();
         }
@@ -51,7 +98,15 @@ public class UserController extends BaseController {
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            return ok(gravatarService.get(new GravatarRequest(user.getEmail(), size)));
+            Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getUser"))
+                    .rel("user")
+                    .build(username);
+
+            return Response
+                    .ok(gravatarService.get(new GravatarRequest(user.getEmail(), size)))
+                    .links(userLink)
+                    .build();
         } else {
             return notFound();
         }
@@ -62,10 +117,20 @@ public class UserController extends BaseController {
     public Response getTweetsByUsername(@PathParam("username") String username) {
         Stream<Tweet> tweets = tweetService.findByUsername(username);
 
-        return ok(tweets
+        List<TweetDTO> convertedTweets = tweets
                 .sorted(Comparator.comparing(Tweet::getDate).reversed())
                 .map(dtoHelper::convertToDTO)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class, "getUser"))
+                .rel("user")
+                .build(username);
+
+        return Response
+                .ok(convertedTweets)
+                .links(userLink)
+                .build();
     }
 
     @GET
@@ -77,10 +142,20 @@ public class UserController extends BaseController {
             return notFound();
         }
 
-        return ok(tweetService.findByLikes(user)
+        List<TweetDTO> convertedTweets = tweetService.findByLikes(user)
                 .sorted(Comparator.comparing(Tweet::getDate).reversed())
                 .map(dtoHelper::convertToDTO)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class, "getUser"))
+                .rel("user")
+                .build(username);
+
+        return Response
+                .ok(convertedTweets)
+                .links(userLink)
+                .build();
     }
 
     @GET
@@ -92,10 +167,20 @@ public class UserController extends BaseController {
             return notFound();
         }
 
-        return ok(user.getFollowing()
+        List<UserDTO> convertedTweets = user.getFollowing()
                 .stream()
                 .map(dtoHelper::convertToDTO)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class, "getUser"))
+                .rel("user")
+                .build(username);
+
+        return Response
+                .ok(convertedTweets)
+                .links(userLink)
+                .build();
     }
 
     @GET
@@ -109,9 +194,19 @@ public class UserController extends BaseController {
 
         Stream<User> followers = userService.findFollowers(user);
 
-        return ok(followers
+        List<UserDTO> convertedTweets = followers
                 .map(dtoHelper::convertToDTO)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class, "getUser"))
+                .rel("user")
+                .build(username);
+
+        return Response
+                .ok(convertedTweets)
+                .links(userLink)
+                .build();
     }
 
     @POST
@@ -123,7 +218,16 @@ public class UserController extends BaseController {
         if (user != null) {
             getUser().addFollowing(user);
             userService.edit(getUser());
-            return ok();
+
+            Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getUser"))
+                    .rel("user")
+                    .build(username);
+
+            return Response
+                    .ok()
+                    .links(userLink)
+                    .build();
         } else {
             return notFound();
         }
@@ -138,7 +242,16 @@ public class UserController extends BaseController {
         if (user != null) {
             getUser().removeFollowing(user);
             userService.edit(getUser());
-            return ok();
+
+            Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class, "getUser"))
+                    .rel("user")
+                    .build(username);
+
+            return Response
+                    .ok()
+                    .links(userLink)
+                    .build();
         } else {
             return notFound();
         }

@@ -12,7 +12,7 @@ import {animate, animateChild, query, stagger, style, transition, trigger} from 
     ]),
     trigger('stagger', [
       transition(':enter', [
-        query(':enter', stagger('.1s', [animateChild()]))
+        query(':enter', stagger('.1s', [animateChild()]), {optional: true})
       ])
     ])
   ]
