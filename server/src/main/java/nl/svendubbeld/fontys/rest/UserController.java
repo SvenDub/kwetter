@@ -48,36 +48,43 @@ public class UserController extends BaseController {
         if (user != null) {
             UserDTO convertedUser = dtoHelper.convertToDTO(user);
             Link pictureLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getProfilePicture"))
                     .rel("profile-picture")
                     .build(username);
 
             Link tweetsLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getTweetsByUsername"))
                     .rel("tweets")
                     .build(username);
 
             Link likesLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getLikesByUsername"))
                     .rel("likes")
                     .build(username);
 
             Link followingLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getFollowingByUsername"))
                     .rel("following")
                     .build(username);
 
             Link followersLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getFollowersByUsername"))
                     .rel("followers")
                     .build(username);
 
             Link followLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "follow"))
                     .rel("follow")
                     .build(username);
 
             Link unfollowLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "unfollow"))
                     .rel("unfollow")
                     .build(username);
@@ -99,6 +106,7 @@ public class UserController extends BaseController {
 
         if (user != null) {
             Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getUser"))
                     .rel("user")
                     .build(username);
@@ -123,6 +131,7 @@ public class UserController extends BaseController {
                 .collect(Collectors.toList());
 
         Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
                 .path(UserController.class, "getUser"))
                 .rel("user")
                 .build(username);
@@ -148,6 +157,7 @@ public class UserController extends BaseController {
                 .collect(Collectors.toList());
 
         Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
                 .path(UserController.class, "getUser"))
                 .rel("user")
                 .build(username);
@@ -173,6 +183,7 @@ public class UserController extends BaseController {
                 .collect(Collectors.toList());
 
         Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
                 .path(UserController.class, "getUser"))
                 .rel("user")
                 .build(username);
@@ -199,6 +210,7 @@ public class UserController extends BaseController {
                 .collect(Collectors.toList());
 
         Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
                 .path(UserController.class, "getUser"))
                 .rel("user")
                 .build(username);
@@ -220,6 +232,7 @@ public class UserController extends BaseController {
             userService.edit(getUser());
 
             Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getUser"))
                     .rel("user")
                     .build(username);
@@ -244,6 +257,7 @@ public class UserController extends BaseController {
             userService.edit(getUser());
 
             Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                    .path(UserController.class)
                     .path(UserController.class, "getUser"))
                     .rel("user")
                     .build(username);

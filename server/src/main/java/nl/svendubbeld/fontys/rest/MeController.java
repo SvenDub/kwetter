@@ -47,6 +47,7 @@ public class MeController extends BaseController {
         UserDTOSecure convertedUser = dtoHelper.convertToDTOSecure(getUser());
 
         Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
                 .path(UserController.class, "getUser"))
                 .rel("user")
                 .build(convertedUser.getProfile().getUsername());

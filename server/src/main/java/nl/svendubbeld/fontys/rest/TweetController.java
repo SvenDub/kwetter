@@ -12,10 +12,7 @@ import nl.svendubbeld.fontys.service.TweetService;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -51,15 +48,17 @@ public class TweetController extends BaseController {
 
         TweetDTO convertedTweet = tweet.convert(dtoHelper);
 
-        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
-        URI userLink = uriBuilder.path(UserController.class, "getUser")
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
+                .path(UserController.class)
+                .path(UserController.class, "getUser"))
+                .rel("user")
                 .build(convertedTweet.getOwner()
                         .getProfile()
                         .getUsername());
 
         return Response
                 .ok(convertedTweet)
-                .link(userLink, "user")
+                .links(userLink)
                 .build();
     }
 
@@ -108,17 +107,17 @@ public class TweetController extends BaseController {
         TweetDTO convertedTweet = tweet.convert(dtoHelper);
         tweetLikedEvent.fireAsync(new TweetLikedEvent(convertedTweet));
 
-        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
-        URI userLink = uriBuilder
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
                 .path(UserController.class)
-                .path(UserController.class, "getUser")
+                .path(UserController.class, "getUser"))
+                .rel("user")
                 .build(convertedTweet.getOwner()
                         .getProfile()
                         .getUsername());
 
         return Response
                 .ok(convertedTweet)
-                .link(userLink, "user")
+                .links(userLink)
                 .build();
     }
 
@@ -137,17 +136,17 @@ public class TweetController extends BaseController {
 
         TweetDTO convertedTweet = tweet.convert(dtoHelper);
 
-        UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
-        URI userLink = uriBuilder
+        Link userLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder()
                 .path(UserController.class)
-                .path(UserController.class, "getUser")
+                .path(UserController.class, "getUser"))
+                .rel("user")
                 .build(convertedTweet.getOwner()
                         .getProfile()
                         .getUsername());
 
         return Response
                 .ok(convertedTweet)
-                .link(userLink, "user")
+                .links(userLink)
                 .build();
     }
 
